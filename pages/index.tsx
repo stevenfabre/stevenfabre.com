@@ -14,7 +14,7 @@ export default function Home() {
 
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="max-w-lg md:max-w-3xl px-4 md:px-8">
-          <h1 className="text-4xl tracking-tight font-medium text-zinc-900 dark:text-zinc-100 md:text-6xl md:tracking-tight">
+          <h1 className="text-3xl tracking-tight font-medium text-zinc-900 dark:text-zinc-100 md:text-6xl md:tracking-tight">
             I’m Steven, a designer and founder passionate about collaborative
             creative tools.
           </h1>

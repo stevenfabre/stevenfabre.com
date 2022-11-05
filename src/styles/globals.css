@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-white text-zinc-500 dark:bg-black dark:text-zinc-500;
+}
+
+::selection {
+  @apply bg-orange-100 text-orange-900 dark:bg-orange-900 dark:text-orange-100;
+}

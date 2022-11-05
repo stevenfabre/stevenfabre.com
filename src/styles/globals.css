@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-white text-zinc-500 dark:bg-black dark:text-zinc-500;
+  @apply bg-white text-zinc-500 dark:bg-black dark:text-zinc-400;
 }
 
 ::selection {

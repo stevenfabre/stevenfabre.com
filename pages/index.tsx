@@ -27,7 +27,7 @@ export default function Home() {
         <div className="mt-[80vh] bg-neutral-100 dark:bg-neutral-900 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:items-center md:justify-center">
           <div className="max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto py-8 sm:py-16">
             <h1 className="text-3xl tracking-tight font-medium text-neutral-900 dark:text-neutral-100 xl:text-6xl xl:tracking-tight">
-              I’m Steven, a designer and founder passionate about collaborative
+              I’m Steven, a designer & founder passionate about collaborative
               creative tools.
             </h1>
             <p className="text-lg leading-relaxed mt-6 xl:mt-8 xl:text-xl xl:leading-relaxed">

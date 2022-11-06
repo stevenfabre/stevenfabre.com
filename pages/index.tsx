@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import profilePic from "../public/steven-fabre.jpg";
+import GameProvider from "../src/components/Game/GameProvider";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
             fill
             objectFit="cover"
           />
+          <GameProvider />
         </div>
         <div className="mt-[80vh] bg-neutral-100 dark:bg-neutral-900 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:items-center md:justify-center">
           <div className="max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto py-8 sm:py-16">

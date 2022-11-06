@@ -42,8 +42,8 @@ export default function Home() {
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
 
-      <div className="md:grid md:grid-cols-4 md:min-h-screen select-none">
-        <div className="h-[80vh] fixed w-full top-0 md:top-auto md:w-auto md:h-auto md:col-span-1 md:relative overflow-hidden">
+      <div className="md:grid md:grid-cols-4 md:min-h-screen">
+        <div className="select-none h-[80vh] fixed w-full top-0 md:top-auto md:w-auto md:h-auto md:col-span-1 md:relative overflow-hidden">
           <Image
             className="object-cover"
             src={profilePic}

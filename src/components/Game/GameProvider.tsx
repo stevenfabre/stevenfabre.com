@@ -19,6 +19,7 @@ export default function GameProvider() {
       initialPresence={{
         cursor: null,
         color: COLORS.ORANGE,
+        pointerType: null,
       }}
       initialStorage={initializeStorage()}
     >

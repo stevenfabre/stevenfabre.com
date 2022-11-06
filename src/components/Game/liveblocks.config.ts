@@ -1,6 +1,6 @@
 import { createClient, LiveList, LiveObject } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
-import { Pixel, Point } from "./types";
+import { CursorType, Pixel, Point } from "./types";
 
 const client = createClient({
   authEndpoint: "/api/auth",
@@ -9,6 +9,7 @@ const client = createClient({
 export type Presence = {
   cursor: Point | null;
   color: string;
+  cursorType: CursorType | null;
 };
 
 export type Storage = {

@@ -9,3 +9,5 @@ export type Point = {
   x: number;
   y: number;
 };
+
+export type CursorType = "mouse" | "touch";

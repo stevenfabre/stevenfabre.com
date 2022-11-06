@@ -65,7 +65,7 @@ export default function Home() {
             <p className="text-lg leading-relaxed mt-6 xl:mt-8 xl:text-xl xl:leading-relaxed">
               I’m currently the co-founder and CEO of{" "}
               <a
-                className="underline-offset-4 decoration-2 underline decoration-[#ff511a] text-neutral-900 dark:text-neutral-100 hover:text-[#ff511a] focus:text-[#ff511a] focus:outline-none"
+                className="underline-offset-4 decoration-2 underline decoration-[#ff511a] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#ff511a] hover:text-[#ff511a] dark:focus:text-[#ff511a] focus:text-[#ff511a] focus:outline-none"
                 href="https://liveblocks.io"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -75,7 +75,7 @@ export default function Home() {
               , a company building the collaboration engine of the internet.
               Before that, I was running{" "}
               <a
-                className="underline-offset-4 decoration-2 underline decoration-teal-400 text-neutral-900 dark:text-neutral-100 hover:text-teal-400 focus:text-teal-400 focus:outline-none"
+                className="underline-offset-4 decoration-2 underline decoration-teal-400 text-neutral-900 dark:text-neutral-100 dark:hover:text-teal-400 hover:text-teal-400 dark:focus:text-teal-400 focus:text-teal-400 focus:outline-none"
                 href="https://thenextweb.com/news/invision-acquires-easee-animation-tool"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -85,7 +85,7 @@ export default function Home() {
               , a web animation tool for designers that was acquired in April
               2016 by{" "}
               <a
-                className="underline-offset-4 decoration-2 underline decoration-[#FF0066] text-neutral-900 dark:text-neutral-100 hover:text-[#FF0066] focus:text-[#FF0066] focus:outline-none"
+                className="underline-offset-4 decoration-2 underline decoration-[#FF0066] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#FF0066] hover:text-[#FF0066] dark:focus:text-[#FF0066] focus:text-[#FF0066] focus:outline-none"
                 href="https://invisionapp.com"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -95,7 +95,7 @@ export default function Home() {
               . And that eventually led me to work on design systems and tooling
               at{" "}
               <a
-                className="underline-offset-4 decoration-2 underline decoration-[#006AFF] text-neutral-900 dark:text-neutral-100 hover:text-[#006AFF] focus:text-[#006AFF] focus:outline-none"
+                className="underline-offset-4 decoration-2 underline decoration-[#006AFF] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#006AFF] hover:text-[#006AFF] dark:focus:text-[#006AFF] focus:text-[#006AFF] focus:outline-none"
                 href="https://messenger.com"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -104,7 +104,7 @@ export default function Home() {
               </a>
               . I also run{" "}
               <a
-                className="underline-offset-4 decoration-2 underline decoration-[#00ebcb] text-neutral-900 dark:text-neutral-100 hover:text-[#00ebcb] focus:text-[#00ebcb] focus:outline-none"
+                className="underline-offset-4 decoration-2 underline decoration-[#00ebcb] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#00ebcb] hover:text-[#00ebcb] dark:focus:text-[#00ebcb] focus:text-[#00ebcb] focus:outline-none"
                 href="https://gifmock.com"
                 target="_blank"
                 rel="noopener noreferrer"

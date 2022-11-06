@@ -9,3 +9,5 @@ export const COLORS = {
 export const PIXELS_RESOLUTION_WIDTH = 20;
 export const PIXELS_RESOLUTION_HEIGHT = 50;
 export const DENSITY_PIXELS = 20;
+
+export const DELAY_TIMEOUT_PIXEL = 10000;

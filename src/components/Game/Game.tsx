@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Toolbar from "./Toolbar";
-import { DENSITY_PIXELS } from "./constants";
+import { DELAY_TIMEOUT_PIXEL, DENSITY_PIXELS } from "./constants";
 import Cursors from "./Cursors";
 import { useMutation, useSelf, useStorage } from "./liveblocks.config";
 import { CursorType, Point } from "./types";
@@ -34,7 +34,7 @@ export default function Game() {
 
       setTimeout(() => {
         pixel.set("on", false);
-      }, 1000);
+      }, DELAY_TIMEOUT_PIXEL);
     },
     [me]
   );

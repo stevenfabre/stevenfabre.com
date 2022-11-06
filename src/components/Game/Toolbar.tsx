@@ -1,7 +1,7 @@
 import { ColorSwatch } from "./ColorSwatch";
 import { COLORS } from "./constants";
 
-export default function ColorPicker({
+export default function Toolbar({
   currentColor,
   setColor,
 }: {
@@ -9,7 +9,7 @@ export default function ColorPicker({
   setColor: (color: string) => void;
 }) {
   return (
-    <div className="transform -translate-y-16 ease-[cubic-bezier(.2,1.35,.36,1)] group-hover:transform-none transition-transform delay-300 duration-500 absolute top-4 bg-neutral-100 dark:bg-neutral-900 rounded-lg flex p-1">
+    <div className="absolute top-4 bg-neutral-100 dark:bg-neutral-900 rounded-lg flex p-1 transform md:-translate-y-16 ease-[cubic-bezier(.2,1.35,.36,1)] group-hover:transform-none transition-transform delay-300 duration-500">
       <ColorSwatch
         color={COLORS.ORANGE}
         label="Orange"

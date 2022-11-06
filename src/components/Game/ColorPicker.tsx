@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ColorSwatch } from "./ColorSwatch";
 import { COLORS } from "./constants";
 
@@ -14,31 +13,31 @@ export default function ColorPicker({
       <ColorSwatch
         color={COLORS.ORANGE}
         label="Orange"
-        onPointerDown={() => setColor(COLORS.ORANGE)}
+        onClick={() => setColor(COLORS.ORANGE)}
         selected={currentColor === COLORS.ORANGE}
       />
       <ColorSwatch
         color={COLORS.PINK}
         label="Pink"
-        onPointerDown={() => setColor(COLORS.PINK)}
+        onClick={() => setColor(COLORS.PINK)}
         selected={currentColor === COLORS.PINK}
       />
       <ColorSwatch
         color={COLORS.RED}
         label="Red"
-        onPointerDown={() => setColor(COLORS.RED)}
+        onClick={() => setColor(COLORS.RED)}
         selected={currentColor === COLORS.RED}
       />
       <ColorSwatch
         color={COLORS.SKY}
         label="Sky"
-        onPointerDown={() => setColor(COLORS.SKY)}
+        onClick={() => setColor(COLORS.SKY)}
         selected={currentColor === COLORS.SKY}
       />
       <ColorSwatch
         color={COLORS.TEAL}
         label="Teal"
-        onPointerDown={() => setColor(COLORS.TEAL)}
+        onClick={() => setColor(COLORS.TEAL)}
         selected={currentColor === COLORS.TEAL}
       />
     </div>

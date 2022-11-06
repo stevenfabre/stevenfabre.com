@@ -11,6 +11,8 @@ import { Pixel } from "./types";
 
 export default function GameProvider() {
   const colorKeys = Object.keys(COLORS);
+  console.log("Real-time collaboration powered by liveblocks.io");
+
   return (
     <RoomProvider
       id="game"

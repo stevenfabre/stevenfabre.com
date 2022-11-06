@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import ColorPicker from "./ColorPicker";
-import { COLORS, DENSITY_PIXELS } from "./constants";
+import { DENSITY_PIXELS } from "./constants";
+import Cursors from "./Cursors";
 import { useMutation, useSelf, useStorage } from "./liveblocks.config";
 import { Point } from "./types";
 
@@ -36,9 +38,32 @@ export default function Game() {
     [me]
   );
 
+  useEffect(() => {
+    const onWindowBlur = () => {
+      setCursor(null);
+    };
+
+    window.addEventListener("blur", onWindowBlur);
+
+    return () => {
+      window.removeEventListener("blur", onWindowBlur);
+    };
+  });
+
   return (
     <div className="group absolute inset-0 flex justify-center items-center">
-      <div className="absolute inset-0 flex items-center justify-center mix-blend-overlay cursor-crosshair">
+      <div
+        className="absolute inset-0 flex items-center justify-center mix-blend-overlay cursor-crosshair"
+        onPointerMove={(e) => {
+          const bounds = e.currentTarget.getBoundingClientRect();
+
+          setCursor({
+            x: Math.round(e.clientX - bounds.width / 2),
+            y: Math.round(e.clientY - bounds.height / 2),
+          });
+        }}
+        onPointerLeave={() => setCursor(null)}
+      >
         {pixels.map((pixel, index) => {
           const { x, y, color, on } = pixel;
 
@@ -67,6 +92,8 @@ export default function Game() {
           );
         })}
       </div>
+
+      <Cursors />
 
       <ColorPicker
         currentColor={me.presence.color}

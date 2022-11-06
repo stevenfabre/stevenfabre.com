@@ -1,32 +1,61 @@
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import profilePic from "../public/steven-fabre.jpg";
 import GameProvider from "../src/components/Game/GameProvider";
+import ThemeSwitcher from "../src/components/Game/ThemeSwitcher";
 
 export default function Home() {
+  const router = useRouter();
+
+  const meta = {
+    title: "Steven Fabre",
+    description: `Designer and founder passionate about collaborative creative tools.`,
+    image: "https://stevenfabre.com/static/images/steven-fabre-banner.png",
+    type: "website",
+  };
+
   return (
     <>
       <Head>
-        <title>Steven Fabre</title>
+        <title>{meta.title}</title>
+        <meta name="robots" content="follow, index" />
+        <meta content={meta.description} name="description" />
         <meta
-          name="description"
-          content="I’m a designer and founder passionate about collaborative creative tools."
+          property="og:url"
+          content={`https://stevenfabre.com${router.asPath}`}
         />
+        <link
+          rel="canonical"
+          href={`https://stevenfabre.com${router.asPath}`}
+        />
+        <meta property="og:type" content={meta.type} />
+        <meta property="og:site_name" content="Steven Fabre" />
+        <meta property="og:description" content={meta.description} />
+        <meta property="og:title" content={meta.title} />
+        <meta property="og:image" content={meta.image} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@stevenfabre" />
+        <meta name="twitter:title" content={meta.title} />
+        <meta name="twitter:description" content={meta.description} />
+        <meta name="twitter:image" content={meta.image} />
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
 
       <div className="md:grid md:grid-cols-4 md:min-h-screen md:min-h-[100svh]">
         <div className="h-screen fixed w-full top-0 md:top-auto md:w-auto md:h-auto md:col-span-1 md:relative overflow-hidden">
           <Image
+            className="object-cover"
             src={profilePic}
             alt="Picture of Steven Fabre"
             priority
             fill
-            objectFit="cover"
+            sizes="(max-width: 768px) 100vw,
+              33vw"
           />
           <GameProvider />
         </div>
-        <div className="mt-[80vh] bg-neutral-100 dark:bg-neutral-900 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:items-center md:justify-center">
+        <div className="relative mt-[80vh] bg-neutral-100 dark:bg-neutral-900 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:items-center md:justify-center">
           <div className="max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto py-8 sm:py-16">
             <h1 className="text-3xl tracking-tight font-medium text-neutral-900 dark:text-neutral-100 xl:text-6xl xl:tracking-tight">
               I’m Steven, a designer & founder passionate about collaborative
@@ -147,6 +176,8 @@ export default function Home() {
               </li>
             </ul>
           </div>
+
+          <ThemeSwitcher />
         </div>
       </div>
     </>

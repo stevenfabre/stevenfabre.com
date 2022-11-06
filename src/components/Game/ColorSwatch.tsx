@@ -1,28 +1,27 @@
-import { PointerEventHandler } from "react";
+import { MouseEventHandler } from "react";
 
 export function ColorSwatch({
   color,
   label,
-  onPointerDown,
-  onPointerUp,
+  onClick,
   selected,
 }: {
   color: string;
   label: string;
-  onPointerDown?: PointerEventHandler;
-  onPointerUp?: PointerEventHandler;
+  onClick?: MouseEventHandler;
   selected?: boolean;
 }) {
   return (
     <button
+      aria-label={`Select ${label}`}
+      type="button"
       className="rounded-md overflow-hidden relative w-8 h-8 flex items-center justify-center"
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
+      onClick={onClick}
     >
       {selected && (
         <>
           <span
-            className="absolute inset-0 opacity-20"
+            className="absolute inset-0 opacity-20 rounded-md"
             style={{ backgroundColor: color }}
           />
           <span className="absolute rounded-full w-5 h-5 bg-neutral-100 dark:bg-neutral-900" />

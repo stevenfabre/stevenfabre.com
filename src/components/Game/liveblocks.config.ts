@@ -3,8 +3,7 @@ import { createRoomContext } from "@liveblocks/react";
 import { Pixel, Point } from "./types";
 
 const client = createClient({
-  publicApiKey:
-    "pk_prod_OBt1rwR5ktdr5_6f10yeHG3mYayAa41oVetV_9io3No568b2l8wE7C9meQiDBZRA",
+  authEndpoint: "/api/auth",
 });
 
 export type Presence = {

@@ -79,7 +79,7 @@ export default function Home() {
               >
                 Gifmock
               </a>
-              , a tool to create high-quality GIFs.
+              , a tool used by thousands of people to create high-quality GIFs.
             </p>
 
             <ul className="mt-12 flex flex-wrap gap-6">

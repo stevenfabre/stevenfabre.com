@@ -47,7 +47,6 @@ function Cursor({ connectionId }: Props) {
       {cursorType === "touch" && (
         <svg
           style={{
-            transition: "transform 120ms linear",
             transform: `translateX(${x}px) translateY(${y}px)`,
           }}
           width="44"

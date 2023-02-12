@@ -3,7 +3,8 @@ import { createRoomContext } from "@liveblocks/react";
 import { CursorType, Pixel, Point } from "./types";
 
 const client = createClient({
-  authEndpoint: "/api/auth",
+  throttle: 16,
+  publicApiKey: process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY as string,
 });
 
 export type Presence = {

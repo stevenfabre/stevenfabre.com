@@ -4,6 +4,8 @@ import { DELAY_TIMEOUT_PIXEL, DENSITY_PIXELS } from "./constants";
 import Cursors from "./Cursors";
 import { useMutation, useSelf, useStorage } from "./liveblocks.config";
 import { CursorType, Point } from "./types";
+import Badge from "./Badge";
+import Footer from "./Footer";
 
 export default function Game() {
   const me = useSelf();
@@ -112,6 +114,8 @@ export default function Game() {
           );
         })}
       </div>
+
+      <Footer />
 
       <Cursors />
 

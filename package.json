@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@liveblocks/client": "^0.19.8",
-    "@liveblocks/node": "^0.19.8",
-    "@liveblocks/react": "^0.19.8",
+    "@liveblocks/client": "^1.0.0",
+    "@liveblocks/node": "^1.0.0",
+    "@liveblocks/react": "^1.0.0",
     "@next/font": "^13.0.2",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",

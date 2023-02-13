@@ -9,7 +9,7 @@
 
 To run locally, you’ll first need to [create a Liveblocks account](https://liveblocks.io/api/auth/signup) to get a new secret key generated.
 
-Once you’ve generated [the secret key](https://liveblocks.io/dashboard/apikeys), create a `.env.local` file and assign it to the`LIVEBLOCKS_SECRET_KEY` variable.
+Once you’ve generated [the public key](https://liveblocks.io/dashboard/apikeys), create an `.env.local` file and assign it to the`NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY` variable.
 
 You can then run the following commands in your terminal:
 

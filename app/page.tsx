@@ -2,11 +2,51 @@ import ThemeSwitcher from "../src/components/ThemeSwitcher";
 import Image from "next/image";
 import GameProvider from "../src/components/Game/GameProvider";
 import profilePic from "../public/steven-fabre.jpg";
+import Investment from "../src/components/Investment";
+
+type Investment = {
+  label: string;
+  url: string;
+  description: string;
+};
+
+const INVESTMENTS: Investment[] = [
+  {
+    label: "Klaro",
+    url: "https://www.klaroapp.com/",
+    description: "a user-friendly spreadsheet platform",
+  },
+  {
+    label: "Sequence",
+    url: "https://sequence.film/",
+    description: "a browser-based professional video editor",
+  },
+  {
+    label: "Storytell.ai",
+    url: "https://storytell.ai/",
+    description: "an AI platform to extract signal from noise",
+  },
+  {
+    label: "Guild",
+    url: "https://guild.host/",
+    description: "a community management platform",
+  },
+  {
+    label: "Cursor Capital",
+    url: "https://www.cursorcapital.vc/",
+    description: "a venture firm investing in creative tools",
+  },
+  {
+    label: "Boldstart",
+    url: "https://boldstart.vc/",
+    description: "a venture firm investing in technical founders",
+  },
+];
 
 export default async function Home() {
   return (
     <>
-      <div className="md:grid md:grid-cols-4 md:min-h-screen">
+      <div className="md:grid md:grid-cols-4 md:h-screen">
         <div className="select-none h-[80vh] fixed w-full top-0 md:top-auto md:w-auto md:h-auto md:col-span-1 md:relative overflow-hidden">
           <div className="absolute top-0 -bottom-[20vh] inset-0 md:bottom-0">
             <Image
@@ -21,14 +61,14 @@ export default async function Home() {
           </div>
           <GameProvider />
         </div>
-        <div className="relative mt-[80vh] bg-neutral-100 dark:bg-neutral-900 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:items-center md:justify-center">
-          <div className="max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto py-8 sm:py-16">
+        <div className="relative mt-[80vh] bg-neutral-100 dark:bg-neutral-900 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:justify-center md:overflow-y-scroll">
+          <div className="max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto pt-10 sm:pt-16 lg:pt-32 xl:pt-44">
             <h1 className="text-balance text-3xl tracking-tight font-semibold text-neutral-900 sm:text-4xl sm:tracking-tight dark:text-neutral-100 xl:text-6xl xl:tracking-tighter">
               I’m Steven, a designer & founder who loves building tools for
               people.
             </h1>
-            <p className="text-pretty text-lg leading-relaxed mt-6 xl:mt-8 xl:text-xl xl:leading-relaxed">
-              I’m currently the co-founder and CEO of{" "}
+            <p className="text-pretty text-lg leading-relaxed mt-8 xl:mt-10 xl:text-xl xl:leading-relaxed">
+              I’m the co-founder and CEO of{" "}
               <a
                 className="underline-offset-4 decoration-2 underline decoration-[#9f8dfc] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#9f8dfc] hover:text-[#9f8dfc] dark:focus:text-[#9f8dfc] focus:text-[#9f8dfc] focus:outline-none"
                 href="https://liveblocks.io"
@@ -47,8 +87,7 @@ export default async function Home() {
               >
                 Easee
               </a>
-              , a web animation tool for designers that was acquired in April
-              2016 by{" "}
+              , a web animation tool acquired by{" "}
               <a
                 className="underline-offset-4 decoration-2 underline decoration-[#FF0066] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#FF0066] hover:text-[#FF0066] dark:focus:text-[#FF0066] focus:text-[#FF0066] focus:outline-none"
                 href="https://invisionapp.com"
@@ -56,9 +95,8 @@ export default async function Home() {
                 rel="noopener noreferrer"
               >
                 InVision
-              </a>
-              . And that eventually led me to work on design systems and tooling
-              at{" "}
+              </a>{" "}
+              in April 2016. I also worked on design systems at{" "}
               <a
                 className="underline-offset-4 decoration-2 underline decoration-[#006AFF] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#006AFF] hover:text-[#006AFF] dark:focus:text-[#006AFF] focus:text-[#006AFF] focus:outline-none"
                 href="https://messenger.com"
@@ -66,8 +104,8 @@ export default async function Home() {
                 rel="noopener noreferrer"
               >
                 Meta
-              </a>
-              . I also run{" "}
+              </a>{" "}
+              and created{" "}
               <a
                 className="underline-offset-4 decoration-2 underline decoration-[#00ebcb] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#00ebcb] hover:text-[#00ebcb] dark:focus:text-[#00ebcb] focus:text-[#00ebcb] focus:outline-none"
                 href="https://gifmock.com"
@@ -79,7 +117,32 @@ export default async function Home() {
               , a tool used by thousands of people to create high-quality GIFs.
             </p>
 
-            <div className="mt-12 flex justify-between items-center">
+            <p className="text-pretty text-lg leading-relaxed mt-6 xl:mt-8 xl:text-xl xl:leading-relaxed">
+              I grew up in Rodez, a small town in the south of France, where the
+              values of hard work, kindness, and resilience are deeply rooted.
+              These principles remain close to my heart today. After spending
+              over a decade abroad in Sydney and New York City, I now call Paris
+              home.
+            </p>
+
+            <p className="text-pretty text-lg leading-relaxed mt-6 xl:mt-8 xl:text-xl xl:leading-relaxed">
+              I also invest small checks in startups and funds that inspire me.
+              I owe much of my career to people who believed in me when others
+              didn’t, and this is my way to pay it forward. Think of me as an
+              advisor with skin in the game—I’m here to help you tackle tricky
+              problems, provide feedback, and connect you with my network.
+            </p>
+
+            <h2 className="font-semibold text-lg leading-relaxed mt-8 xl:mt-10 xl:text-xl xl:leading-relaxed text-neutral-900 dark:text-neutral-100">
+              Investments
+            </h2>
+            <ul className="flex flex-col mt-3 xl:mt-4 gap-1.5 xl:gap-2">
+              {INVESTMENTS.map((investment, index) => {
+                return <Investment key={index} {...investment} />;
+              })}
+            </ul>
+
+            <div className="mt-12 flex justify-between items-center pb-4 sm:pb-16 lg:pb-32 xl:pb-44">
               <ul className="flex flex-wrap gap-4">
                 <li>
                   <a

@@ -23,7 +23,7 @@ export default function GameProvider() {
       throttle={16}
     >
       <RoomProvider
-        id="game-hello-stevenfabre.cofm"
+        id="game-hello-stevenfabre.com"
         initialPresence={{
           cursor: null,
           color: COLORS.ORANGE,
@@ -31,7 +31,9 @@ export default function GameProvider() {
         }}
         initialStorage={initializeStorage()}
       >
-        <ClientSideSuspense fallback={<></>}>{() => <Game />}</ClientSideSuspense>
+        <ClientSideSuspense fallback={<></>}>
+          {() => <Game />}
+        </ClientSideSuspense>
       </RoomProvider>
     </LiveblocksProvider>
   );

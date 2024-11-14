@@ -1,4 +1,4 @@
-"use-client";
+"use client";
 
 import Cursor from "./Cursor";
 import { useOthersConnectionIds } from "@liveblocks/react/suspense";

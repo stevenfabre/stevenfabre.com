@@ -1,15 +1,15 @@
-const { spacing, fontFamily } = require('tailwindcss/defaultTheme');
-/** @type {import('tailwindcss').Config} */
+const { spacing, fontFamily } = require("tailwindcss/defaultTheme");
+/** @type {import("tailwindcss").Config} */
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./app/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Familjen Grotesk', ...fontFamily.sans]
+        sans: ["Familjen Grotesk", ...fontFamily.sans]
       }
     },
   },

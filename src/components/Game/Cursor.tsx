@@ -1,4 +1,4 @@
-"use-client";
+"use client";
 
 import { memo } from "react";
 import { useOther } from "@liveblocks/react/suspense";

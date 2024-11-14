@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import ThemeSwitcher from "../src/components/ThemeSwitcher";
 import Image from "next/image";
 import GameProvider from "../src/components/Game/GameProvider";
@@ -24,7 +23,7 @@ export default async function Home() {
         </div>
         <div className="relative mt-[80vh] bg-neutral-100 dark:bg-neutral-900 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:items-center md:justify-center">
           <div className="max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto py-8 sm:py-16">
-            <h1 className="text-balance text-3xl tracking-tight font-medium text-neutral-900 sm:text-4xl sm:tracking-tight dark:text-neutral-100 xl:text-6xl xl:tracking-tighter">
+            <h1 className="text-balance text-3xl tracking-tight font-semibold text-neutral-900 sm:text-4xl sm:tracking-tight dark:text-neutral-100 xl:text-6xl xl:tracking-tighter">
               I’m Steven, a designer & founder who loves building tools for
               people.
             </h1>

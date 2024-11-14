@@ -1,10 +1,11 @@
+"use client";
+
 import { useEffect } from "react";
 import Toolbar from "./Toolbar";
 import { DELAY_TIMEOUT_PIXEL, DENSITY_PIXELS } from "./constants";
 import Cursors from "./Cursors";
-import { useMutation, useSelf, useStorage } from "./liveblocks.config";
+import { useMutation, useSelf, useStorage } from "@liveblocks/react/suspense";
 import { CursorType, Point } from "./types";
-import Badge from "./Badge";
 import Footer from "./Footer";
 
 export default function Game() {

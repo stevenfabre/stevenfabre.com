@@ -1,5 +1,3 @@
-import { ComponentProps } from "react";
-
 export default function Badge() {
   return (
     <a href="https://liveblocks.io" rel="noreferrer" target="_blank">

@@ -1,5 +1,7 @@
+"use-client";
+
 import Badge from "./Badge";
-import { useOthers } from "./liveblocks.config";
+import { useOthers } from "@liveblocks/react/suspense";
 
 export default function Footer() {
   const countOthers = useOthers((others) => others.length);

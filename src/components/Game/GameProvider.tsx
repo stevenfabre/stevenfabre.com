@@ -1,35 +1,44 @@
-import { ClientSideSuspense } from "@liveblocks/react";
-import { RoomProvider, Storage } from "./liveblocks.config";
+"use client";
+
+import { LiveList, LiveObject } from "@liveblocks/client";
+import {
+  LiveblocksProvider,
+  RoomProvider,
+  ClientSideSuspense,
+} from "@liveblocks/react/suspense";
 import Game from "./Game";
 import {
   COLORS,
-  PIXELS_RESOLUTION_WIDTH,
   PIXELS_RESOLUTION_HEIGHT,
+  PIXELS_RESOLUTION_WIDTH,
 } from "./constants";
-import { LiveList, LiveObject } from "@liveblocks/client";
 import { Pixel } from "./types";
+import { Storage } from "./liveblocks.config";
 
 export default function GameProvider() {
   const colorKeys = Object.keys(COLORS);
-  console.log("Real-time collaboration powered by liveblocks.io");
-
   return (
-    <RoomProvider
-      id="game"
-      initialPresence={{
-        cursor: null,
-        color: COLORS.ORANGE,
-        cursorType: null,
-      }}
-      initialStorage={initializeStorage()}
+    <LiveblocksProvider
+      publicApiKey="pk_prod_OBt1rwR5ktdr5_6f10yeHG3mYayAa41oVetV_9io3No568b2l8wE7C9meQiDBZRA"
+      throttle={16}
     >
-      <ClientSideSuspense fallback={<></>}>{() => <Game />}</ClientSideSuspense>
-    </RoomProvider>
+      <RoomProvider
+        id="game-hello-stevenfabre.cofm"
+        initialPresence={{
+          cursor: null,
+          color: COLORS.ORANGE,
+          cursorType: null,
+        }}
+        initialStorage={initializeStorage()}
+      >
+        <ClientSideSuspense fallback={<></>}>{() => <Game />}</ClientSideSuspense>
+      </RoomProvider>
+    </LiveblocksProvider>
   );
 }
 
 function initializeStorage(): Storage {
-  const pixels = new LiveList<LiveObject<Pixel>>();
+  const pixels = new LiveList<LiveObject<Pixel>>([]);
 
   for (
     let x = -PIXELS_RESOLUTION_WIDTH / 2;

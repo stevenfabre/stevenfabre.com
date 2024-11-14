@@ -10,7 +10,7 @@ const INFO = {
   name: "Steven Fabre",
   twitter: "@stevenfabre",
   description:
-    "Steven Fabre is a designer and founder passionate about collaborative creative tools.",
+    "Steven Fabre is a designer and founder who loves building tools for people.",
   url: "https://stevenfabre.com",
   metaImage: "/meta.png",
 };

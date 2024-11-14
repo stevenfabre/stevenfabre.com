@@ -1,5 +1,7 @@
+"use client";
+
 import Cursor from "./Cursor";
-import { useOthersConnectionIds } from "./liveblocks.config";
+import { useOthersConnectionIds } from "@liveblocks/react/suspense";
 
 export default function Cursors() {
   const ids = useOthersConnectionIds();

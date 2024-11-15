@@ -17,32 +17,32 @@ const INVESTMENTS: Investment[] = [
   {
     label: "Klaro",
     url: "https://www.klaroapp.com/",
-    description: "a user-friendly spreadsheet platform",
+    description: "a user-friendly spreadsheet platform.",
   },
   {
     label: "Sequence",
     url: "https://sequence.film/",
-    description: "a browser-based professional video editor",
+    description: "a browser-based professional video editor.",
   },
   {
     label: "Storytell.ai",
     url: "https://storytell.ai/",
-    description: "an AI platform to extract signal from noise",
+    description: "an AI platform to extract signal from noise.",
   },
   {
     label: "Guild",
     url: "https://guild.host/",
-    description: "a community management platform",
+    description: "a community management platform.",
   },
   {
     label: "Cursor Capital",
     url: "https://www.cursorcapital.vc/",
-    description: "a venture firm investing in creative tools",
+    description: "a venture firm investing in creative tools.",
   },
   {
     label: "Boldstart",
     url: "https://boldstart.vc/",
-    description: "a venture firm investing in technical founders",
+    description: "a venture firm investing in technical founders.",
   },
 ];
 
@@ -64,7 +64,7 @@ export default async function Home() {
           </div>
           <GameProvider />
         </div>
-        <div className="relative mt-[80vh] bg-neutral-100 dark:bg-neutral-900 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:justify-center md:overflow-y-scroll">
+        <div className="relative mt-[80vh] bg-neutral-50 dark:bg-neutral-950 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:justify-center md:overflow-y-scroll">
           <div className="max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto pt-10 sm:pt-16 lg:pt-32 xl:pt-44">
             <h1 className="text-balance text-3xl tracking-tight font-semibold text-neutral-900 sm:text-4xl sm:tracking-tight dark:text-neutral-100 xl:text-6xl xl:tracking-tighter">
               I’m Steven, a designer & founder who loves building tools for
@@ -122,7 +122,7 @@ export default async function Home() {
 
             <p className="text-pretty text-lg leading-relaxed mt-6 xl:mt-8 xl:text-xl xl:leading-relaxed">
               I grew up in Rodez, a small town in the south of France, where the
-              values of hard work, humility, and resilience are deeply rooted.
+              values of hard work, resilience, and humility are deeply rooted.
               These principles remain close to my heart today. After spending
               over a decade abroad in Sydney and New York City, I now call Paris
               home.

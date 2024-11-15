@@ -24,7 +24,7 @@ export function ColorSwatch({
             className="absolute inset-0 opacity-20 rounded-md"
             style={{ backgroundColor: color }}
           />
-          <span className="absolute rounded-full w-5 h-5 bg-neutral-100 dark:bg-neutral-900" />
+          <span className="absolute rounded-full w-5 h-5 bg-neutral-50 dark:bg-neutral-900" />
         </>
       )}
       <span

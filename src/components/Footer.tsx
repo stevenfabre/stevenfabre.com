@@ -5,7 +5,7 @@ import { Tooltip } from "./Tooltip";
 
 export default function Footer() {
   return (
-    <footer className="sticky bottom-0 flex flex-row-reverse justify-between items-center py-4 mt-12 xl:mt-16 border-t border-black border-opacity-5 dark:border-opacity-5 dark:border-white bg-neutral-100 dark:bg-neutral-900 bg-opacity-95 dark:bg-opacity-95 backdrop-blur">
+    <footer className="sticky bottom-0 flex flex-row-reverse justify-between items-center py-4 mt-12 xl:mt-16 border-t border-black border-opacity-5 dark:border-opacity-5 dark:border-white bg-neutral-50 dark:bg-neutral-950 bg-opacity-95 dark:bg-opacity-95 backdrop-blur">
       <ul className="flex flex-wrap gap-1.5">
         <li>
           <Tooltip content="X" delayDuration={200}>

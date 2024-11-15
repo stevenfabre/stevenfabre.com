@@ -22,9 +22,7 @@ export default function Investment({
         {label}
       </Link>
       <span className="hidden sm:flex grow border-t border-black border-opacity-10 dark:border-opacity-10 dark:border-white min-w-4" />
-      <span className="text-neutral-400 dark:text-neutral-500">
-        {description}
-      </span>
+      <span>{description}</span>
     </li>
   );
 }

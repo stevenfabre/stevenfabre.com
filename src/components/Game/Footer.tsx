@@ -1,6 +1,5 @@
 "use client";
 
-import Badge from "./Badge";
 import { useOthers } from "@liveblocks/react/suspense";
 
 export default function Footer() {

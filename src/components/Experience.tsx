@@ -18,21 +18,21 @@ export default function Experience({
   when,
 }: ExperienceProps) {
   return (
-    <li className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between sm:space-x-2 pl-0 text-base leading-relaxed xl:text-lg xl:leading-relaxed">
-      <span>
+    <li className="flex flex-col pl-0 text-base leading-relaxed xl:text-lg xl:leading-relaxed">
+      <span className="flex justify-between items-baseline space-x-2">
+        <span>{title}</span>
+        <span className="flex grow border-t border-black border-opacity-5 dark:border-opacity-5 dark:border-white min-w-4" />
         {tooltip ? (
           <Tooltip content={tooltip} delayDuration={200}>
             <Company url={url}>{company}</Company>
           </Tooltip>
         ) : (
           <Company url={url}>{company}</Company>
-        )}{" "}
-        <span className="text-neutral-400 dark:text-neutral-500">
-          - {title}
-        </span>
+        )}
       </span>
-      <span className="hidden sm:flex grow border-t border-black border-opacity-5 dark:border-opacity-5 dark:border-white min-w-4" />
-      <span>{when}</span>
+      <span className="self-start text-neutral-400 dark:text-neutral-500 text-sm xl:text-base">
+        {when}
+      </span>
     </li>
   );
 }

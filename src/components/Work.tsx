@@ -70,7 +70,7 @@ export default function () {
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 xl:text-xl xl:leading-relaxed text-neutral-900 dark:text-neutral-100">
         Work
       </h2>
-      <ul className="flex flex-col mt-3 xl:mt-4 gap-2">
+      <ul className="flex flex-col mt-3 xl:mt-4 gap-3">
         {EXPERIENCES.map((experience, index) => {
           return <Experience key={index} {...experience} />;
         })}

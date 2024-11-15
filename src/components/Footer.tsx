@@ -5,12 +5,12 @@ import { Tooltip } from "./Tooltip";
 
 export default function Footer() {
   return (
-    <footer className="sticky bottom-0 flex flex-row-reverse justify-between items-center py-4 mt-12 xl:mt-16 border-t border-black border-opacity-5 dark:border-opacity-5 dark:border-white bg-neutral-50 dark:bg-neutral-950 bg-opacity-95 dark:bg-opacity-95 backdrop-blur">
+    <footer className="sticky bottom-0 flex flex-row-reverse justify-between items-center py-4 mt-12 xl:mt-16 border-t border-black border-opacity-10 dark:border-opacity-10 dark:border-white bg-neutral-50 dark:bg-neutral-950 bg-opacity-95 dark:bg-opacity-95 backdrop-blur">
       <ul className="flex flex-wrap gap-1.5">
         <li>
           <Tooltip content="X" delayDuration={200}>
             <Link
-              className="w-8 h-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+              className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
               href="https://twitter.com/stevenfabre"
               target="_blank"
               rel="noopener noreferrer"
@@ -18,7 +18,7 @@ export default function Footer() {
               <svg
                 aria-hidden="true"
                 focusable="false"
-                className="fill-current"
+                className="fill-current size-6 sm:size-5"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -34,7 +34,7 @@ export default function Footer() {
         <li>
           <Tooltip content="LinkedIn" delayDuration={200}>
             <Link
-              className="w-8 h-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+              className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
               href="https://www.linkedin.com/in/steven-fabre-5510bb38"
               target="_blank"
               rel="noopener noreferrer"
@@ -42,7 +42,7 @@ export default function Footer() {
               <svg
                 aria-hidden="true"
                 focusable="false"
-                className="fill-current"
+                className="fill-current size-6 sm:size-5"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -58,7 +58,7 @@ export default function Footer() {
         <li>
           <Tooltip content="GitHub" delayDuration={200}>
             <Link
-              className="w-8 h-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+              className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
               href="https://github.com/stevenfabre"
               target="_blank"
               rel="noopener noreferrer"
@@ -66,7 +66,7 @@ export default function Footer() {
               <svg
                 aria-hidden="true"
                 focusable="false"
-                className="fill-current"
+                className="fill-current size-6 sm:size-5"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -81,13 +81,13 @@ export default function Footer() {
         </li>
         <li>
           <EmailLink
-            className="w-8 h-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+            className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
             email="hello@stevenfabre.com"
           >
             <svg
               aria-hidden="true"
               focusable="false"
-              className="fill-current"
+              className="fill-current size-6 sm:size-5"
               width="20"
               height="20"
               viewBox="0 0 20 20"

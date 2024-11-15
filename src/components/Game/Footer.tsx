@@ -7,8 +7,9 @@ export default function Footer() {
   const countOthers = useOthers((others) => others.length);
 
   return (
-    <div className="absolute bottom-0 right-0 left-0 py-4 px-4 flex gap-4 items-center justify-end">
-      <span className="inline-flex items-center gap-2 text-sm text-black font-medium">
+    <div className="absolute bottom-0 right-0 left-0 py-4 px-6 flex gap-4 items-center justify-end pointer-events-none">
+      <div className="absolute -top-12 left-0 right-0 bottom-0 bg-gradient-to-t from-neutral-900 to-transparent dark:from-neutral-100 opacity-60" />
+      <span className="relative z-10 inline-flex items-center gap-2 h-10 sm:h-8 text-sm text-neutral-100 dark:text-neutral-900 font-medium tabular-nums">
         <svg
           aria-hidden="true"
           focusable="false"
@@ -22,7 +23,6 @@ export default function Footer() {
         </svg>
         {countOthers + 1}
       </span>
-      {/* <Badge /> */}
     </div>
   );
 }

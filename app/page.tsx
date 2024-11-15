@@ -11,8 +11,8 @@ export default async function Home() {
   return (
     <>
       <div className="md:grid md:grid-cols-4 md:h-screen">
-        <div className="select-none h-[80vh] fixed w-full top-0 md:top-auto md:w-auto md:h-auto md:col-span-1 md:relative overflow-hidden">
-          <div className="absolute top-0 -bottom-[20vh] inset-0 md:bottom-0">
+        <div className="select-none h-[72vh] fixed w-full top-0 md:top-auto md:w-auto md:h-auto md:col-span-1 md:relative overflow-hidden">
+          <div className="absolute top-0 -bottom-[10vh] inset-0 md:bottom-0">
             <Image
               className="object-cover"
               src={profilePic}
@@ -25,9 +25,9 @@ export default async function Home() {
           </div>
           <GameProvider />
         </div>
-        <div className="relative mt-[80vh] bg-neutral-50 dark:bg-neutral-950 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:justify-center md:overflow-y-scroll">
+        <div className="relative mt-[72vh] bg-neutral-50 dark:bg-neutral-950 bg-opacity-95 dark:bg-opacity-95 backdrop-blur md:backdrop-filter-none md:mt-0 md:col-span-3 md:flex md:justify-center md:overflow-y-scroll">
           <div className="max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto pt-10 sm:pt-16 lg:pt-32 xl:pt-44">
-            <h1 className="text-balance text-3xl tracking-tight font-semibold text-neutral-900 sm:text-4xl sm:tracking-tight dark:text-neutral-100 xl:text-6xl xl:tracking-tighter">
+            <h1 className="text-balance text-3xl tracking-tight font-semibold text-neutral-900 sm:text-4xl sm:tracking-tight dark:text-neutral-100 xl:text-6xl xl:tracking-tight">
               I’m Steven, a designer & founder who loves building tools for
               people.
             </h1>

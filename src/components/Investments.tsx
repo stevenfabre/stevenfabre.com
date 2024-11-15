@@ -39,7 +39,7 @@ export default function () {
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 xl:text-xl xl:leading-relaxed text-neutral-900 dark:text-neutral-100">
         Investments
       </h2>
-      <ul className="flex flex-col mt-3 xl:mt-4 gap-3">
+      <ul className="flex flex-col mt-4 xl:mt-6 gap-3">
         {INVESTMENTS.map((investment, index) => {
           return <Investment key={index} {...investment} />;
         })}

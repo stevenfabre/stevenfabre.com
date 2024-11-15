@@ -5,27 +5,27 @@ const EXPERIENCES: ExperienceProps[] = [
     company: "Liveblocks",
     url: "https://liveblocks.io",
     title: "Co-founder & CEO",
-    when: "2021 - Present",
+    when: "2021-Now",
   },
   {
     company: "Gifmock",
     url: "https://gifmock.com",
     title: "Founder",
-    when: "2017 - Present",
+    when: "2017-Now",
   },
   {
     company: "Meta",
     tooltip: "Messenger",
     url: "https://meta.com",
     title: "Product Design",
-    when: "2020 - 2021",
+    when: "2020-2021",
   },
   {
     company: "InVision",
     tooltip: "InVision Studio",
     url: "https://invisionapp.com",
     title: "Product Design",
-    when: "2016 - 2020",
+    when: "2016-2020",
   },
   {
     company: "Easee",
@@ -37,7 +37,7 @@ const EXPERIENCES: ExperienceProps[] = [
     company: "Campaign Monitor",
     url: "https://campaignmonitor.com",
     title: "Product Design",
-    when: "2014 - 2016",
+    when: "2014-2016",
   },
   {
     company: "Backseat",
@@ -48,19 +48,19 @@ const EXPERIENCES: ExperienceProps[] = [
     company: "Digital Garden",
     url: "https://digitalgarden.com.au",
     title: "Design & Engineering",
-    when: "2013 - 2014",
+    when: "2013-2014",
   },
   {
     company: "Rocket Internet",
     tooltip: "The Iconic",
     url: "https://theiconic.com.au",
     title: "Design & Engineering",
-    when: "2012 - 2013",
+    when: "2012-2013",
   },
   {
     company: "Freelance",
     title: "Design & Engineering",
-    when: "2006 - 2011",
+    when: "2006-2011",
   },
 ];
 
@@ -70,7 +70,7 @@ export default function () {
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 xl:text-xl xl:leading-relaxed text-neutral-900 dark:text-neutral-100">
         Work
       </h2>
-      <ul className="flex flex-col mt-3 xl:mt-4 gap-3">
+      <ul className="flex flex-col mt-4 xl:mt-6 gap-3">
         {EXPERIENCES.map((experience, index) => {
           return <Experience key={index} {...experience} />;
         })}

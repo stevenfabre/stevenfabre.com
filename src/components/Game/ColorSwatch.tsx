@@ -15,7 +15,7 @@ export function ColorSwatch({
     <button
       aria-label={`Select ${label}`}
       type="button"
-      className="rounded-md overflow-hidden relative w-8 h-8 flex items-center justify-center"
+      className="rounded-md overflow-hidden relative size-10 sm:size-8 flex items-center justify-center"
       onClick={onClick}
     >
       {selected && (
@@ -24,11 +24,11 @@ export function ColorSwatch({
             className="absolute inset-0 opacity-20 rounded-md"
             style={{ backgroundColor: color }}
           />
-          <span className="absolute rounded-full w-5 h-5 bg-neutral-100 dark:bg-neutral-900" />
+          <span className="absolute rounded-full size-6 sm:size-5 bg-neutral-50 dark:bg-neutral-900" />
         </>
       )}
       <span
-        className="block relative rounded-full w-4 h-4"
+        className="block relative rounded-full size-5 sm:size-4"
         style={{ backgroundColor: color }}
       />
       <span className="sr-only">{label}</span>

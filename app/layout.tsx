@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
 import { Metadata } from "next";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 const font = Inter({ subsets: ["latin"] });
 
@@ -53,7 +54,9 @@ export default function RootLayout({
         <meta content="initial-scale=1, viewport-fit=cover" name="viewport" />
       </head>
       <body>
-        <ThemeProvider attribute="class">{children}</ThemeProvider>
+        <ThemeProvider attribute="class">
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

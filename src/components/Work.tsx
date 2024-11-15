@@ -41,6 +41,7 @@ const EXPERIENCES: ExperienceProps[] = [
   },
   {
     company: "Backseat",
+    url: "https://www.news.com.au/technology/gadgets/over-taxis-ridesharing-apps-like-uber-and-backseat-hit-australia/news-story/81ebe2794989a0dcc128d97fea140121",
     title: "Co-founder",
     when: "2014",
   },

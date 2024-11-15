@@ -81,7 +81,7 @@ export default async function Home() {
                 Liveblocks
               </Link>
               , a company building the collaboration engine of the internet.
-              Before that, I was running{" "}
+              Before that, I created{" "}
               <Link
                 className="underline-offset-4 decoration-2 underline decoration-teal-400 text-neutral-900 dark:text-neutral-100 dark:hover:text-teal-400 hover:text-teal-400 dark:focus:text-teal-400 focus:text-teal-400 focus:outline-none"
                 href="https://thenextweb.com/news/invision-acquires-easee-animation-tool"
@@ -108,7 +108,7 @@ export default async function Home() {
               >
                 Meta
               </Link>{" "}
-              and created{" "}
+              and run{" "}
               <Link
                 className="underline-offset-4 decoration-2 underline decoration-[#00ebcb] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#00ebcb] hover:text-[#00ebcb] dark:focus:text-[#00ebcb] focus:text-[#00ebcb] focus:outline-none"
                 href="https://gifmock.com"
@@ -117,7 +117,7 @@ export default async function Home() {
               >
                 Gifmock
               </Link>
-              , a tool used by thousands of people to create high-quality GIFs.
+              , a tool to create high‑quality GIFs.
             </p>
 
             <p className="text-pretty text-lg leading-relaxed mt-6 xl:mt-8 xl:text-xl xl:leading-relaxed">
@@ -132,9 +132,8 @@ export default async function Home() {
               I also invest small checks in startups and funds that inspire me.
               I owe much of my career to people who believed in me when others
               didn’t. This is my way to pay it forward. Think of me as an
-              advisor with skin in the game—I’m here to help you tackle tricky
-              problems, provide feedback, and connect you with my network. If
-              you think I can be helpful, please{" "}
+              advisor with skin in the game—if you think I can be helpful,
+              please{" "}
               <EmailLink
                 className="shrink-0 underline-offset-4 decoration-2 underline decoration-neutral-300 hover:decoration-neutral-900 focus:decoration-neutral-900 dark:decoration-neutral-700 dark:hover:decoration-neutral-100 dark:focus:decoration-neutral-100 text-neutral-900 dark:text-neutral-100 dark:hover:text-neutral-50 hover:text-neutral-950 dark:focus:text-neutral-50 focus:text-neutral-950 focus:outline-none"
                 email="hello@stevenfabre.com"

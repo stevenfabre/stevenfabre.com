@@ -1,14 +1,16 @@
 import Link from "next/link";
 
+export type InvestmentProps = {
+  label: string;
+  url: string;
+  description: string;
+};
+
 export default function Investment({
   url,
   label,
   description,
-}: {
-  url: string;
-  label: string;
-  description: string;
-}) {
+}: InvestmentProps) {
   return (
     <li className="sm:flex sm:items-baseline sm:justify-between sm:space-x-2 pl-0 text-base leading-relaxed xl:text-lg xl:leading-relaxed">
       <Link
@@ -20,8 +22,8 @@ export default function Investment({
         {label}
       </Link>
       <span className="hidden sm:flex grow border-t border-black border-opacity-5 dark:border-opacity-5 dark:border-white min-w-4" />
-      <span>
-        <span className="sm:hidden">: </span>
+      <span className="text-neutral-400 dark:text-neutral-500">
+        <span className="sm:hidden"> - </span>
         {description}
       </span>
     </li>

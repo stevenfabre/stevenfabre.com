@@ -1,12 +1,6 @@
-import Investment from "./Investment";
+import Investment, { InvestmentProps } from "./Investment";
 
-type Investment = {
-  label: string;
-  url: string;
-  description: string;
-};
-
-const INVESTMENTS: Investment[] = [
+const INVESTMENTS: InvestmentProps[] = [
   {
     label: "Klaro",
     url: "https://www.klaroapp.com/",
@@ -42,10 +36,10 @@ const INVESTMENTS: Investment[] = [
 export default function () {
   return (
     <>
-      <h2 className="font-semibold text-lg leading-relaxed mt-8 xl:mt-10 xl:text-xl xl:leading-relaxed text-neutral-900 dark:text-neutral-100">
+      <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 xl:text-xl xl:leading-relaxed text-neutral-900 dark:text-neutral-100">
         Investments
       </h2>
-      <ul className="flex flex-col mt-3 xl:mt-4 gap-1.5 xl:gap-2">
+      <ul className="flex flex-col mt-3 xl:mt-4 gap-2">
         {INVESTMENTS.map((investment, index) => {
           return <Investment key={index} {...investment} />;
         })}

@@ -26,11 +26,11 @@ const INVESTMENTS: InvestmentProps[] = [
     url: "https://www.cursorcapital.vc/",
     description: "a venture firm focused on creative tools",
   },
-  {
-    label: "Boldstart",
-    url: "https://boldstart.vc/",
-    description: "a venture firm investing in technical founders",
-  },
+  // {
+  //   label: "Boldstart",
+  //   url: "https://boldstart.vc/",
+  //   description: "a venture firm investing in technical founders",
+  // },
 ];
 
 export default function () {

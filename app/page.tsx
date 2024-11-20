@@ -6,6 +6,7 @@ import EmailLink from "../src/components/EmailLink";
 import Footer from "../src/components/Footer";
 import Investments from "../src/components/Investments";
 import Work from "../src/components/Work";
+import Featured from "../src/components/Featured";
 
 export default async function Home() {
   return (
@@ -106,6 +107,7 @@ export default async function Home() {
 
             <Investments />
             <Work />
+            <Featured />
             <Footer />
           </div>
         </div>

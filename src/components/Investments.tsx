@@ -24,7 +24,7 @@ const INVESTMENTS: InvestmentProps[] = [
   {
     label: "Cursor Capital",
     url: "https://www.cursorcapital.vc/",
-    description: "a venture firm investing in creative tools",
+    description: "a venture firm focused on creative tools",
   },
   {
     label: "Boldstart",

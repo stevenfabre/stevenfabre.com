@@ -2,6 +2,7 @@ import "../src/styles/globals.css";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
@@ -58,6 +59,7 @@ export default function RootLayout({
           <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

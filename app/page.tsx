@@ -42,8 +42,8 @@ export default async function Home() {
               >
                 Liveblocks
               </Link>
-              , a company building the collaboration engine of the internet.
-              Before that, I created{" "}
+              , a company on a mission to make the web more collaborative to
+              help people work better together. Before that, I created{" "}
               <Link
                 className="underline-offset-4 decoration-2 underline decoration-teal-400 text-neutral-900 dark:text-neutral-100 dark:hover:text-teal-400 hover:text-teal-400 dark:focus:text-teal-400 focus:text-teal-400 focus:outline-none"
                 href="https://thenextweb.com/news/invision-acquires-easee-animation-tool"
@@ -61,7 +61,7 @@ export default async function Home() {
               >
                 InVision
               </Link>{" "}
-              in April 2016. I also worked on design systems at{" "}
+              in 2016. I also worked on design systems at{" "}
               <Link
                 className="underline-offset-4 decoration-2 underline decoration-[#006AFF] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#006AFF] hover:text-[#006AFF] dark:focus:text-[#006AFF] focus:text-[#006AFF] focus:outline-none"
                 href="https://messenger.com"
@@ -69,38 +69,29 @@ export default async function Home() {
                 rel="noopener noreferrer"
               >
                 Meta
-              </Link>{" "}
-              and run{" "}
-              <Link
-                className="underline-offset-4 decoration-2 underline decoration-[#00ebcb] text-neutral-900 dark:text-neutral-100 dark:hover:text-[#00ebcb] hover:text-[#00ebcb] dark:focus:text-[#00ebcb] focus:text-[#00ebcb] focus:outline-none"
-                href="https://gifmock.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Gifmock
               </Link>
-              , a tool to create high‑quality GIFs.
+              , and contributed to various projects in different capacities
+              along the way.
             </p>
 
             <p className="text-pretty text-lg leading-relaxed mt-6 xl:mt-8 xl:text-xl xl:leading-relaxed">
               I grew up in Rodez, a small town in the south of France, where the
               values of hard work, resilience, and humility are deeply rooted.
-              These principles remain close to my heart today. After spending
-              over a decade abroad in Sydney and New York City, I now call Paris
-              home.
+              These principles continue to guide me in everything I do. After
+              spending over a decade abroad in Sydney and New York City, I now
+              call Paris home.
             </p>
 
             <p className="text-pretty text-lg leading-relaxed mt-6 xl:mt-8 xl:text-xl xl:leading-relaxed">
               I also invest small checks in startups and funds that inspire me.
               I owe much of my career to people who believed in me when others
               didn’t. This is my way to pay it forward. Think of me as an
-              advisor with skin in the game—if you think I can be helpful,
-              please{" "}
+              advisor with skin in the game—if you think I can help, I’d love to{" "}
               <EmailLink
                 className="shrink-0 underline-offset-4 decoration-2 underline decoration-neutral-300 hover:decoration-neutral-900 focus:decoration-neutral-900 dark:decoration-neutral-700 dark:hover:decoration-neutral-100 dark:focus:decoration-neutral-100 text-neutral-900 dark:text-neutral-100 focus:outline-none"
                 email="hello@stevenfabre.com"
               >
-                reach out
+                hear from you
               </EmailLink>
               !
             </p>

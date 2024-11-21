@@ -16,10 +16,9 @@ import { Pixel } from "./types";
 import { Storage } from "./liveblocks.config";
 
 export default function GameProvider() {
-  const colorKeys = Object.keys(COLORS);
   return (
     <LiveblocksProvider
-      publicApiKey="pk_prod_OBt1rwR5ktdr5_6f10yeHG3mYayAa41oVetV_9io3No568b2l8wE7C9meQiDBZRA"
+      publicApiKey={process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY || ""}
       throttle={16}
     >
       <RoomProvider

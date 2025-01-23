@@ -7,14 +7,19 @@ const INVESTMENTS: InvestmentProps[] = [
     description: "a user-friendly spreadsheet platform",
   },
   {
-    label: "Storytell.ai",
-    url: "https://storytell.ai/",
-    description: "an AI platform to extract signal from noise",
+    label: "Plakar",
+    url: "https://plakar.io/",
+    description: "an open-source data backup solution",
   },
   {
     label: "Sequence",
     url: "https://sequence.film/",
     description: "a browser-based professional video editor",
+  },
+  {
+    label: "Storytell.ai",
+    url: "https://storytell.ai/",
+    description: "an AI platform to extract signal from noise",
   },
   {
     label: "Guild",

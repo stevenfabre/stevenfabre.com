@@ -42,8 +42,8 @@ export default async function Home() {
               >
                 Liveblocks
               </Link>
-              , a company on a mission to make the web more collaborative to
-              help people work better together. Before that, I created{" "}
+              , a company on a mission to enable people and AI to work better
+              together. Before that, I created{" "}
               <Link
                 className="underline-offset-4 decoration-2 underline decoration-teal-400 text-neutral-900 dark:text-neutral-100 dark:hover:text-teal-400 hover:text-teal-400 dark:focus:text-teal-400 focus:text-teal-400 focus:outline-none"
                 href="https://thenextweb.com/news/invision-acquires-easee-animation-tool"

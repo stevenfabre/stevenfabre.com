@@ -11,7 +11,7 @@ export default function Footer() {
           <Tooltip content="X" delayDuration={200}>
             <Link
               className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
-              href="https://twitter.com/stevenfabre"
+              href="https://x.com/stevenfabre"
               target="_blank"
               rel="noopener noreferrer"
             >

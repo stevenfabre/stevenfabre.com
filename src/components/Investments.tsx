@@ -2,6 +2,11 @@ import Investment, { InvestmentProps } from "./Investment";
 
 const INVESTMENTS: InvestmentProps[] = [
   {
+    label: "Project Europe",
+    url: "https://www.projecteurope.co/",
+    description: "a fund investing in young European founders",
+  },
+  {
     label: "Klaro",
     url: "https://www.klaroapp.com/",
     description: "a user-friendly spreadsheet platform",

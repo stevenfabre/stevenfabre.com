@@ -36,6 +36,11 @@ const INVESTMENTS: InvestmentProps[] = [
     url: "https://www.cursorcapital.vc/",
     description: "a venture firm focused on creative tools",
   },
+  {
+    label: "Dynamic Fund",
+    url: "https://www.dynamicgrowth.partners/",
+    description: "a fund investing in early stage technical Founders",
+  },
   // {
   //   label: "Boldstart",
   //   url: "https://boldstart.vc/",

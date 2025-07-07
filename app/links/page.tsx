@@ -23,7 +23,7 @@ export default async function Links() {
         </div>
       </div>
       <ul className="flex flex-col gap-1.5 mt-8 items-stretch">
-        <LinkTreeItem href="https://lblcks.io/story-3.0">
+        <LinkTreeItem href="https://lblcks.io/3.0-interview">
           The story behind Liveblocks
         </LinkTreeItem>
         <LinkTreeItem href="https://liveblocks.io">

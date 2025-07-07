@@ -1,9 +1,0 @@
-{
-  "functions": {
-    "app/**/*.tsx": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "buildCommand": "npm run build",
-  "installCommand": "npm install"
-}

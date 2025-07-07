@@ -35,7 +35,6 @@ export default async function Links() {
         <LinkTreeItem href="/">My personal website</LinkTreeItem>
       </ul>
       <Footer
-        themeSwitcher={false}
         includedSocials={["x", "linkedin", "instagram", "youtube", "github"]}
       />
     </div>

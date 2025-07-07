@@ -52,7 +52,7 @@ function LinkTreeItem({
     <li className="flex w-full">
       <Link
         href={href}
-        className="flex items-center group gap-3 justify-between w-full text-neutral-900 dark:text-neutral-100 focus:outline-none rounded-lg pl-4 pr-3 h-11 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 focus:border-neutral-300 dark:focus:border-neutral-700"
+        className="flex items-center group gap-3 justify-between w-full text-neutral-900 dark:text-neutral-100 focus:outline-none rounded-lg pl-4 pr-3 h-14 sm:h-11 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 focus:border-neutral-300 dark:focus:border-neutral-700"
         target="_blank"
         rel="noopener noreferrer"
       >

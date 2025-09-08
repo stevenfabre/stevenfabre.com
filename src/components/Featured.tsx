@@ -2,6 +2,20 @@ import FeaturedItem, { FeaturedItemProps } from "./FeaturedItem";
 
 const FEATURED: FeaturedItemProps[] = [
   {
+    title: "The story behind Liveblocks 3.0",
+    description: "Liveblocks",
+    url: "https://www.youtube.com/watch?v=SG8eG7SYEko",
+    when: "Jun 2025",
+    tooltip: "Interview",
+  },
+  {
+    title: "The future of in-product collaboration between AI and humans",
+    description: "Supra Insider",
+    url: "https://youtu.be/46Olg8gJvPY?si=4ypawJCrKRklABTt",
+    when: "Mar 2025",
+    tooltip: "Podcast",
+  },
+  {
     title: "Interview with Steven Fabre",
     description: "ConTejas Code",
     url: "https://www.youtube.com/watch?v=uyHRhx7LJLk",
@@ -21,6 +35,13 @@ const FEATURED: FeaturedItemProps[] = [
     url: "https://www.youtube.com/watch?v=EpXSc31CUUw",
     when: "Mar 2024",
     tooltip: "Talk",
+  },
+  {
+    title: "Build multiplayer SaaS apps with Liveblocks",
+    description: "Learn with Jason",
+    url: "https://youtu.be/n5JkIl1e6k4",
+    when: "Aug 2023",
+    tooltip: "Podcast",
   },
   {
     title: "Interview with Steven Fabre",

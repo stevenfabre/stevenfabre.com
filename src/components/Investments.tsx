@@ -2,11 +2,6 @@ import Investment, { InvestmentProps } from "./Investment";
 
 const INVESTMENTS: InvestmentProps[] = [
   {
-    label: "Project Europe",
-    url: "https://www.projecteurope.co/",
-    description: "a fund investing in young European founders",
-  },
-  {
     label: "Klaro",
     url: "https://www.klaroapp.com/",
     description: "a user-friendly spreadsheet platform",
@@ -41,11 +36,16 @@ const INVESTMENTS: InvestmentProps[] = [
     url: "https://www.dynamicgrowth.partners/",
     description: "a fund investing in early stage technical Founders",
   },
-  // {
-  //   label: "Boldstart",
-  //   url: "https://boldstart.vc/",
-  //   description: "a venture firm investing in technical founders",
-  // },
+  {
+    label: "Boldstart",
+    url: "https://boldstart.vc/",
+    description: "a venture firm investing in technical founders",
+  },
+  {
+    label: "Project Europe",
+    url: "https://www.projecteurope.co/",
+    description: "a fund investing in young European founders",
+  },
 ];
 
 export default function () {

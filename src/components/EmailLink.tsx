@@ -23,6 +23,7 @@ export default function EmailLink({
   const triggerRef = useRef(null);
   const timeoutIdRef = useRef<ReturnType<typeof setTimeout>>();
   const [state, setState] = useState<FeedbackState>(FeedbackState.None);
+  const [isOpen, setIsOpen] = useState(false);
 
   const content = useMemo(() => {
     if (state === FeedbackState.None) {
@@ -69,10 +70,12 @@ export default function EmailLink({
   const handleClick = useCallback(async () => {
     const success = await copyStringToClipboard(email);
     setState(success ? FeedbackState.Success : FeedbackState.Error);
+    setIsOpen(true);
 
     clearTimeout(timeoutIdRef.current);
     timeoutIdRef.current = setTimeout(() => {
       setState(FeedbackState.None);
+      setIsOpen(false);
     }, 2000);
   }, [email]);
 
@@ -80,6 +83,8 @@ export default function EmailLink({
     <Tooltip
       content={content}
       delayDuration={200}
+      open={isOpen}
+      onOpenChange={setIsOpen}
       onPointerDownOutside={(e) => {
         if (e.target === triggerRef.current) e.preventDefault();
       }}

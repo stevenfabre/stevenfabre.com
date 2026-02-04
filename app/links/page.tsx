@@ -17,7 +17,7 @@ export default async function Links() {
           <h1 className="font-semibold text-lg leading-relaxed xl:text-xl xl:leading-relaxed text-neutral-900 dark:text-neutral-100">
             Steven Fabre
           </h1>
-          <p className="text-smleading-relaxed xl:text-base xl:leading-relaxed">
+          <p className="text-sm leading-relaxed xl:text-base xl:leading-relaxed">
             CEO at Liveblocks
           </p>
         </div>

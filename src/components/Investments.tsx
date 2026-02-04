@@ -48,7 +48,7 @@ const INVESTMENTS: InvestmentProps[] = [
   },
 ];
 
-export default function () {
+export default function Investments() {
   return (
     <>
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 xl:text-xl xl:leading-relaxed text-neutral-900 dark:text-neutral-100">

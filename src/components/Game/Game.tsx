@@ -14,13 +14,13 @@ export default function Game() {
 
   const setColor = useMutation(
     ({ setMyPresence }, color: string) => setMyPresence({ color }),
-    []
+    [],
   );
 
   const setCursor = useMutation(
     ({ setMyPresence }, cursor: Point | null, cursorType: CursorType | null) =>
       setMyPresence({ cursor, cursorType }),
-    []
+    [],
   );
 
   const setPixel = useMutation(
@@ -39,7 +39,7 @@ export default function Game() {
         pixel.set("on", false);
       }, DELAY_TIMEOUT_PIXEL);
     },
-    [me]
+    [me],
   );
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function Game() {
     clientX: number,
     clientY: number,
     cursorType: CursorType,
-    target: HTMLElement
+    target: HTMLElement,
   ) => {
     const bounds = target.getBoundingClientRect();
     const point = {

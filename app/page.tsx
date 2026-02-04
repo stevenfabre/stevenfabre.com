@@ -96,9 +96,9 @@ export default async function Home() {
               !
             </p>
 
-            <Investments />
             <Work />
             <Featured />
+            <Investments />
             <Footer />
           </div>
         </div>

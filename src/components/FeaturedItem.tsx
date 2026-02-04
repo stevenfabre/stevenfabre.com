@@ -7,6 +7,7 @@ export type FeaturedItemProps = {
   url: string;
   description: string;
   when: string;
+  language: "fr" | "en";
   tooltip?: string;
 };
 
@@ -15,6 +16,7 @@ export default function FeaturedItem({
   title,
   description,
   when,
+  language,
   tooltip,
 }: FeaturedItemProps) {
   return (
@@ -27,10 +29,14 @@ export default function FeaturedItem({
             sideOffset={4}
             side="left"
           >
-            <Title url={url}>{title}</Title>
+            <Title url={url} language={language}>
+              {title}
+            </Title>
           </Tooltip>
         ) : (
-          <Title url={url}>{title}</Title>
+          <Title url={url} language={language}>
+            {title}
+          </Title>
         )}
       </span>
       <span className="hidden sm:flex grow border-t border-black border-opacity-10 dark:border-opacity-10 dark:border-white min-w-8" />
@@ -44,15 +50,28 @@ export default function FeaturedItem({
   );
 }
 
-function Title({ children, url }: { children: ReactNode; url: string }) {
+function Title({
+  children,
+  url,
+  language,
+}: {
+  children: ReactNode;
+  url: string;
+  language: "fr" | "en";
+}) {
   return (
     <Link
-      className="shrink-0 underline-offset-4 decoration-2 underline decoration-neutral-300 hover:decoration-neutral-900 focus:decoration-neutral-900 dark:decoration-neutral-700 dark:hover:decoration-neutral-100 dark:focus:decoration-neutral-100 text-neutral-900 dark:text-neutral-100 focus:outline-none"
+      className="group inline-flex justify-between min-w-0 flex-row-reverse sm:flex-row gap-2 items-baseline w-full text-neutral-900 dark:text-neutral-100 focus:outline-none"
       href={url}
       target="_blank"
       rel="noopener noreferrer"
     >
-      {children}
+      <span className="self-center uppercase text-xs tracking-wider inline-flex font-medium text-neutral-500 border border-neutral-200 dark:border-neutral-800 px-1 py-0.5 rounded shrink-0">
+        {language}
+      </span>
+      <span className="min-w-0 truncate underline-offset-4 decoration-2 underline decoration-neutral-300 group-hover:decoration-neutral-900 group-focus:decoration-neutral-900 dark:decoration-neutral-700 dark:group-hover:decoration-neutral-100 dark:group-focus:decoration-neutral-100">
+        {children}
+      </span>
     </Link>
   );
 }

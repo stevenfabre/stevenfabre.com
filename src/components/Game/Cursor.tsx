@@ -10,7 +10,7 @@ type Props = {
 function Cursor({ connectionId }: Props) {
   const { cursor, color, cursorType } = useOther(
     connectionId,
-    (user) => user.presence
+    (user) => user.presence,
   );
 
   if (!cursor) {

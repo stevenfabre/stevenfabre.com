@@ -38,7 +38,7 @@ export function Tooltip({
         <TooltipPrimitive.Content
           className={cx(
             className,
-            "bg-neutral-800 text-neutral-200 border border-opacity-0 dark:border-opacity-5 border-white rounded-md px-3 py-1.5 xl:px-3.5 text-xs xl:text-sm font-medium shadow-xl"
+            "bg-neutral-800 text-neutral-200 border border-opacity-0 dark:border-opacity-5 border-white rounded-md px-3 py-1.5 xl:px-3.5 text-xs xl:text-sm font-medium shadow-xl",
           )}
           side={side}
           align={align}

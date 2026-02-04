@@ -1,6 +1,7 @@
 "use client";
 
 import { useOthers } from "@liveblocks/react/suspense";
+import Link from "next/link";
 
 export default function Footer() {
   const countOthers = useOthers((others) => others.length);
@@ -8,7 +9,12 @@ export default function Footer() {
   return (
     <div className="absolute bottom-0 right-0 left-0 py-3.5 px-3.5 flex gap-4 items-center justify-between pointer-events-none">
       <div className="absolute -top-12 left-0 right-0 bottom-0 bg-gradient-to-t from-neutral-900 to-transparent dark:from-neutral-100 opacity-60" />
-      <a href="https://lblcks.io/badge" target="_blank">
+      <Link
+        className="pointer-events-auto"
+        href="https://lblcks.io/badge"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <svg
           className="relative"
           width="111"
@@ -52,7 +58,7 @@ export default function Footer() {
             fill="white"
           />
         </svg>
-      </a>
+      </Link>
       <span className="relative z-10 inline-flex items-center gap-2 h-10 mr-2 sm:h-8 text-sm text-neutral-100 dark:text-neutral-900 font-medium tabular-nums">
         <svg
           aria-hidden="true"

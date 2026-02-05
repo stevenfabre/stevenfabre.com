@@ -18,7 +18,7 @@ export default function Game() {
   );
 
   const setCursor = useMutation(
-    ({ setMyPresence }, cursor: Point | null, cursorType: CursorType | null) =>
+    ({ setMyPresence }, cursor: Point[] | null, cursorType: CursorType | null) =>
       setMyPresence({ cursor, cursorType }),
     [],
   );
@@ -55,27 +55,29 @@ export default function Game() {
   });
 
   const onDraw = (
-    clientX: number,
-    clientY: number,
+    touches: { clientX: number; clientY: number }[],
     cursorType: CursorType,
     target: HTMLElement,
   ) => {
     const bounds = target.getBoundingClientRect();
-    const point = {
-      x: Math.round(clientX - bounds.width / 2),
-      y: Math.round(clientY - bounds.height / 2),
-    };
+    const points = touches.map((touch) => ({
+      x: Math.round(touch.clientX - bounds.width / 2),
+      y: Math.round(touch.clientY - bounds.height / 2),
+    }));
 
-    setCursor(point, cursorType);
+    setCursor(points, cursorType);
 
-    const pixelIndexFromPoint = pixels.findIndex((pixel) => {
-      return (
-        pixel.x * DENSITY_PIXELS + DENSITY_PIXELS / 2 >= point.x &&
-        pixel.y * DENSITY_PIXELS + DENSITY_PIXELS / 2 >= point.y
-      );
+    // Draw pixels for each touch point
+    points.forEach((point) => {
+      const pixelIndexFromPoint = pixels.findIndex((pixel) => {
+        return (
+          pixel.x * DENSITY_PIXELS + DENSITY_PIXELS / 2 >= point.x &&
+          pixel.y * DENSITY_PIXELS + DENSITY_PIXELS / 2 >= point.y
+        );
+      });
+
+      setPixel(pixelIndexFromPoint);
     });
-
-    setPixel(pixelIndexFromPoint);
   };
 
   return (
@@ -83,10 +85,25 @@ export default function Game() {
       <div
         className="absolute inset-0 flex items-center justify-center mix-blend-overlay cursor-crosshair"
         onPointerMove={(e) => {
-          const cursorType = e.pointerType === "touch" ? "touch" : "mouse";
-          onDraw(e.clientX, e.clientY, cursorType, e.currentTarget);
+          // Only handle mouse pointer, touches are handled by onTouchMove
+          if (e.pointerType !== "touch") {
+            onDraw(
+              [{ clientX: e.clientX, clientY: e.clientY }],
+              "mouse",
+              e.currentTarget,
+            );
+          }
+        }}
+        onTouchMove={(e) => {
+          // Handle multi-touch - captures all active touch points
+          const touches = Array.from(e.touches).map((touch) => ({
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+          }));
+          onDraw(touches, "touch", e.currentTarget);
         }}
         onPointerLeave={() => setCursor(null, null)}
+        onTouchEnd={() => setCursor(null, null)}
       >
         {pixels.map((pixel, index) => {
           const { x, y, color, on } = pixel;

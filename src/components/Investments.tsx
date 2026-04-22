@@ -46,6 +46,11 @@ const INVESTMENTS: InvestmentProps[] = [
     url: "https://www.projecteurope.co/",
     description: "a fund investing in young European founders",
   },
+  {
+    label: "Seedcamp",
+    url: "https://seedcamp.com/",
+    description: "a fund backing early-stage European startups",
+  },
 ];
 
 export default function Investments() {

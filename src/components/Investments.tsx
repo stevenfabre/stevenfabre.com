@@ -27,6 +27,16 @@ const INVESTMENTS: InvestmentProps[] = [
     description: "a community management platform",
   },
   {
+    label: "Fluidstack",
+    url: "https://fluidstack.io/",
+    description: "an AI cloud platform for frontier model training",
+  },
+  {
+    label: "Decart",
+    url: "https://decart.ai/",
+    description: "a real-time AI lab for video and world models",
+  },
+  {
     label: "Cursor Capital",
     url: "https://www.cursorcapital.vc/",
     description: "a venture firm focused on creative tools",

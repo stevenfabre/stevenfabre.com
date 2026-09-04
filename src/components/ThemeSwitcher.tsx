@@ -14,7 +14,7 @@ export default function ThemeSwitcher() {
       <button
         aria-label="Toggle theme"
         type="button"
-        className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+        className="size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
         onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       >
         {mounted && (

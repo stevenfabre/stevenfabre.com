@@ -23,13 +23,13 @@ export default function Footer({
   )[];
 }) {
   return (
-    <footer className="sticky bottom-0 flex flex-row-reverse justify-between items-center py-4 mt-12 xl:mt-16 border-t border-black border-opacity-10 dark:border-opacity-10 dark:border-white bg-neutral-50 dark:bg-neutral-950 bg-opacity-95 dark:bg-opacity-95 backdrop-blur">
+    <footer className="sticky bottom-0 flex flex-row-reverse justify-between items-center py-4 mt-12 xl:mt-16 border-t border-black/10 dark:border-white/10 bg-neutral-50/95 dark:bg-neutral-950/95 backdrop-blur">
       <ul className="flex flex-wrap sm:gap-0.5">
         {includedSocials.includes("x") && (
           <li>
             <Tooltip content="X" delayDuration={200}>
               <Link
-                className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+                className="size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
                 href="https://x.com/stevenfabre"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -55,7 +55,7 @@ export default function Footer({
           <li>
             <Tooltip content="LinkedIn" delayDuration={200}>
               <Link
-                className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+                className="size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
                 href="https://www.linkedin.com/in/steven-fabre-5510bb38"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -81,7 +81,7 @@ export default function Footer({
           <li>
             <Tooltip content="Instagram" delayDuration={200}>
               <Link
-                className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+                className="size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
                 href="https://www.instagram.com/stevenfabre"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -104,7 +104,7 @@ export default function Footer({
           <li>
             <Tooltip content="YouTube" delayDuration={200}>
               <Link
-                className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+                className="size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
                 href="https://www.youtube.com/@StevenFabre"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -128,7 +128,7 @@ export default function Footer({
           <li>
             <Tooltip content="GitHub" delayDuration={200}>
               <Link
-                className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+                className="size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
                 href="https://github.com/stevenfabre"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -153,7 +153,7 @@ export default function Footer({
         {includedSocials.includes("email") && (
           <li>
             <EmailLink
-              className="size-10 sm:size-8 bg-neutral-200 bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 rounded-md dark:bg-neutral-800 dark:bg-opacity-0 dark:hover:bg-opacity-100 dark:focus:bg-opacity-100 flex items-center justify-center"
+              className="size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
               email="hello@stevenfabre.com"
             >
               <svg

@@ -128,7 +128,7 @@ const FEATURED: FeaturedItemProps[] = [
 export default function Featured() {
   return (
     <>
-      <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 xl:text-xl xl:leading-relaxed text-neutral-900 dark:text-neutral-100">
+      <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
         Featured
       </h2>
       <ul className="flex flex-col mt-4 xl:mt-6 gap-3">

@@ -9,7 +9,7 @@ const EXPERIENCES: ExperienceProps[] = [
   },
   {
     company: "Gifmock",
-    url: "https://gifmock.com",
+    url: "https://gifmock.app",
     title: "Founder",
     when: "2017-Now",
   },

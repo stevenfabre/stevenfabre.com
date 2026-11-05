@@ -13,7 +13,11 @@ preview deployments, and production.
 - `src/components/SiteNavigation.tsx`: route-ready shared-element transitions and fallback animation.
 - `src/utils/preloadMedia.ts`: bounded image and video metadata preloading.
 
-Original media and research in `private/work/` are excluded from Git and deployment.
+Only published media copies are retained. Local source notes and research in
+`private/work/` are excluded from Git and deployment. Name assets with a company
+or project prefix and a descriptive subject, using lowercase hyphen-separated
+words. Avoid numbered exports and suffixes such as `hq` or `final`; keep video
+and poster stems aligned, and use `-before`/`-after` for comparisons.
 To add a project, update its data and dimensions, add the referenced public assets,
 and verify the overview, detail view, and mobile layout. Respect reduced-motion
 preferences and keep previous/next navigation instant.

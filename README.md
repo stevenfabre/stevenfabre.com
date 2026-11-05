@@ -32,8 +32,11 @@ links preview this content.
 Portfolio content lives in `app/work/work-data.ts`. The 17 project pages are
 prerendered for production. Published media lives in `public/work/media/`, served
 as static assets with native caching and byte-range support. Videos are H.264/AAC
-MP4s optimized for web playback. Original media and research remain in the ignored
-`private/work/` folder and are not required to build or deploy the site.
+MP4s optimized for web playback. Only the published media copies are retained;
+local source notes and research in `private/work/` are not needed to build or deploy.
+Use descriptive, lowercase, hyphen-separated asset names with a company/project
+prefix (for example, `liveblocks-brand-desktop-website.jpg`). Video posters share
+the video’s filename stem, and comparison images use `-before` and `-after`.
 
 Shared UI lives in `src/components`. `SiteNavigationProvider` waits for destination
 content before capturing native view transitions, with a small Web Animations

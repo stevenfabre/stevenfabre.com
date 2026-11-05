@@ -35,5 +35,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Original portfolio media and research; web assets live in public/work/media.
+# Local portfolio source notes and research; published assets live in public/work/media.
 /private/work/

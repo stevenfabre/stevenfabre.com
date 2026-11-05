@@ -152,7 +152,7 @@ export type Film = ProjectVisual & {
 
 export const films: Record<string, Film> = {
   liveblocksOverview: {
-    file: "liveblocks-company",
+    file: "liveblocks-company-introduction",
     slug: "building-liveblocks",
     collaborators: [{ name: "Guillaume Salles", role: "Co-founder & CTO" }],
     autoLoop: false,
@@ -203,20 +203,20 @@ export const films: Record<string, Film> = {
     galleryLayout: "stack",
     gallery: [
       {
-        file: "homepage-reflections",
+        file: "liveblocks-homepage-reflections",
         title: "Live reflections",
         aspectRatio: "3456 / 2194",
         caption: "Live reflections on the shapes in the homepage hero.",
       },
       {
-        file: "homepage-ai-game",
+        file: "liveblocks-homepage-ai-game",
         title: "Playing alongside AI agents",
         aspectRatio: "3456 / 2194",
         caption:
           "A multiplayer game where visitors and AI agents can play together.",
       },
       {
-        file: "homepage-svg-playground",
+        file: "liveblocks-homepage-svg-playground",
         title: "Bring your own shapes",
         aspectRatio: "2856 / 1694",
         caption:
@@ -226,7 +226,7 @@ export const films: Record<string, Film> = {
     source: "https://x.com/liveblocks/status/2098051542293311790",
   },
   infrastructure: {
-    file: "liveblocks-infrastructure-hq",
+    file: "liveblocks-realtime-infrastructure",
     slug: "liveblocks-realtime-infrastructure",
     thumbnailPosition: "left center",
     title: "Making realtime infrastructure easier to understand",
@@ -244,7 +244,7 @@ export const films: Record<string, Film> = {
     source: "https://x.com/stevenfabre/status/2044396309478846970",
   },
   template: {
-    file: "template-week-multiplayer",
+    file: "liveblocks-nextjs-template-week-multiplayer",
     slug: "nextjs-template-week",
     thumbnailPosition: "left center",
     title: "Next.js Template Week",
@@ -269,7 +269,7 @@ export const films: Record<string, Film> = {
     galleryLayout: "stack",
     gallery: [
       {
-        file: "template-week",
+        file: "liveblocks-nextjs-template-week-introduction",
         title: "Next.js Template Week launch film",
         aspectRatio: "16 / 9",
         caption:
@@ -277,7 +277,7 @@ export const films: Record<string, Film> = {
         source: "https://x.com/liveblocks/status/1834238851314831621",
       },
       {
-        file: "issue-tracker",
+        file: "liveblocks-nextjs-template-week-issue-tracker",
         title: "Next.js Template Week on launch day",
         aspectRatio: "1544 / 1080",
         caption:
@@ -287,7 +287,7 @@ export const films: Record<string, Film> = {
     ],
   },
   louvre: {
-    file: "louvre-launch",
+    file: "liveblocks-louvre-campaign-launch",
     slug: "liveblocks-louvre-campaign",
     title: "Viral marketing campaign",
     company: "liveblocks",
@@ -311,12 +311,12 @@ export const films: Record<string, Film> = {
     ],
     gallery: [
       {
-        file: "louvre-sphere",
+        file: "liveblocks-louvre-campaign-sphere",
         post: {
           name: "Turner Novak",
           handle: "TurnerNovak",
           engagement: { likes: 50, replies: 38, reposts: 5, views: 19413 },
-          avatar: "louvre-turner-avatar.png",
+          avatar: "liveblocks-louvre-turner-novak-avatar.png",
           text: "someone installed the Las Vegas Sphere on the Louvre pyramid in Paris",
           publishedAt: "2025-07-08T20:12:57+00:00",
         },
@@ -326,12 +326,12 @@ export const films: Record<string, Film> = {
         source: "https://x.com/TurnerNovak/status/1942678311743750452",
       },
       {
-        file: "louvre-soleio",
+        file: "liveblocks-louvre-campaign-soleio",
         post: {
           name: "Soleio",
           handle: "soleio",
           engagement: { likes: 24, replies: 3, reposts: 2, views: 2013 },
-          avatar: "louvre-soleio-avatar.jpg",
+          avatar: "liveblocks-louvre-soleio-avatar.jpg",
           text: "Everyone at @liveblocks are crazy for doing this at @RaiseSummit",
           publishedAt: "2025-07-08T21:13:53+00:00",
         },
@@ -341,12 +341,12 @@ export const films: Record<string, Film> = {
         source: "https://x.com/soleio/status/1942693645422899411",
       },
       {
-        file: "louvre-almonk",
+        file: "liveblocks-louvre-campaign-almonk",
         post: {
           name: "almonk",
           handle: "almonk",
           engagement: { likes: 27, replies: 7, reposts: 4, views: 3076 },
-          avatar: "louvre-almonk-avatar.jpg",
+          avatar: "liveblocks-louvre-almonk-avatar.jpg",
           text: "who gave @stevenfabre the keys to the louvre?",
           publishedAt: "2025-07-08T20:21:00+00:00",
         },
@@ -356,12 +356,12 @@ export const films: Record<string, Film> = {
         source: "https://x.com/almonk/status/1942680337349300439",
       },
       {
-        file: "louvre-steven",
+        file: "liveblocks-louvre-campaign-steven-fabre",
         post: {
           name: "Steven Fabre",
           handle: "stevenfabre",
           engagement: { likes: 119, replies: 18, reposts: 9, views: 7583 },
-          avatar: "louvre-steven-avatar.jpg",
+          avatar: "liveblocks-louvre-steven-fabre-avatar.jpg",
           text: "We launched @liveblocks 3.0 a few weeks ago, and just closed our best quarter ever.\nFelt like that deserved something special during @RaiseSummit.",
           publishedAt: "2025-07-08T20:17:51+00:00",
         },
@@ -372,14 +372,14 @@ export const films: Record<string, Film> = {
       },
       {
         kind: "image",
-        file: "louvre-complex",
+        file: "liveblocks-louvre-campaign-complex-post",
         post: {
           platform: "instagram",
           name: "Complex",
           handle: "complex",
           // Counts visible in the archived Complex Instagram screenshot.
           engagement: { likes: 27700, replies: 88, shares: 1223 },
-          avatar: "louvre-complex.jpg",
+          avatar: "liveblocks-louvre-campaign-complex-post.jpg",
           text: "Banksy is that you? 👀\n\nThe Las Vegas Sphere was captured being displayed on the Louvre pyramid in Paris.",
           publishedAt: "2025-07",
         },
@@ -397,7 +397,7 @@ export const films: Record<string, Film> = {
   liveblocksBrand: {
     thumbnailPosition: "calc(50% + 20px) center",
     kind: "image",
-    file: "liveblocks-brand-09",
+    file: "liveblocks-brand-desktop-website",
     imageExtension: "jpg",
     title: "Liveblocks brand",
     imageAlt: "Liveblocks website displayed on a laptop",
@@ -425,7 +425,7 @@ export const films: Record<string, Film> = {
     gallery: [
       {
         kind: "image",
-        file: "liveblocks-brand-02",
+        file: "liveblocks-brand-collaboration-messaging",
         imageExtension: "jpg",
         title: "Collaborative experiences in days, not months",
         imageAlt:
@@ -434,7 +434,7 @@ export const films: Record<string, Film> = {
       },
       {
         kind: "image",
-        file: "liveblocks-brand-01",
+        file: "liveblocks-brand-identity-card",
         imageExtension: "jpg",
         title: "The Liveblocks identity",
         imageAlt: "Liveblocks identity on a black folded card",
@@ -442,7 +442,7 @@ export const films: Record<string, Film> = {
       },
       {
         kind: "image",
-        file: "liveblocks-brand-03",
+        file: "liveblocks-brand-react-brussels-announcement",
         imageExtension: "jpg",
         title: "Event announcement",
         imageAlt: "Liveblocks React Brussels event announcement",
@@ -450,7 +450,7 @@ export const films: Record<string, Film> = {
       },
       {
         kind: "image",
-        file: "liveblocks-brand-04",
+        file: "liveblocks-brand-wordmark",
         imageExtension: "png",
         title: "The Liveblocks wordmark",
         imageAlt: "White Liveblocks wordmark on black",
@@ -458,7 +458,7 @@ export const films: Record<string, Film> = {
       },
       {
         kind: "image",
-        file: "liveblocks-brand-05",
+        file: "liveblocks-brand-colors-and-shapes",
         imageExtension: "jpg",
         title: "Color and shapes",
         imageAlt: "Soft green and yellow gradients with geometric shapes",
@@ -466,7 +466,7 @@ export const films: Record<string, Film> = {
       },
       {
         kind: "image",
-        file: "liveblocks-brand-06",
+        file: "liveblocks-brand-station-poster",
         imageExtension: "jpg",
         title: "Brand application",
         imageAlt: "Liveblocks poster concept in a station setting",
@@ -474,7 +474,7 @@ export const films: Record<string, Film> = {
       },
       {
         kind: "image",
-        file: "liveblocks-brand-07",
+        file: "liveblocks-brand-collaborative-shapes",
         imageExtension: "jpg",
         title: "Collaborative shapes",
         imageAlt: "Colored circles connected by dark geometric shapes",
@@ -482,7 +482,7 @@ export const films: Record<string, Film> = {
       },
       {
         kind: "image",
-        file: "liveblocks-brand-10",
+        file: "liveblocks-brand-mobile-website",
         imageExtension: "jpg",
         title: "Mobile website",
         imageAlt: "Liveblocks website displayed on a phone",
@@ -491,7 +491,7 @@ export const films: Record<string, Film> = {
     ],
   },
   logo: {
-    file: "logo",
+    file: "liveblocks-logo-experiment",
     slug: "liveblocks-logo-experiment",
     title: "Liveblocks logo experiment",
     company: "liveblocks",
@@ -506,7 +506,7 @@ export const films: Record<string, Film> = {
     source: "https://x.com/stevenfabre/status/1938648049636491558",
   },
   messenger: {
-    file: "messenger",
+    file: "meta-messenger-chat-builder",
     slug: "messenger-chat-builder",
     title: "Chat Builder for Messenger",
     company: "messenger",
@@ -548,7 +548,7 @@ export const films: Record<string, Film> = {
     contribution: "",
   },
   colorpicker: {
-    file: "colorpicker",
+    file: "invision-studio-color-picker",
     slug: "invision-color-picker",
     title: "InVision Studio color picker",
     company: "invision",
@@ -565,7 +565,7 @@ export const films: Record<string, Film> = {
     contribution: "",
   },
   studioUpdateWindow: {
-    file: "studio-update-window",
+    file: "invision-studio-update-window",
     slug: "invision-update-window",
     title: "A more personal update window",
     company: "invision",
@@ -581,7 +581,7 @@ export const films: Record<string, Film> = {
     contribution: "",
   },
   gifmock: {
-    file: "gifmock",
+    file: "gifmock-sketch-demo",
     slug: "gifmock",
     title: "Gifmock for Sketch",
     company: "gifmock",
@@ -601,7 +601,7 @@ export const films: Record<string, Film> = {
     galleryLayout: "stack",
     gallery: [
       {
-        file: "gifmock-precision",
+        file: "gifmock-figma-precision-editing",
         title: "Pixel-perfect GIFs in Figma",
         aspectRatio: "852 / 480",
         caption:
@@ -617,7 +617,7 @@ export const films: Record<string, Film> = {
         source: "https://x.com/gifmock/status/1298007564316102656",
       },
       {
-        file: "gifmock-big-sur",
+        file: "gifmock-macos-big-sur",
         title: "Gifmock for macOS Big Sur",
         aspectRatio: "1126 / 820",
         caption: "The Mac app, updated for macOS Big Sur in November 2020.",
@@ -652,7 +652,7 @@ export const films: Record<string, Film> = {
     gallery: [
       {
         kind: "image",
-        file: "easee-library",
+        file: "easee-animation-library",
         title: "Animation library",
         imageAlt:
           "Easee’s animation library, with a grid of saved projects and a button to create a new animation",
@@ -682,7 +682,7 @@ export const films: Record<string, Film> = {
       },
       {
         kind: "image",
-        file: "easee-net-magazine",
+        file: "easee-net-magazine-feature",
         title: "Easee in net magazine",
         imageAlt:
           "November 2015 net magazine interview with Steven Fabre about creating Easee",
@@ -694,7 +694,7 @@ export const films: Record<string, Film> = {
   },
   campaignMonitorBuilder: {
     kind: "image",
-    file: "email-builder-dragging",
+    file: "campaign-monitor-email-builder-drag-and-drop",
     slug: "campaign-monitor-email-builder",
     title: "Campaign Monitor email builder",
     company: "campaign-monitor",
@@ -715,12 +715,12 @@ export const films: Record<string, Film> = {
     gallery: [
       {
         kind: "image",
-        file: "wysiwyg-after",
+        file: "campaign-monitor-typography-editor-after",
         title: "Typography controls",
         aspectRatio: "1140 / 576",
         imageAlt: "The redesigned inline typography editor",
         comparison: {
-          file: "wysiwyg-before",
+          file: "campaign-monitor-typography-editor-before",
           alt: "The previous inline text editor",
         },
         caption:
@@ -730,7 +730,7 @@ export const films: Record<string, Film> = {
   },
   campaignMonitor: {
     kind: "image",
-    file: "shipit-landing-page",
+    file: "campaign-monitor-email-builder-landing-page",
     thumbnailPosition: "21% center",
     slug: "campaign-monitor",
     title: "Email builder landing page",
@@ -751,7 +751,7 @@ export const films: Record<string, Film> = {
   },
   campaignMonitorGallery: {
     kind: "image",
-    file: "gallery-sxsw-photo",
+    file: "campaign-monitor-template-gallery-sxsw",
     imageExtension: "jpg",
     slug: "campaign-monitor-template-gallery",
     title: "A new template gallery",
@@ -773,12 +773,12 @@ export const films: Record<string, Film> = {
     gallery: [
       {
         kind: "image",
-        file: "gallery-before",
+        file: "campaign-monitor-template-gallery-after",
         title: "Template gallery before and after",
         aspectRatio: "1140 / 672",
         imageAlt: "Campaign Monitor’s redesigned template gallery",
         comparison: {
-          file: "gallery-after",
+          file: "campaign-monitor-template-gallery-before",
           alt: "Campaign Monitor’s previous template gallery",
         },
         caption: "The template gallery before and after the redesign.",
@@ -787,7 +787,7 @@ export const films: Record<string, Film> = {
   },
   backseat: {
     kind: "image",
-    file: "backseat-iphone",
+    file: "backseat-ride-request-iphone",
     slug: "backseat",
     title: "Getting Backseat on the road",
     company: "backseat",
@@ -813,7 +813,7 @@ export const films: Record<string, Film> = {
     gallery: [
       {
         kind: "image",
-        file: "backseat-channel9",
+        file: "backseat-channel-nine-feature",
         imageExtension: "png",
         title: "Backseat on Channel 9",
         imageAlt: "Backseat featured on Channel 9’s Financial Review Sunday",
@@ -831,7 +831,7 @@ export const projectRedirects: Record<string, string> = {
   "template-week-film": "nextjs-template-week",
   "template-week-website": "nextjs-template-week",
   "gifmock-for-sketch": "gifmock",
-  "gifmock-for-figma": "gifmock#visual-gifmock-precision",
+  "gifmock-for-figma": "gifmock#visual-gifmock-figma-precision-editing",
   "gifmock-auto-crop": "gifmock#visual-gifmock-auto-crop",
-  "gifmock-big-sur": "gifmock#visual-gifmock-big-sur",
+  "gifmock-big-sur": "gifmock#visual-gifmock-macos-big-sur",
 };

@@ -69,7 +69,8 @@
   border-radius: 4px;
 }
 .stage {
-  min-height: var(--visual-height);
+  /* Reserve the same space across projects, including on mobile. */
+  height: var(--visual-height);
 }
 .visual {
   position: relative;
@@ -194,8 +195,3 @@
 
 .navigation a[data-keyboard-pressed="true"] { background: #e5e5e5; color: #171717; }
 :global(.dark) .navigation a[data-keyboard-pressed="true"] { background: #262626; color: #f5f5f5; }
-
-/* Let mobile descriptions follow the media without a large empty stage. */
-@media (max-width: 639px) {
-  .stage { min-height: 0; }
-}

@@ -261,8 +261,15 @@ export default function ProjectSwipe({
       onPointerCancel={() => {
         if (gesture.current) reset();
       }}
-      onLostPointerCapture={() => {
-        if (gesture.current) reset();
+      onLostPointerCapture={(event) => {
+        // Touch implicitly captures the original target (often the video).
+        // Moving capture to this viewport emits a bubbling capture-loss event
+        // from that child; only losing the viewport's own capture cancels us.
+        if (
+          event.target === event.currentTarget &&
+          gesture.current?.id === event.pointerId
+        )
+          reset();
       }}
       onClickCapture={(event) => {
         if (suppressClick.current) {

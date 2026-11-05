@@ -88,3 +88,47 @@
     animation-duration: 100ms;
   }
 }
+
+/* Video posters are real DOM images, not just a media-element hint. */
+[data-video-poster] {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+video[data-poster-video] {
+  position: relative;
+  opacity: 0;
+  transition: opacity 120ms var(--ease-out);
+}
+video[data-video-ready="true"] {
+  opacity: 1;
+}
+
+/* Snapshot images, never hardware video surfaces. Only the selected visual
+   is shared; everything else stays in the opaque page snapshot. */
+html[data-project-transition] [data-work-visual],
+html[data-project-transition] [data-site-portrait],
+html[data-project-transition] [data-site-footer],
+html[data-project-transition] nav[aria-label="Project navigation"] {
+  view-transition-name: none !important;
+}
+html[data-project-transition] [data-transition-selected] {
+  view-transition-name: selected-project !important;
+}
+html[data-project-transition] [data-work-visual] video {
+  opacity: 0 !important;
+  visibility: hidden;
+  transition: none;
+}
+html[data-project-transition] [aria-label="Video controls"] {
+  visibility: hidden;
+}
+::view-transition-group(selected-project) {
+  z-index: 3;
+}
+::view-transition-old(selected-project),
+::view-transition-new(selected-project) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

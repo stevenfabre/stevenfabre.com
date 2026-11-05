@@ -1,6 +1,6 @@
 import type { MouseEvent } from "react";
 
-type ReturnView = { href: string };
+type ReturnView = { href: string; scroll?: { pane: number; window: number } };
 const pendingKey = "portfolio-navigation";
 const fallback: ReturnView = { href: "/work" };
 
@@ -35,7 +35,13 @@ export function rememberProjectHref(href: string) {
   const overview = location.pathname === "/" || location.pathname === "/work";
   const current = history.state?.portfolioReturn;
   const returnView: ReturnView = overview
-    ? { href: location.pathname + location.search + location.hash }
+    ? {
+        href: location.pathname + location.search + location.hash,
+        scroll: {
+          pane: document.querySelector("[data-site-content]")?.scrollTop || 0,
+          window: window.scrollY,
+        },
+      }
     : isReturnView(current)
     ? current
     : fallback;
@@ -46,8 +52,7 @@ export function rememberProjectHref(href: string) {
           ...history.state,
           portfolioScroll: {
             pathname: location.pathname,
-            pane: document.querySelector("[data-site-content]")?.scrollTop || 0,
-            window: window.scrollY,
+            ...returnView.scroll,
           },
         },
         ""

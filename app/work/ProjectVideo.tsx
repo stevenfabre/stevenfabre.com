@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useVideoFrameReady } from "../../src/hooks/useVideoFrameReady";
 import WorkIcon from "./WorkIcon";
 import type { ProjectVisual } from "./work-data";
 import { getMediaDimensions } from "./media";
@@ -39,6 +40,7 @@ export default function ProjectVideo({
   autoLoop?: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const frameReady = useVideoFrameReady(ref, film.file);
   const progressRef = useRef<HTMLInputElement>(null);
   const manuallyPaused = useRef(false);
   const soundPreferenceReady = useRef(false);
@@ -217,7 +219,18 @@ export default function ProjectVideo({
   }, [film.file, preload]);
   return (
     <div className={playerStyles.player}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        data-video-poster
+        src={`/work/media/${film.file}.jpg`}
+        alt=""
+        width={width}
+        height={height}
+        decoding="async"
+      />
       <video
+        data-poster-video
+        data-video-ready={frameReady || undefined}
         ref={ref}
         data-file={film.file}
         src={`/work/media/${film.file}.mp4`}

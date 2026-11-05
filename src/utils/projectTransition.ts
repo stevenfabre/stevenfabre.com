@@ -1,102 +1,151 @@
-// WebKit and older browsers may not expose same-document View Transitions.
-// Keep their navigation animated too, without retaining an entire page snapshot.
+// Browsers without View Transitions use the same decoded poster as the native
+// path. Move/crop an image instead of stretching a video or sampling its GPU layer.
 export function captureProjectTransition(source?: HTMLElement | null) {
   const bounds = source?.getBoundingClientRect();
   const name = source?.style.getPropertyValue("view-transition-name");
+  const media = source?.querySelector<HTMLImageElement>(
+    "img[data-video-poster], img"
+  );
   let overlay: HTMLDivElement | undefined;
-  if (source && bounds && bounds.width && bounds.height && name) {
+  let snapshot: HTMLImageElement | undefined;
+  const animations: Animation[] = [];
+  let page: HTMLElement | null = null;
+  let pageOpacity = "";
+  let cancelled = false;
+
+  const clip = (rect: DOMRect, radius: string) =>
+    `inset(${rect.top}px ${innerWidth - rect.right}px ${
+      innerHeight - rect.bottom
+    }px ${rect.left}px round ${radius})`;
+  const fit = (rect: DOMRect, element: HTMLImageElement) => {
+    const style = getComputedStyle(element);
+    const scale = (style.objectFit === "contain" ? Math.min : Math.max)(
+      rect.width / media!.naturalWidth,
+      rect.height / media!.naturalHeight
+    );
+    const position = style.objectPosition
+      .split(" ")
+      .map((value) => parseFloat(value) / 100);
+    const x =
+      rect.left +
+      (rect.width - media!.naturalWidth * scale) *
+        (Number.isFinite(position[0]) ? position[0] : 0.5);
+    const y =
+      rect.top +
+      (rect.height - media!.naturalHeight * scale) *
+        (Number.isFinite(position[1]) ? position[1] : 0.5);
+    return `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+  };
+
+  if (
+    source &&
+    bounds &&
+    bounds.width &&
+    bounds.height &&
+    media?.naturalWidth
+  ) {
     overlay = document.createElement("div");
     overlay.setAttribute("aria-hidden", "true");
     Object.assign(overlay.style, {
       position: "fixed",
-      left: `${bounds.left}px`,
-      top: `${bounds.top}px`,
-      width: `${bounds.width}px`,
-      height: `${bounds.height}px`,
-      overflow: "hidden",
+      inset: "0",
       pointerEvents: "none",
       zIndex: "100",
-      borderRadius: getComputedStyle(source).borderRadius,
-      transformOrigin: "top left",
+      clipPath: clip(bounds, getComputedStyle(source).borderRadius),
     });
-    const media = source.querySelector("video, img");
-    let snapshot: HTMLElement | undefined;
-    if (media instanceof HTMLVideoElement && media.readyState >= 2) {
-      const canvas = document.createElement("canvas");
-      canvas.width = media.videoWidth;
-      canvas.height = media.videoHeight;
-      canvas.getContext("2d")?.drawImage(media, 0, 0);
-      snapshot = canvas;
-    } else if (
-      media instanceof HTMLImageElement ||
-      media instanceof HTMLVideoElement
-    ) {
-      const image = new Image();
-      image.src =
-        media instanceof HTMLVideoElement
-          ? media.poster
-          : media.currentSrc || media.src;
-      snapshot = image;
-    }
-    if (snapshot && media) {
-      Object.assign(snapshot.style, {
-        width: "100%",
-        height: "100%",
-        display: "block",
-        objectFit: getComputedStyle(media).objectFit,
-        objectPosition: getComputedStyle(media).objectPosition,
-      });
-      overlay.append(snapshot);
-      document.body.append(overlay);
-    }
+    snapshot = new Image();
+    snapshot.src = media.currentSrc || media.src;
+    Object.assign(snapshot.style, {
+      position: "absolute",
+      left: "0",
+      top: "0",
+      maxWidth: "none",
+      width: `${media.naturalWidth}px`,
+      height: `${media.naturalHeight}px`,
+      transformOrigin: "top left",
+      transform: fit(bounds, media),
+    });
+    overlay.append(snapshot);
+    document.body.append(overlay);
   }
-  const animations: Animation[] = [];
-  const cleanup = () => overlay?.remove();
+  const cleanup = () => {
+    animations.forEach((animation) => animation.cancel());
+    overlay?.remove();
+    if (page) page.style.opacity = pageOpacity;
+  };
   return {
     cancel() {
-      animations.forEach((animation) => animation.cancel());
+      cancelled = true;
       cleanup();
     },
-    play() {
+    prepareDestination() {
+      page = document.querySelector<HTMLElement>(
+        "[data-project-slug], [data-site-layout]"
+      );
+      if (page) {
+        pageOpacity = page.style.opacity;
+        page.style.opacity = "0";
+      }
+    },
+    async play() {
+      if (cancelled) return;
       const tokens = getComputedStyle(document.documentElement);
       const duration = parseFloat(
         tokens.getPropertyValue("--page-transition-duration")
       );
       const easing = tokens.getPropertyValue("--ease-out").trim();
+      const options: KeyframeAnimationOptions = {
+        duration,
+        easing,
+        fill: "both",
+      };
+      if (page)
+        animations.push(
+          page.animate([{ opacity: 0 }, { opacity: 1 }], options)
+        );
       const target = Array.from(
         document.querySelectorAll<HTMLElement>("[data-work-visual]")
       ).find(
         (visual) =>
-          visual.style.getPropertyValue("view-transition-name") === name
+          visual.style.getPropertyValue("view-transition-name") === name &&
+          !visual.closest("[data-swipe-preview]")
       );
-      const page = document.querySelector<HTMLElement>(
-        "[data-project-slug], [data-site-content]"
+      const targetImage = target?.querySelector<HTMLImageElement>(
+        "img[data-video-poster], img"
       );
-      if (page)
+      if (overlay && snapshot && target && targetImage && bounds) {
+        const to = target.getBoundingClientRect();
         animations.push(
-          page.animate([{ opacity: 0 }, { opacity: 1 }], { duration, easing })
+          snapshot.animate(
+            [
+              { transform: snapshot.style.transform },
+              { transform: fit(to, targetImage) },
+            ],
+            options
+          )
         );
-      if (!overlay || !target || !bounds) {
-        cleanup();
-        return;
+        animations.push(
+          overlay.animate(
+            [
+              { clipPath: overlay.style.clipPath, opacity: 1 },
+              {
+                clipPath: clip(to, getComputedStyle(target).borderRadius),
+                opacity: 1,
+                offset: 0.8,
+              },
+              {
+                clipPath: clip(to, getComputedStyle(target).borderRadius),
+                opacity: 0,
+              },
+            ],
+            options
+          )
+        );
       }
-      const to = target.getBoundingClientRect();
-      const animation = overlay.animate(
-        [
-          { transform: "none", opacity: 1 },
-          {
-            transform: `translate(${to.left - bounds.left}px, ${
-              to.top - bounds.top
-            }px) scale(${to.width / bounds.width}, ${
-              to.height / bounds.height
-            })`,
-            opacity: 0,
-          },
-        ],
-        { duration, easing }
+      await Promise.allSettled(
+        animations.map((animation) => animation.finished)
       );
-      animations.push(animation);
-      void animation.finished.then(cleanup, cleanup);
+      cleanup();
     },
   };
 }

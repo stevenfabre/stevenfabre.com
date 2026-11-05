@@ -74,7 +74,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
   if (!hasPortrait) return <>{children}</>;
 
   return (
-    <div className="md:grid md:grid-cols-4 md:h-screen">
+    <div data-site-layout className="md:grid md:grid-cols-4 md:h-screen">
       <Portrait />
       <div
         ref={content}

@@ -34,3 +34,10 @@ Neighboring content is server-rendered and mounted as inert, still-image preview
 only during a gesture; adjacent routes are prefetched for the handoff. Vertical
 scrolling, browser-edge gestures, and nested comparison/media controls keep their
 own behavior. Reduced motion keeps swipe navigation but skips sliding.
+
+Overview/detail transitions decode visible poster images before capturing either
+state. Only the selected visual gets a separate transition layer; other media,
+the portrait, and navigation stay in the page snapshot. Videos retain a real
+poster image until a decoded frame is ready, and remain hidden during snapshots
+to avoid empty hardware-video surfaces on iOS. Closing restores the saved
+overview scroll position before measuring the destination thumbnail.

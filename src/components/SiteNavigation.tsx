@@ -5,6 +5,10 @@ import {
   isPlainNavigation,
   rememberProjectHref,
 } from "../utils/projectNavigation";
+import {
+  decodeVisibleImages,
+  prepareProjectImages,
+} from "../utils/transitionImages";
 import { captureProjectTransition } from "../utils/projectTransition";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -65,14 +69,19 @@ export function RouteReady({ href }: { href: string }) {
 export function SiteNavigationProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const pending = useRef<{ destination: URL; finish: () => void } | null>(null);
+  const pending = useRef<{
+    destination: URL;
+    scroll?: { pane: number; window: number };
+    finish: () => void;
+  } | null>(null);
   const active = useRef<Transition | null>(null);
+  const images = useRef<ReturnType<typeof prepareProjectImages> | null>(null);
   const sequence = useRef(0);
   const fallback = useRef<ReturnType<typeof captureProjectTransition> | null>(
     null
   );
 
-  const ready = useCallback((href: string) => {
+  const ready = useCallback(async (href: string) => {
     const navigation = pending.current;
     if (!navigation) {
       // Initial deep links may target the independently scrolling overview pane.
@@ -92,27 +101,47 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       return;
     }
     if (navigation.destination.pathname !== href) return;
-    const { destination } = navigation;
+    const { destination, scroll } = navigation;
+    if (scroll) {
+      const pane = document.querySelector<HTMLElement>("[data-site-content]");
+      if (pane) pane.scrollTop = scroll.pane;
+      window.scrollTo({ top: scroll.window, behavior: "instant" });
+    }
     if (destination.hash) {
       try {
-        document
-          .getElementById(decodeURIComponent(destination.hash.slice(1)))
-          ?.scrollIntoView({ block: "nearest", behavior: "instant" });
+        const target = document.getElementById(
+          decodeURIComponent(destination.hash.slice(1))
+        );
+        const bounds = target?.getBoundingClientRect();
+        if (
+          !scroll ||
+          !bounds ||
+          bounds.top < 0 ||
+          bounds.bottom > innerHeight
+        ) {
+          target?.scrollIntoView({ block: "nearest", behavior: "instant" });
+        }
       } catch {
         /* Ignore malformed fragments. */
       }
     } else if (destination.pathname.startsWith("/work/")) {
       window.scrollTo({ top: 0, behavior: "instant" });
     }
+    images.current?.selectDestination();
+    fallback.current?.prepareDestination();
+    if (images.current || fallback.current) await decodeVisibleImages();
+    if (pending.current !== navigation) return;
     navigation.finish();
     pending.current = null;
   }, []);
 
   useEffect(
     () => () => {
+      ++sequence.current;
       pending.current?.finish();
       active.current?.skipTransition();
       fallback.current?.cancel();
+      images.current?.cancel();
     },
     []
   );
@@ -129,6 +158,8 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       active.current = null;
       pending.current = null;
       fallback.current = null;
+      images.current?.cancel();
+      images.current = null;
       rememberProjectHref(href);
       if (destination.pathname === pathname) {
         router.push(href);
@@ -142,6 +173,19 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
         ) &&
         !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+      const savedScroll =
+        pathname.startsWith("/work/") && destination.pathname === "/work"
+          ? history.state?.portfolioReturn?.scroll
+          : undefined;
+      const scroll =
+        savedScroll &&
+        Number.isFinite(savedScroll.pane) &&
+        Number.isFinite(savedScroll.window)
+          ? {
+              pane: Math.max(0, savedScroll.pane),
+              window: Math.max(0, savedScroll.window),
+            }
+          : undefined;
       const update = () =>
         new Promise<void>((resolve) => {
           if (request !== sequence.current) {
@@ -156,11 +200,14 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
               active.current?.skipTransition();
               fallback.current?.cancel();
               fallback.current = null;
+              images.current?.cancel();
+              images.current = null;
             }
             resolve();
           }, 2000);
           pending.current = {
             destination,
+            scroll,
             finish: () => {
               window.clearTimeout(timeout);
               resolve();
@@ -172,23 +219,41 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
         void update();
         return true;
       }
-      if (!doc.startViewTransition) {
-        const animation = captureProjectTransition(source);
-        fallback.current = animation;
-        void update().then(() => {
-          if (fallback.current === animation) animation.play();
-        });
-        return true;
-      }
-      const transition = doc.startViewTransition(update);
-      active.current = transition;
-      void transition.ready.catch(() => {});
-      void transition.updateCallbackDone.catch(() => {});
-      void transition.finished
-        .catch(() => {})
-        .then(() => {
-          if (active.current === transition) active.current = null;
-        });
+      const projectChange =
+        !!source &&
+        ((pathname.startsWith("/work/") && destination.pathname === "/work") ||
+          (pathname === "/work" && destination.pathname.startsWith("/work/")));
+      const run = async () => {
+        if (projectChange) await decodeVisibleImages();
+        if (request !== sequence.current) return;
+        const prepared = projectChange ? prepareProjectImages(source!) : null;
+        images.current = prepared;
+        const release = () => {
+          if (images.current === prepared) {
+            prepared?.cancel();
+            images.current = null;
+          }
+        };
+        if (!doc.startViewTransition) {
+          const animation = captureProjectTransition(source);
+          fallback.current = animation;
+          await update();
+          if (fallback.current === animation) await animation.play();
+          release();
+          return;
+        }
+        const transition = doc.startViewTransition(update);
+        active.current = transition;
+        void transition.ready.catch(() => {});
+        void transition.updateCallbackDone.catch(() => {});
+        void transition.finished
+          .catch(() => {})
+          .then(() => {
+            if (active.current === transition) active.current = null;
+            release();
+          });
+      };
+      void run();
       return true;
     },
     [pathname, router]

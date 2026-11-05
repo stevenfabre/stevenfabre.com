@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Film } from "./work-data";
 import styles from "./work.module.css";
+import { useVideoFrameReady } from "../../src/hooks/useVideoFrameReady";
 import WorkLink from "./WorkLink";
 import ProjectImage from "./ProjectImage";
 
@@ -12,6 +13,7 @@ type Thumbnail = Pick<
   | "file"
   | "title"
   | "kind"
+  | "imageExtension"
   | "imageAlt"
   | "aspectRatio"
   | "thumbnailPosition"
@@ -19,6 +21,7 @@ type Thumbnail = Pick<
 
 function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const frameReady = useVideoFrameReady(ref, film.file);
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
@@ -83,7 +86,17 @@ function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
         } as CSSProperties
       }
     >
+      {/* An actual image survives video decoding and browser snapshots. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        data-video-poster
+        src={`/work/media/${film.file}.jpg`}
+        alt=""
+        decoding="async"
+      />
       <video
+        data-poster-video
+        data-video-ready={frameReady || undefined}
         ref={ref}
         data-file={film.file}
         poster={`/work/media/${film.file}.jpg`}

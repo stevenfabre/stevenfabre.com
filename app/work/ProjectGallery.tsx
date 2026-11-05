@@ -11,8 +11,10 @@ import styles from "./detail.module.css";
 export default function ProjectGallery({
   visuals,
   layout = "grid",
+  preview = false,
 }: {
   visuals: ProjectVisual[];
+  preview?: boolean;
   layout?: "grid" | "stack";
 }) {
   return (
@@ -38,7 +40,7 @@ export default function ProjectGallery({
           >
             {visual.comparison ? (
               <BeforeAfter visual={visual} />
-            ) : visual.kind ? (
+            ) : visual.kind || preview ? (
               <ProjectImage film={visual} loading="lazy" />
             ) : (
               <ProjectVideo film={visual} preload="none" />
@@ -49,7 +51,7 @@ export default function ProjectGallery({
           return (
             <SocialPostCard
               key={visual.file}
-              id={`visual-${visual.file}`}
+              id={preview ? undefined : `visual-${visual.file}`}
               className={styles.galleryItem}
               style={dimensions}
               post={visual.post}
@@ -61,7 +63,7 @@ export default function ProjectGallery({
         }
         return (
           <figure
-            id={`visual-${visual.file}`}
+            id={preview ? undefined : `visual-${visual.file}`}
             className={styles.galleryItem}
             key={visual.file}
             style={dimensions}

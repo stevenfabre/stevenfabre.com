@@ -5,7 +5,8 @@ preview deployments, and production.
 
 - `work-data.ts`: project copy, company roles, contribution lists, collaborator credits, and gallery definitions.
 - `WorkPortfolio.tsx`: server-rendered company overview, with interactive thumbnails in `ProjectGrid.tsx`.
-- `ProjectViewer.tsx`: server-rendered project content, with client navigation and media controls.
+- `ProjectViewer.tsx` and `ProjectContent.tsx`: server-rendered project content, with client navigation and media controls.
+- `ProjectSwipe.tsx`: mobile horizontal gestures, spring settling, and inert neighboring previews. `swipe.ts` defines distance/velocity thresholds.
 - `media-dimensions.json`: original dimensions used to preserve aspect ratios and cap visual sizes.
 - `ProjectVideo.tsx`: video playback controls, visibility-aware playback, and preview playback restoration.
 - `preview-data.ts`: static homepage preview data passed directly from the server.
@@ -27,3 +28,9 @@ content rather than a loading boundary. Internal links and keyboard shortcuts
 use the same Next.js navigation provider. Event listeners live in effects with
 cleanup; executable inline navigation scripts are unnecessary. The remaining
 JSON-LD script is structured data for search engines.
+
+On mobile, project content follows horizontal drags while the header stays fixed.
+Neighboring content is server-rendered and mounted as inert, still-image previews
+only during a gesture; adjacent routes are prefetched for the handoff. Vertical
+scrolling, browser-edge gestures, and nested comparison/media controls keep their
+own behavior. Reduced motion keeps swipe navigation but skips sliding.

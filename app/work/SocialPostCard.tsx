@@ -25,7 +25,7 @@ export default function SocialPostCard({
   post: SocialPost;
   source: string;
   children: ReactNode;
-  id: string;
+  id?: string;
   className: string;
   style: CSSProperties;
 }) {

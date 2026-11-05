@@ -158,6 +158,13 @@
     --bar-height: 65px;
   }
 }
+@media (max-width: 767px) {
+  .page {
+    /* Caption gap (4rem), title and margin, then two lines of opening copy.
+       Keep this viewport-based so every project reserves the same space. */
+    --visual-height: max(0px, calc(100svh - var(--bar-height) - 10.5rem));
+  }
+}
 @media (min-width: 1024px) {
   .page {
     --caption-width: calc(180px + 32px + var(--text-width));

@@ -59,10 +59,10 @@ export default function WorkPageSelect() {
               <Select.Item
                 key={href}
                 value={href}
-                className="relative flex cursor-default select-none items-center rounded-lg py-1 pr-[calc(0.55em+8px)] outline-none data-[highlighted]:bg-neutral-200 dark:data-[highlighted]:bg-neutral-800"
+                className="relative flex cursor-default select-none items-center rounded-lg py-1 pl-3 pr-[calc(0.55em+20px)] outline-none data-[highlighted]:bg-neutral-200 dark:data-[highlighted]:bg-neutral-800"
               >
                 <Select.ItemText>{label}</Select.ItemText>
-                <Select.ItemIndicator className="absolute right-0 flex items-center">
+                <Select.ItemIndicator className="absolute right-3 flex items-center">
                   <Check aria-hidden="true" className="size-[0.55em]" />
                 </Select.ItemIndicator>
               </Select.Item>

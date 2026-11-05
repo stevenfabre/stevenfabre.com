@@ -1,0 +1,94 @@
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --page-transition-duration: 240ms;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+[data-site-portrait] {
+  view-transition-name: site-portrait;
+}
+[data-site-footer] {
+  view-transition-name: site-footer;
+}
+
+::view-transition-group(*) {
+  animation-duration: var(--page-transition-duration);
+  animation-timing-function: var(--ease-out);
+}
+
+/* Equal fade timing prevents a flash of the canvas between snapshots. */
+::view-transition-image-pair(*) {
+  isolation: isolate;
+}
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: var(--page-transition-duration);
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+  mix-blend-mode: plus-lighter;
+}
+::view-transition-old(*) {
+  animation-name: page-out;
+}
+::view-transition-new(*) {
+  animation-name: page-in;
+}
+
+/* Keep the selected media above the page and stationary navigation chrome. */
+::view-transition-group(.project) {
+  z-index: 3;
+}
+::view-transition-old(.project),
+::view-transition-new(.project) {
+  height: 100%;
+  object-fit: contain;
+}
+::view-transition-group(site-portrait),
+::view-transition-group(project-navigation) {
+  z-index: 2;
+}
+
+/* The footer changes position without flying across the viewport. */
+::view-transition-group(site-footer) {
+  animation: none;
+  z-index: 2;
+}
+::view-transition-old(site-footer) {
+  animation: none;
+  opacity: 0;
+}
+::view-transition-new(site-footer) {
+  animation: none;
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-site-portrait],
+  [data-site-footer],
+  [data-work-visual],
+  nav[aria-label="Project navigation"] {
+    view-transition-name: none !important;
+  }
+  ::view-transition-group(*) {
+    animation: none;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 100ms;
+  }
+}

@@ -1,4 +1,5 @@
 import "../src/styles/globals.css";
+import "../src/styles/transitions.css";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
@@ -6,6 +7,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Person, WithContext } from "schema-dts";
+import SiteLayout from "../src/components/SiteLayout";
+import ProjectTransitionLayer from "../src/components/ProjectTransitionLayer";
+import { SiteNavigationProvider } from "../src/components/SiteNavigation";
 
 const font = Inter({ subsets: ["latin"] });
 
@@ -82,10 +86,40 @@ export default function RootLayout({
     <html lang="en" className={font.className} suppressHydrationWarning>
       <head>
         <meta content="initial-scale=1, viewport-fit=cover" name="viewport" />
+        <script
+          dangerouslySetInnerHTML={{
+            // Register before first paint so fragments are positioned before
+            // the browser captures the incoming view-transition snapshot.
+            __html: `(() => {
+              let keyboardNavigation = false;
+              document.addEventListener('click', (event) => {
+                if (event.target instanceof Element && event.target.closest('a[href]')) {
+                  keyboardNavigation = event.detail === 0;
+                }
+              });
+              window.addEventListener('pageswap', (event) => {
+                if (keyboardNavigation) event.viewTransition?.skipTransition();
+                keyboardNavigation = false;
+              });
+              window.addEventListener('pagereveal', () => {
+                if (!location.hash) return;
+                try {
+                  document.getElementById(decodeURIComponent(location.hash.slice(1)))
+                    ?.scrollIntoView({ behavior: 'instant', block: 'start' });
+                } catch {}
+              });
+            })();`,
+          }}
+        />
       </head>
       <body>
+        {process.env.NODE_ENV === "development" && <ProjectTransitionLayer />}
         <ThemeProvider attribute="class">
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <SiteNavigationProvider>
+              <SiteLayout>{children}</SiteLayout>
+            </SiteNavigationProvider>
+          </TooltipProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

@@ -14,6 +14,7 @@ export function ColorSwatch({
   return (
     <button
       aria-label={`Select ${label}`}
+      aria-pressed={selected}
       type="button"
       className="rounded-md overflow-hidden relative size-10 sm:size-8 flex items-center justify-center"
       onClick={onClick}

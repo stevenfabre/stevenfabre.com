@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local portfolio draft — keep private work out of the public repository.
+/app/work/
+/private/work/

@@ -1,3 +1,4 @@
+import Icon from "../../src/components/Icon";
 import Image from "next/image";
 import Link from "next/link";
 import profilePic from "../../public/steven-fabre-profile-picture.jpg";
@@ -57,19 +58,11 @@ function LinkTreeItem({
         rel="noopener noreferrer"
       >
         <span className="truncate">{children}</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
+        <Icon
+          name="chevron-right"
+          size={16}
           className="shrink-0 opacity-70 group-hover:opacity-90 group-focus:opacity-90"
-        >
-          <path
-            d="M11.0008 8L6.00078 13L5.30078 12.3L9.60078 8L5.30078 3.7L6.00078 3L11.0008 8Z"
-            fill="currentColor"
-          />
-        </svg>
+        />
       </Link>
     </li>
   );

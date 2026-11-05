@@ -149,10 +149,10 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
   });
   return (
     <div
-      className={`mt-3 flex items-center text-xs tabular-nums ${
+      className={`mt-3 flex items-center justify-start gap-5 text-xs tabular-nums ${
         instagram
-          ? "gap-5 text-[var(--ink)]"
-          : "gap-2 justify-between text-[var(--muted)]"
+          ? "text-[var(--ink)]"
+          : "text-[var(--muted)]"
       }`}
       aria-label="Post engagement"
       title="Engagement counts from the archived post; not live."
@@ -174,7 +174,7 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
             aria-hidden="true"
             className="shrink-0"
           />
-          {count !== undefined && <span>{format.format(count)}</span>}
+          {count !== undefined && <span className="font-medium">{format.format(count)}</span>}
         </a>
       ))}
     </div>

@@ -1,3 +1,5 @@
+import { getWorkPreviews } from "./work/preview-data";
+import { RouteReady } from "../src/components/SiteNavigation";
 import Link from "next/link";
 import EmailLink from "../src/components/EmailLink";
 import Footer from "../src/components/Footer";
@@ -9,11 +11,12 @@ import {
   WorkPreviewLink,
 } from "../src/components/WorkPreview";
 
-export default async function Home() {
+export default function Home() {
   const className =
     "@container/content w-full max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto pt-10 sm:pt-16 lg:pt-32 xl:pt-44";
   const content = (
     <>
+      <RouteReady href="/" />
       <h1 className="text-balance text-3xl tracking-tight font-semibold text-neutral-900 @sm/content:text-4xl @sm/content:tracking-tight dark:text-neutral-100 @xl/content:text-6xl @xl/content:tracking-tight">
         I’m Steven, a designer & founder who loves building tools for people.
       </h1>
@@ -75,7 +78,9 @@ export default async function Home() {
     </>
   );
   return (
-    <WorkPreviewProvider className={className}>{content}</WorkPreviewProvider>
+    <WorkPreviewProvider className={className} previews={getWorkPreviews()}>
+      {content}
+    </WorkPreviewProvider>
   );
 }
 

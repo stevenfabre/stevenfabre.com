@@ -13,10 +13,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import CompanyLink from "./CompanyLink";
-import {
-  isPlainNavigation,
-  rememberProjectNavigation,
-} from "../utils/projectNavigation";
+import { isPlainNavigation } from "../utils/projectNavigation";
 import { afterPageLoad, preloadMedia } from "../utils/preloadMedia";
 import styles from "./WorkPreview.module.css";
 
@@ -42,31 +39,26 @@ const Context = createContext<PreviewContext | null>(null);
 export function WorkPreviewProvider({
   children,
   className,
+  previews,
 }: {
   children: ReactNode;
   className?: string;
+  previews: Record<string, Preview[]>;
 }) {
   const position = useRef<HTMLDivElement>(null);
   const pointer = useRef({ x: 0, y: 0 });
-  const [previews, setPreviews] = useState<Record<string, Preview[]>>({});
   const [nearby, setNearby] = useState(false);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [playback, setPlayback] = useState<Record<string, Playback>>({});
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetch("/work/preview", { signal: controller.signal })
-      .then((response) => (response.ok ? response.json() : {}))
-      .then(setPreviews)
-      .catch(() => {});
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const syncMotion = () => setReducedMotion(motion.matches);
     syncMotion();
     motion.addEventListener("change", syncMotion);
     const cancelReady = afterPageLoad(() => setNearby(true));
     return () => {
-      controller.abort();
       cancelReady();
       motion.removeEventListener("change", syncMotion);
     };
@@ -372,7 +364,6 @@ export function WorkPreviewLink({
       onBlur={preview.close}
       onClick={(event) => {
         if (!isPlainNavigation(event)) return;
-        rememberProjectNavigation(event, true);
         preview.savePlayback(project.file);
         // Keep the shared visual mounted until the old snapshot is captured.
       }}

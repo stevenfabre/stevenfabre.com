@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useState } from "react";
 import ButtonLink from "../../src/components/ButtonLink";
 import { Tooltip } from "../../src/components/Tooltip";
-import {
-  initializeProjectReturn,
-  isPlainNavigation,
-  rememberProjectNavigation,
-} from "../../src/utils/projectNavigation";
+import { initializeProjectReturn } from "../../src/utils/projectNavigation";
+import { useSiteNavigation } from "../../src/components/SiteNavigation";
 import ProjectCounter from "./ProjectCounter";
 import WorkIcon from "./WorkIcon";
 import styles from "./detail.module.css";
@@ -34,56 +31,51 @@ export default function ProjectNavigation({
     window.addEventListener("scroll", update, { passive: true });
     return () => window.removeEventListener("scroll", update);
   }, [slug]);
-  const [returnView, setReturnView] = useState({ href: "/work", steps: 0 });
+  const [returnView, setReturnView] = useState({ href: "/work" });
   useEffect(() => setReturnView(initializeProjectReturn()), [slug]);
 
-  const navigate = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (!isPlainNavigation(event)) return;
-    rememberProjectNavigation(event, true);
-    event.preventDefault();
-    window.history.pushState(null, "", event.currentTarget.pathname);
-    window.scrollTo({ top: 0, behavior: "instant" });
-  };
+  const navigate = useSiteNavigation();
+  const closeHref = returnView.href.startsWith("/work")
+    ? `/work#project-${slug}`
+    : returnView.href;
+  const [pressed, setPressed] = useState<string | null>(null);
+  const previousHref = `/work/${previous.slug}`;
+  const nextHref = `/work/${next.slug}`;
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if (
         event.defaultPrevented ||
         event.repeat ||
+        event.isComposing ||
         event.altKey ||
         event.ctrlKey ||
         event.metaKey ||
-        event.shiftKey
-      )
-        return;
-      const target = event.target as HTMLElement;
-      if (
-        target.closest(
-          'input, textarea, select, video, [contenteditable], [role="slider"]'
-        ) ||
+        event.shiftKey ||
         document.fullscreenElement
       )
         return;
-      const direction =
+      if (
+        event.target instanceof Element &&
+        event.target.closest(
+          'input, textarea, select, video, audio, [contenteditable]:not([contenteditable="false"]), [role="slider"], [role="dialog"], dialog[open]'
+        )
+      )
+        return;
+      const shortcut =
         event.key === "ArrowRight"
-          ? "next"
+          ? { direction: "next", href: nextHref }
           : event.key === "ArrowLeft"
-          ? "previous"
+          ? { direction: "previous", href: previousHref }
           : event.key === "Escape"
-          ? "close"
+          ? { direction: "close", href: closeHref }
           : null;
-      if (!direction) return;
+      if (!shortcut) return;
       event.preventDefault();
-      const button = document.querySelector<HTMLAnchorElement>(
-        `[data-project-direction="${direction}"]`
-      );
-      button?.setAttribute("data-keyboard-pressed", "true");
-      button?.click();
+      setPressed(shortcut.direction);
+      navigate(shortcut.href, { animate: false });
     };
-    const release = () =>
-      document
-        .querySelectorAll("[data-keyboard-pressed]")
-        .forEach((button) => button.removeAttribute("data-keyboard-pressed"));
+    const release = () => setPressed(null);
     document.addEventListener("keydown", handleKey);
     document.addEventListener("keyup", release);
     window.addEventListener("blur", release);
@@ -92,7 +84,7 @@ export default function ProjectNavigation({
       document.removeEventListener("keyup", release);
       window.removeEventListener("blur", release);
     };
-  }, []);
+  }, [closeHref, nextHref, previousHref, navigate]);
 
   return (
     <nav
@@ -107,8 +99,9 @@ export default function ProjectNavigation({
               variant="icon"
               href={`/work/${previous.slug}`}
               data-project-direction="previous"
+              data-keyboard-pressed={pressed === "previous" || undefined}
               aria-keyshortcuts="ArrowLeft"
-              onClick={navigate}
+              clientNavigation
               aria-label={`Previous project: ${previous.title}`}
             >
               <WorkIcon name="chevron-left" />
@@ -120,8 +113,9 @@ export default function ProjectNavigation({
               variant="icon"
               href={`/work/${next.slug}`}
               data-project-direction="next"
+              data-keyboard-pressed={pressed === "next" || undefined}
               aria-keyshortcuts="ArrowRight"
-              onClick={navigate}
+              clientNavigation
               aria-label={`Next project: ${next.title}`}
             >
               <WorkIcon name="chevron-right" />
@@ -132,14 +126,11 @@ export default function ProjectNavigation({
           <ButtonLink
             variant="icon"
             className="justify-self-end"
-            href={
-              returnView.href.startsWith("/work")
-                ? `/work#project-${slug}`
-                : returnView.href
-            }
+            href={closeHref}
             aria-label="Close project"
             aria-keyshortcuts="Escape"
             data-project-direction="close"
+            data-keyboard-pressed={pressed === "close" || undefined}
             clientNavigation
           >
             <WorkIcon name="x" />

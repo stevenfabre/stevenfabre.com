@@ -1,0 +1,168 @@
+"use client";
+
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import type { Film } from "./work-data";
+import styles from "./work.module.css";
+import WorkLink from "./WorkLink";
+import ProjectImage from "./ProjectImage";
+
+type Thumbnail = Pick<
+  Film,
+  | "slug"
+  | "file"
+  | "title"
+  | "kind"
+  | "imageAlt"
+  | "aspectRatio"
+  | "thumbnailPosition"
+>;
+
+function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let visible = false;
+    const prepare = () => {
+      if (!video.getAttribute("src")) {
+        video.preload = "auto";
+        video.src = `/work/media/${film.file}.mp4`;
+        video.load();
+      }
+    };
+    const sync = () => {
+      if (visible && !paused && !document.hidden && !motion.matches) {
+        prepare();
+        if (!video.loop && video.ended) return;
+        void video.play().catch(() => {});
+      } else video.pause();
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting && entry.intersectionRatio >= 0.25;
+        sync();
+      },
+      { threshold: 0.25 }
+    );
+    const pane = video.closest("[data-site-content]");
+    const root =
+      pane && /auto|scroll/.test(getComputedStyle(pane).overflowY)
+        ? pane
+        : null;
+    const nearby = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          prepare();
+          nearby.disconnect();
+        }
+      },
+      { root, rootMargin: "600px" }
+    );
+    nearby.observe(video);
+    observer.observe(video);
+    document.addEventListener("visibilitychange", sync);
+    motion.addEventListener("change", sync);
+    return () => {
+      observer.disconnect();
+      nearby.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+      motion.removeEventListener("change", sync);
+      video.pause();
+    };
+  }, [film.file, paused]);
+  return (
+    <div
+      className={styles.video}
+      data-work-visual
+      style={
+        {
+          viewTransitionName: `film-${film.file}`,
+          "--film-ratio": film.aspectRatio,
+          "--thumbnail-position": film.thumbnailPosition,
+        } as CSSProperties
+      }
+    >
+      <video
+        ref={ref}
+        data-file={film.file}
+        poster={`/work/media/${film.file}.jpg`}
+        muted
+        loop={film.slug !== "building-liveblocks"}
+        playsInline
+        preload="none"
+        aria-label={`${film.title} — silent preview`}
+      />
+      <WorkLink
+        className="absolute inset-0 cursor-pointer"
+        href={`/work/${film.slug}`}
+        aria-label={`View project: ${film.title}`}
+      />
+    </div>
+  );
+}
+
+function ProjectPreview({
+  film,
+  paused,
+  onHover,
+}: {
+  film: Thumbnail;
+  paused: boolean;
+  onHover: (slug: string | null) => void;
+}) {
+  return (
+    <figure
+      id={`project-${film.slug}`}
+      className={styles.project}
+      aria-label={film.title}
+      onPointerEnter={(event) => {
+        if (
+          event.pointerType !== "touch" &&
+          window.matchMedia("(hover: hover) and (pointer: fine)").matches
+        )
+          onHover(film.slug);
+      }}
+      onPointerLeave={() => onHover(null)}
+    >
+      {film.kind ? (
+        <div
+          className={styles.video}
+          data-work-visual
+          style={
+            {
+              viewTransitionName: `film-${film.file}`,
+              "--film-ratio": film.aspectRatio,
+              "--thumbnail-position": film.thumbnailPosition,
+            } as CSSProperties
+          }
+        >
+          <ProjectImage film={film} loading="lazy" />
+          <WorkLink
+            href={`/work/${film.slug}`}
+            className="absolute inset-0 cursor-pointer"
+            aria-label={`View project: ${film.title}`}
+          />
+        </div>
+      ) : (
+        <Video film={film} paused={paused} />
+      )}
+    </figure>
+  );
+}
+
+export default function ProjectGrid({ films }: { films: Thumbnail[] }) {
+  const [hovered, setHovered] = useState<string | null>(null);
+  return (
+    <div className={styles.projectList} onPointerLeave={() => setHovered(null)}>
+      {films.map((film) => (
+        <ProjectPreview
+          key={film.slug}
+          film={film}
+          paused={hovered !== null && hovered !== film.slug}
+          onHover={setHovered}
+        />
+      ))}
+    </div>
+  );
+}

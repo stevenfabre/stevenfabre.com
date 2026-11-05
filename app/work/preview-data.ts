@@ -1,6 +1,6 @@
-import { allFilms, companies, imagePath } from "../work-data";
+import { allFilms, companies, imagePath } from "./work-data";
 
-export function GET() {
+export function getWorkPreviews() {
   const previews = Object.fromEntries(
     companies.map((company) => [
       company.name,
@@ -21,9 +21,5 @@ export function GET() {
         ),
     ])
   );
-  return Response.json(previews, {
-    headers: {
-      "Cache-Control": "public, max-age=300, s-maxage=3600",
-    },
-  });
+  return previews;
 }

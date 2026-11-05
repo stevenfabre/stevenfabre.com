@@ -1,18 +1,13 @@
 import type { MouseEvent } from "react";
 
-type ReturnView = { href: string; steps: number };
+type ReturnView = { href: string };
 const pendingKey = "portfolio-navigation";
-const fallback: ReturnView = { href: "/work", steps: 0 };
+const fallback: ReturnView = { href: "/work" };
 
 function isReturnView(value: unknown): value is ReturnView {
   if (!value || typeof value !== "object") return false;
-  const { href, steps } = value as ReturnView;
-  return (
-    typeof href === "string" &&
-    /^(\/|\/work)([?#].*)?$/.test(href) &&
-    Number.isInteger(steps) &&
-    steps >= 0
-  );
+  const { href } = value as ReturnView;
+  return typeof href === "string" && /^(\/|\/work)([?#].*)?$/.test(href);
 }
 
 export function isPlainNavigation(event: MouseEvent<HTMLAnchorElement>) {
@@ -23,18 +18,15 @@ export function isPlainNavigation(event: MouseEvent<HTMLAnchorElement>) {
     !event.ctrlKey &&
     !event.shiftKey &&
     !event.altKey &&
+    !event.currentTarget.hasAttribute("download") &&
     (!event.currentTarget.target || event.currentTarget.target === "_self")
   );
 }
 
 // Store the return view per history entry. Back/forward and reloads therefore
-// keep the correct distance, even after browsing several fullscreen projects.
-export function rememberProjectNavigation(
-  event: MouseEvent<HTMLAnchorElement>,
-  clientNavigation = false
-) {
-  if (!isPlainNavigation(event)) return;
-  const destination = new URL(event.currentTarget.href);
+// keep the original overview, even after browsing several fullscreen projects.
+export function rememberProjectHref(href: string) {
+  const destination = new URL(href, location.href);
   if (
     destination.origin !== location.origin ||
     !destination.pathname.startsWith("/work/")
@@ -43,9 +35,9 @@ export function rememberProjectNavigation(
   const overview = location.pathname === "/" || location.pathname === "/work";
   const current = history.state?.portfolioReturn;
   const returnView: ReturnView = overview
-    ? { href: location.pathname + location.search + location.hash, steps: 1 }
-    : isReturnView(current) && current.steps > 0
-    ? { ...current, steps: current.steps + 1 }
+    ? { href: location.pathname + location.search + location.hash }
+    : isReturnView(current)
+    ? current
     : fallback;
   try {
     if (overview) {
@@ -65,8 +57,6 @@ export function rememberProjectNavigation(
       pendingKey,
       JSON.stringify({
         destination: destination.pathname,
-        clientNavigation,
-        from: location.href.split("#")[0],
         returnView,
         savedAt: Date.now(),
       })
@@ -85,8 +75,6 @@ export function initializeProjectReturn(): ReturnView {
     if (
       pending &&
       pending.destination === location.pathname &&
-      (pending.clientNavigation ||
-        pending.from === document.referrer.split("#")[0]) &&
       Date.now() - pending.savedAt < 60_000 &&
       isReturnView(pending.returnView)
     ) {

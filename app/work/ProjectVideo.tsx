@@ -20,6 +20,7 @@ function getPreviewPlayback(file: string): PreviewPlayback | null {
     const playback = JSON.parse(saved) as PreviewPlayback;
     return playback.file === file &&
       Number.isFinite(playback.time) &&
+      playback.time >= 0 &&
       Date.now() - playback.savedAt < 15000
       ? playback
       : null;
@@ -95,7 +96,7 @@ export default function ProjectVideo({
     };
     const sync = () => {
       updateProgress();
-      setTime(video.currentTime);
+      setTime(Math.floor(video.currentTime));
       setDuration(Number.isFinite(video.duration) ? video.duration : 0);
       setPlaying(!video.paused && !video.ended);
       cancelAnimationFrame(frame);

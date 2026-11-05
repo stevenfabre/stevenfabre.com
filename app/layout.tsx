@@ -4,11 +4,10 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Person, WithContext } from "schema-dts";
 import SiteLayout from "../src/components/SiteLayout";
-import ProjectTransitionLayer from "../src/components/ProjectTransitionLayer";
 import { SiteNavigationProvider } from "../src/components/SiteNavigation";
 
 const font = Inter({ subsets: ["latin"] });
@@ -50,6 +49,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 const jsonLd: WithContext<Person> = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -84,36 +89,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={font.className} suppressHydrationWarning>
-      <head>
-        <meta content="initial-scale=1, viewport-fit=cover" name="viewport" />
-        <script
-          dangerouslySetInnerHTML={{
-            // Register before first paint so fragments are positioned before
-            // the browser captures the incoming view-transition snapshot.
-            __html: `(() => {
-              let keyboardNavigation = false;
-              document.addEventListener('click', (event) => {
-                if (event.target instanceof Element && event.target.closest('a[href]')) {
-                  keyboardNavigation = event.detail === 0;
-                }
-              });
-              window.addEventListener('pageswap', (event) => {
-                if (keyboardNavigation) event.viewTransition?.skipTransition();
-                keyboardNavigation = false;
-              });
-              window.addEventListener('pagereveal', () => {
-                if (!location.hash) return;
-                try {
-                  document.getElementById(decodeURIComponent(location.hash.slice(1)))
-                    ?.scrollIntoView({ behavior: 'instant', block: 'start' });
-                } catch {}
-              });
-            })();`,
-          }}
-        />
-      </head>
       <body>
-        <ProjectTransitionLayer />
         <ThemeProvider attribute="class">
           <TooltipProvider>
             <SiteNavigationProvider>
@@ -125,7 +101,9 @@ export default function RootLayout({
         <SpeedInsights />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
         />
       </body>
     </html>

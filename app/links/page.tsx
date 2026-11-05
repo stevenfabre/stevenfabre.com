@@ -1,3 +1,4 @@
+import { RouteReady } from "../../src/components/SiteNavigation";
 import Icon from "../../src/components/Icon";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +8,7 @@ import Footer from "../../src/components/Footer";
 export default async function Links() {
   return (
     <div className="max-w-sm mx-auto px-4">
+      <RouteReady href="/links" />
       <div className="mt-12 xl:mt-16 flex flex-col items-center gap-4">
         <Image
           className="size-14 rounded-full"

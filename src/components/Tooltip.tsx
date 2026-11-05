@@ -18,6 +18,7 @@ export function Tooltip({
   defaultOpen,
   onOpenChange,
   delayDuration,
+  disableHoverableContent,
   side = "top",
   align = "center",
   alignOffset,
@@ -31,6 +32,7 @@ export function Tooltip({
       defaultOpen={defaultOpen}
       onOpenChange={onOpenChange}
       delayDuration={delayDuration}
+      disableHoverableContent={disableHoverableContent}
     >
       <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
 

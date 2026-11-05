@@ -1,9 +1,7 @@
-"use client";
-
 import BeforeAfter from "./BeforeAfter";
 import Link from "next/link";
-import { notFound, usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { notFound } from "next/navigation";
+import { RouteReady } from "../../src/components/SiteNavigation";
 import { allFilms, imagePath, companies, companyDetails } from "./work-data";
 import PreloadProjects from "./PreloadProjects";
 import ProjectVideo from "./ProjectVideo";
@@ -25,15 +23,9 @@ export default function ProjectViewer({
 }: {
   initialSlug: string;
 }) {
-  const pathname = usePathname();
-  const slug = pathname.startsWith("/work/")
-    ? pathname.split("/")[2]
-    : initialSlug;
+  const slug = initialSlug;
   const index = allFilms.findIndex((film) => film.slug === slug);
   const film = allFilms[index];
-  useEffect(() => {
-    if (film) document.title = `Steven Fabre • ${film.title}`;
-  }, [film]);
   if (!film) notFound();
   const { width: visualWidth, height: visualHeight } = getMediaDimensions(film);
   const company = companies.find((company) => company.id === film.company)!;
@@ -41,6 +33,7 @@ export default function ProjectViewer({
   const next = allFilms[(index + 1) % allFilms.length];
   return (
     <div className={styles.page} data-project-slug={film.slug}>
+      <RouteReady href={`/work/${slug}`} />
       <PreloadProjects
         assets={[-1, 1, -2, 2].map((offset) => {
           const nearby =

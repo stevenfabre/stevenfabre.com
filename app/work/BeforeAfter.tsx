@@ -10,7 +10,7 @@ export default function BeforeAfter({ visual }: { visual: ProjectVisual }) {
   const [handleY, setHandleY] = useState(50);
   const [returning, setReturning] = useState(false);
   const transition = returning
-    ? "240ms cubic-bezier(0.22, 1, 0.36, 1)"
+    ? "var(--page-transition-duration) var(--ease-out)"
     : "none";
   const before = visual.comparison;
   if (!before) return null;
@@ -59,7 +59,7 @@ export default function BeforeAfter({ visual }: { visual: ProjectVisual }) {
         draggable={false}
       />
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 motion-reduce:!transition-none"
         style={{
           clipPath: `inset(0 ${100 - position}% 0 0)`,
           transition: `clip-path ${transition}`,

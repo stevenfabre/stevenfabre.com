@@ -50,9 +50,13 @@ export function captureProjectTransition(source?: HTMLElement | null) {
       document.body.append(overlay);
     }
   }
+  const animations: Animation[] = [];
   const cleanup = () => overlay?.remove();
   return {
-    cancel: cleanup,
+    cancel() {
+      animations.forEach((animation) => animation.cancel());
+      cleanup();
+    },
     play() {
       const tokens = getComputedStyle(document.documentElement);
       const duration = parseFloat(
@@ -68,7 +72,10 @@ export function captureProjectTransition(source?: HTMLElement | null) {
       const page = document.querySelector<HTMLElement>(
         "[data-project-slug], [data-site-content]"
       );
-      page?.animate([{ opacity: 0 }, { opacity: 1 }], { duration, easing });
+      if (page)
+        animations.push(
+          page.animate([{ opacity: 0 }, { opacity: 1 }], { duration, easing })
+        );
       if (!overlay || !target || !bounds) {
         cleanup();
         return;
@@ -88,6 +95,7 @@ export function captureProjectTransition(source?: HTMLElement | null) {
         ],
         { duration, easing }
       );
+      animations.push(animation);
       void animation.finished.then(cleanup, cleanup);
     },
   };

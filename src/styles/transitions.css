@@ -5,10 +5,6 @@
   --page-transition-duration: 240ms;
 }
 
-@view-transition {
-  navigation: auto;
-}
-
 [data-site-portrait] {
   view-transition-name: site-portrait;
 }

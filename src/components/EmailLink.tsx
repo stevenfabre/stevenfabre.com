@@ -2,7 +2,14 @@
 
 import Icon from "./Icon";
 import Link from "next/link";
-import { ReactNode, useCallback, useMemo, useRef, useState } from "react";
+import {
+  ReactNode,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import copyStringToClipboard from "../utils/copyStringToClipboard";
 import { Tooltip } from "./Tooltip";
 
@@ -23,6 +30,7 @@ export default function EmailLink({
 }) {
   const triggerRef = useRef(null);
   const timeoutIdRef = useRef<ReturnType<typeof setTimeout>>();
+  useEffect(() => () => clearTimeout(timeoutIdRef.current), []);
   const [state, setState] = useState<FeedbackState>(FeedbackState.None);
   const [isOpen, setIsOpen] = useState(false);
 

@@ -2,7 +2,7 @@
 
 import { SiteLink } from "../../src/components/SiteNavigation";
 import { type AnchorHTMLAttributes, type MouseEvent } from "react";
-import { rememberProjectNavigation } from "../../src/utils/projectNavigation";
+import { isPlainNavigation } from "../../src/utils/projectNavigation";
 
 // Client navigation keeps the app mounted and can show the route loading state.
 export default function WorkLink({
@@ -13,17 +13,7 @@ export default function WorkLink({
 }: AnchorHTMLAttributes<HTMLAnchorElement>) {
   function navigate(event: MouseEvent<HTMLAnchorElement>) {
     onClick?.(event);
-    if (
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey ||
-      props.target === "_blank"
-    )
-      return;
-    rememberProjectNavigation(event, true);
+    if (!isPlainNavigation(event)) return;
     const video = event.currentTarget
       .closest("[data-work-visual]")
       ?.querySelector("video");

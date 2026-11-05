@@ -106,11 +106,3 @@
     font-size: 18px;
   }
 }
-@container content (max-width: 28rem) {
-  .projectList {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .project:not(:first-child) .video {
-    aspect-ratio: var(--film-ratio);
-  }
-}

@@ -22,12 +22,18 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Local portfolio draft
+## Work portfolio
 
-The optional portfolio lives in ignored `app/work/` and `private/work/` folders.
-Its pages and media routes are development-only; they are not part of this public
-repository or its deployment previews. Homepage work links keep their external
-URLs in production.
+`/work` presents selected projects across design, engineering, art direction, and
+company building. Individual projects live at `/work/[slug]`, with descriptions,
+contribution credits, collaborators, and image/video galleries. Homepage work
+links preview this content.
+
+Portfolio content lives in `app/work/work-data.ts`. The 17 project pages are
+prerendered for production. Published media lives in `public/work/media/`, served
+as static assets with native caching and byte-range support. Videos are H.264/AAC
+MP4s optimized for web playback. Original media and research remain in the ignored
+`private/work/` folder and are not required to build or deploy the site.
 
 Shared UI lives in `src/components`. `SiteNavigationProvider` waits for destination
 content before capturing native view transitions, with a small Web Animations

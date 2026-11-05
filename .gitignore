@@ -35,6 +35,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Local portfolio draft — keep private work out of the public repository.
-/app/work/
+# Original portfolio media and research; web assets live in public/work/media.
 /private/work/

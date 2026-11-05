@@ -1,0 +1,226 @@
+{
+  "backseat-channel9": {
+    "height": 650,
+    "width": 1155
+  },
+  "backseat-iphone": {
+    "height": 1024,
+    "width": 1536
+  },
+  "backseat-screen": {
+    "height": 568,
+    "width": 315
+  },
+  "campaign-monitor-overview": {
+    "height": 900,
+    "width": 1600
+  },
+  "colorpicker": {
+    "height": 1080,
+    "width": 1661
+  },
+  "easee-homepage": {
+    "height": 1344,
+    "width": 2340
+  },
+  "easee-net-magazine": {
+    "height": 1240,
+    "width": 951
+  },
+  "easee-overview": {
+    "height": 900,
+    "width": 1600
+  },
+  "gifmock": {
+    "height": 1080,
+    "width": 1920
+  },
+  "gifmock-auto-crop": {
+    "height": 600,
+    "width": 1012
+  },
+  "gifmock-big-sur": {
+    "height": 820,
+    "width": 1126
+  },
+  "gifmock-precision": {
+    "height": 480,
+    "width": 852
+  },
+  "homepage-ai-game": {
+    "height": 2194,
+    "width": 3456
+  },
+  "homepage-reflections": {
+    "height": 2194,
+    "width": 3456
+  },
+  "homepage-svg-playground": {
+    "height": 1694,
+    "width": 2856
+  },
+  "invision-studio": {
+    "height": 1080,
+    "width": 1920
+  },
+  "issue-tracker": {
+    "height": 1080,
+    "width": 1544
+  },
+  "liveblocks-company": {
+    "height": 1080,
+    "width": 1920
+  },
+  "liveblocks-hero": {
+    "height": 1080,
+    "width": 1620
+  },
+  "liveblocks-infrastructure": {
+    "height": 720,
+    "width": 1058
+  },
+  "liveblocks-infrastructure-hq": {
+    "height": 1080,
+    "width": 1588
+  },
+  "liveblocks-overview": {
+    "height": 900,
+    "width": 1600
+  },
+  "logo": {
+    "height": 3840,
+    "width": 3840
+  },
+  "louvre-almonk": {
+    "height": 1920,
+    "width": 1080
+  },
+  "louvre-complex": {
+    "height": 2012,
+    "width": 1125
+  },
+  "louvre-launch": {
+    "height": 1920,
+    "width": 1080
+  },
+  "louvre-soleio": {
+    "height": 1920,
+    "width": 1080
+  },
+  "louvre-sphere": {
+    "height": 1920,
+    "width": 1080
+  },
+  "louvre-steven": {
+    "height": 1920,
+    "width": 1080
+  },
+  "messenger": {
+    "height": 1080,
+    "width": 1920
+  },
+  "shipit-landing-page": {
+    "height": 1492,
+    "width": 2340
+  },
+  "studio-overview": {
+    "height": 900,
+    "width": 1600
+  },
+  "studio-prototypes": {
+    "height": 900,
+    "width": 900
+  },
+  "studio-update-window": {
+    "height": 900,
+    "width": 1200
+  },
+  "template-week": {
+    "height": 1080,
+    "width": 1920
+  },
+  "template-week-multiplayer": {
+    "height": 1080,
+    "width": 1556
+  },
+  "liveblocks-homepage-redesign": {
+    "height": 1080,
+    "width": 1620
+  },
+  "email-builder-dragging": {
+    "width": 2340,
+    "height": 1536
+  },
+  "wysiwyg-after": {
+    "width": 1140,
+    "height": 576
+  },
+  "wysiwyg-before": {
+    "width": 1140,
+    "height": 576
+  },
+  "gallery-after": {
+    "width": 1140,
+    "height": 672
+  },
+  "gallery-before": {
+    "width": 1140,
+    "height": 672
+  },
+  "gallery-sxsw-photo": {
+    "width": 1755,
+    "height": 900
+  },
+  "easee-library": {
+    "width": 1170,
+    "height": 624
+  },
+  "easee-animation-builder": {
+    "width": 2340,
+    "height": 1654
+  },
+  "easee-animation-builder-css": {
+    "width": 2340,
+    "height": 1654
+  },
+  "liveblocks-brand-01": {
+    "width": 2800,
+    "height": 1750
+  },
+  "liveblocks-brand-02": {
+    "width": 3000,
+    "height": 1875
+  },
+  "liveblocks-brand-03": {
+    "width": 3000,
+    "height": 1875
+  },
+  "liveblocks-brand-04": {
+    "width": 3000,
+    "height": 1688
+  },
+  "liveblocks-brand-05": {
+    "width": 1920,
+    "height": 1080
+  },
+  "liveblocks-brand-06": {
+    "width": 3000,
+    "height": 1875
+  },
+  "liveblocks-brand-07": {
+    "width": 3000,
+    "height": 1688
+  },
+  "liveblocks-brand-08": {
+    "width": 2881,
+    "height": 1621
+  },
+  "liveblocks-brand-09": {
+    "width": 3000,
+    "height": 1875
+  },
+  "liveblocks-brand-10": {
+    "width": 3000,
+    "height": 1875
+  }
+}

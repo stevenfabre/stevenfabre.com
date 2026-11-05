@@ -1,0 +1,102 @@
+.card {
+  padding: 16px;
+  border: 1px solid var(--media-border);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 2%);
+}
+:global(.dark) .card {
+  background: #141414;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 10%);
+}
+.author {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  border-radius: 4px;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.author img {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.name,
+.handle {
+  display: block;
+}
+.name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.handle {
+  font-size: 12px;
+  color: var(--muted);
+}
+.author:focus-visible {
+  outline: 2px solid #9f8dfc;
+  outline-offset: 4px;
+}
+.copy {
+  margin: 16px 0;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.55;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+.footer time {
+  color: var(--muted);
+  font-size: 12px;
+}
+.card[data-platform="instagram"] .author {
+  margin-bottom: 16px;
+}
+.card[data-platform="instagram"] .author img {
+  object-fit: cover;
+  object-position: 7% 4%;
+}
+.card[data-platform="instagram"] [data-work-visual] {
+  aspect-ratio: 1125 / 1406;
+}
+.card[data-platform="instagram"] [data-work-visual] img {
+  height: auto;
+  transform: translateY(-8.6%);
+}
+.instagramAvatar {
+  display: block;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-size: 388.125px 694.14px;
+  background-position: -9.6px -14.775px;
+}
+
+.mention { color: #0875be; }
+:global(.dark) .mention { color: #63b7f0; }
+.instagramAvatar { position: relative; margin: 4px; }
+.instagramAvatar::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  padding: 2px;
+  background: conic-gradient(from 210deg, #ffcc54, #ff7244, #e52a7b, #9d37ba, #e52a7b, #ffcc54);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  border-radius: 50%;
+  pointer-events: none;
+}

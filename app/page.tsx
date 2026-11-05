@@ -74,10 +74,8 @@ export default async function Home() {
       <Footer />
     </>
   );
-  return process.env.NODE_ENV === "development" ? (
+  return (
     <WorkPreviewProvider className={className}>{content}</WorkPreviewProvider>
-  ) : (
-    <div className={className}>{content}</div>
   );
 }
 
@@ -100,11 +98,9 @@ function IntroWorkLink({
       {company}
     </Link>
   );
-  return process.env.NODE_ENV === "development" ? (
+  return (
     <WorkPreviewLink company={company} className={className}>
       {link}
     </WorkPreviewLink>
-  ) : (
-    link
   );
 }

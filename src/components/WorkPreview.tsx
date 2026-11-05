@@ -55,9 +55,7 @@ export function WorkPreviewProvider({
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== "development") return;
     const controller = new AbortController();
-    // This endpoint only exists in the local draft; public builds keep external links.
     fetch("/work/preview", { signal: controller.signal })
       .then((response) => (response.ok ? response.json() : {}))
       .then(setPreviews)
@@ -303,7 +301,7 @@ function PreviewFrame({
         } as CSSProperties
       }
     >
-      {/* Local media stays outside the public asset pipeline. Posters paint immediately. */}
+      {/* Posters paint immediately while videos prepare. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className={

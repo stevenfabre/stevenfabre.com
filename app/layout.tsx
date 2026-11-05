@@ -113,7 +113,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {process.env.NODE_ENV === "development" && <ProjectTransitionLayer />}
+        <ProjectTransitionLayer />
         <ThemeProvider attribute="class">
           <TooltipProvider>
             <SiteNavigationProvider>

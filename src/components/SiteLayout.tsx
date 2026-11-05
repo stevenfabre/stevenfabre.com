@@ -41,9 +41,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
   const positions = useRef<Record<string, { pane: number; window: number }>>(
     {}
   );
-  const hasPortrait =
-    pathname === "/" ||
-    (process.env.NODE_ENV === "development" && pathname === "/work");
+  const hasPortrait = pathname === "/" || pathname === "/work";
 
   useLayoutEffect(() => {
     if (!hasPortrait || !content.current) return;

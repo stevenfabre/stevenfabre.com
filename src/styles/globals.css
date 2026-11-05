@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-/* The local portfolio is gitignored, so include its utility classes explicitly. */
-@source "../../app/work";
-
 @custom-variant dark (&:where(.dark, .dark *));
 
 body {

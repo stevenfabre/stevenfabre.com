@@ -68,46 +68,37 @@ const EXPERIENCES: ExperienceProps[] = [
 ];
 
 export default function Work() {
-  const preview = process.env.NODE_ENV === "development";
   const experiences = (
     <ul className="flex flex-col mt-4 xl:mt-6 gap-3">
       {EXPERIENCES.map((experience) => (
-        <Experience
-          key={experience.company}
-          {...experience}
-          preview={preview}
-        />
+        <Experience key={experience.company} {...experience} preview />
       ))}
     </ul>
   );
   return (
     <>
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
-        {preview ? (
-          <SiteLink
-            href="/work"
-            className="group inline-flex items-center gap-1.5 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+        <SiteLink
+          href="/work"
+          className="group inline-flex items-center gap-1.5 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          Work
+          <span
+            aria-hidden="true"
+            className="relative size-4 overflow-hidden opacity-40 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
           >
-            Work
-            <span
-              aria-hidden="true"
-              className="relative size-4 overflow-hidden opacity-40 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
-            >
-              <Icon
-                name="arrow-up-right"
-                size={16}
-                className="transition-[transform,opacity,filter] duration-200 ease-out motion-safe:group-hover:translate-x-full motion-safe:group-hover:-translate-y-full motion-safe:group-hover:opacity-0 motion-safe:group-hover:blur-sm motion-reduce:transition-none"
-              />
-              <Icon
-                name="arrow-up-right"
-                size={16}
-                className="absolute inset-0 -translate-x-full translate-y-full opacity-0 blur-sm transition-[transform,opacity,filter] duration-200 ease-out motion-safe:group-hover:translate-x-0 motion-safe:group-hover:translate-y-0 motion-safe:group-hover:opacity-100 motion-safe:group-hover:blur-none motion-reduce:hidden"
-              />
-            </span>
-          </SiteLink>
-        ) : (
-          "Work"
-        )}
+            <Icon
+              name="arrow-up-right"
+              size={16}
+              className="transition-[transform,opacity,filter] duration-200 ease-out motion-safe:group-hover:translate-x-full motion-safe:group-hover:-translate-y-full motion-safe:group-hover:opacity-0 motion-safe:group-hover:blur-sm motion-reduce:transition-none"
+            />
+            <Icon
+              name="arrow-up-right"
+              size={16}
+              className="absolute inset-0 -translate-x-full translate-y-full opacity-0 blur-sm transition-[transform,opacity,filter] duration-200 ease-out motion-safe:group-hover:translate-x-0 motion-safe:group-hover:translate-y-0 motion-safe:group-hover:opacity-100 motion-safe:group-hover:blur-none motion-reduce:hidden"
+            />
+          </span>
+        </SiteLink>
       </h2>
       {experiences}
     </>

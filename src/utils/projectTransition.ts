@@ -1,3 +1,5 @@
+import { objectPositionOffsets } from "./objectPosition";
+
 // Keep a painted outgoing page during route streaming. Safari can discard native
 // full-page snapshots when its browser chrome changes the viewport during a route.
 // One poster moves between the two layouts; neither layout paints a second copy.
@@ -9,6 +11,7 @@ export function captureProjectTransition(source?: HTMLElement | null) {
   );
   let overlay: HTMLDivElement | undefined;
   let snapshot: HTMLImageElement | undefined;
+  let border: HTMLDivElement | undefined;
   const animations: Animation[] = [];
   let page: HTMLElement | null = null;
   let pageOpacity = "";
@@ -88,19 +91,27 @@ export function captureProjectTransition(source?: HTMLElement | null) {
       rect.width / media!.naturalWidth,
       rect.height / media!.naturalHeight
     );
-    const position = style.objectPosition
-      .split(" ")
-      .map((value) => parseFloat(value) / 100);
-    const x =
-      rect.left +
-      (rect.width - media!.naturalWidth * scale) *
-        (Number.isFinite(position[0]) ? position[0] : 0.5);
-    const y =
-      rect.top +
-      (rect.height - media!.naturalHeight * scale) *
-        (Number.isFinite(position[1]) ? position[1] : 0.5);
+    const [offsetX, offsetY] = objectPositionOffsets(
+      style.objectPosition,
+      rect.width - media!.naturalWidth * scale,
+      rect.height - media!.naturalHeight * scale
+    );
+    const x = rect.left + offsetX;
+    const y = rect.top + offsetY;
     return `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
   };
+
+  const borderFrame = (element: HTMLElement, rect: DOMRect) => ({
+    left: `${rect.left}px`,
+    top: `${rect.top}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    borderRadius: getComputedStyle(element).borderRadius,
+    borderColor: getComputedStyle(element, "::after").borderTopColor,
+  });
+
+  const sourceBorder =
+    source && bounds ? borderFrame(source, bounds) : undefined;
 
   if (
     source &&
@@ -130,7 +141,14 @@ export function captureProjectTransition(source?: HTMLElement | null) {
       transformOrigin: "top left",
       transform: fit(bounds, media),
     });
-    overlay.append(snapshot);
+    border = document.createElement("div");
+    Object.assign(border.style, {
+      position: "absolute",
+      boxSizing: "border-box",
+      border: "1px solid transparent",
+      ...sourceBorder,
+    });
+    overlay.append(snapshot, border);
     document.body.append(overlay);
   }
   const cleanup = () => {
@@ -197,6 +215,11 @@ export function captureProjectTransition(source?: HTMLElement | null) {
               if (visual) visual.style.visibility = "hidden";
             }
           });
+        if (border && sourceBorder) {
+          animations.push(
+            border.animate([sourceBorder, borderFrame(target, to)], options)
+          );
+        }
         animations.push(
           snapshot.animate(
             [

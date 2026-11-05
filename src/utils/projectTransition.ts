@@ -12,6 +12,7 @@ export function captureProjectTransition(source?: HTMLElement | null) {
   let page: HTMLElement | null = null;
   let pageOpacity = "";
   let cancelled = false;
+  let cleaned = false;
 
   const clip = (rect: DOMRect, radius: string) =>
     `inset(${rect.top}px ${innerWidth - rect.right}px ${
@@ -69,6 +70,8 @@ export function captureProjectTransition(source?: HTMLElement | null) {
     document.body.append(overlay);
   }
   const cleanup = () => {
+    if (cleaned) return;
+    cleaned = true;
     animations.forEach((animation) => animation.cancel());
     overlay?.remove();
     if (page) page.style.opacity = pageOpacity;

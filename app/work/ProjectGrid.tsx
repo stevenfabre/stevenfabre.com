@@ -28,9 +28,8 @@ function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let visible = false;
     const prepare = () => {
-      if (!video.getAttribute("src")) {
+      if (video.preload === "none") {
         video.preload = "auto";
-        video.src = `/work/media/${film.file}.mp4`;
         video.load();
       }
     };
@@ -99,12 +98,13 @@ function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
         data-video-ready={frameReady || undefined}
         ref={ref}
         data-file={film.file}
+        src={`/work/media/${film.file}.mp4`}
         poster={`/work/media/${film.file}.jpg`}
         muted
         loop={film.slug !== "building-liveblocks"}
         playsInline
         preload="none"
-        aria-label={`${film.title} — silent preview`}
+        aria-hidden="true"
       />
       <WorkLink
         className="absolute inset-0 cursor-pointer"

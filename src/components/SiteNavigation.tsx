@@ -204,7 +204,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
               images.current = null;
             }
             resolve();
-          }, 2000);
+          }, 8000);
           pending.current = {
             destination,
             scroll,
@@ -234,11 +234,12 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
             images.current = null;
           }
         };
-        if (!doc.startViewTransition) {
+        if (projectChange || !doc.startViewTransition) {
           const animation = captureProjectTransition(source);
           fallback.current = animation;
           await update();
           if (fallback.current === animation) await animation.play();
+          if (fallback.current === animation) fallback.current = null;
           release();
           return;
         }

@@ -1,5 +1,6 @@
-// Browsers without View Transitions use the same decoded poster as the native
-// path. Move/crop an image instead of stretching a video or sampling its GPU layer.
+// Keep a painted outgoing page during route streaming. Safari can discard native
+// full-page snapshots when its browser chrome changes the viewport during a route.
+// One poster moves between the two layouts; neither layout paints a second copy.
 export function captureProjectTransition(source?: HTMLElement | null) {
   const bounds = source?.getBoundingClientRect();
   const name = source?.style.getPropertyValue("view-transition-name");
@@ -11,8 +12,71 @@ export function captureProjectTransition(source?: HTMLElement | null) {
   const animations: Animation[] = [];
   let page: HTMLElement | null = null;
   let pageOpacity = "";
+  let target: HTMLElement | undefined;
+  let targetVisibility = "";
   let cancelled = false;
   let cleaned = false;
+
+  const outgoing = document.createElement("div");
+  outgoing.setAttribute("aria-hidden", "true");
+  outgoing.inert = true;
+  Object.assign(outgoing.style, {
+    position: "fixed",
+    inset: "0",
+    overflow: "hidden",
+    pointerEvents: "none",
+    zIndex: "99",
+    background: getComputedStyle(document.body).backgroundColor,
+  });
+  const currentPage = document.querySelector<HTMLElement>(
+    "[data-project-slug], [data-site-layout]"
+  );
+  if (currentPage) {
+    const rect = currentPage.getBoundingClientRect();
+    const frozen = currentPage.cloneNode(true) as HTMLElement;
+    // Frozen content is purely visual: no duplicate IDs or active media players.
+    frozen
+      .querySelectorAll("video, audio, iframe, script")
+      .forEach((el) => el.remove());
+    [frozen, ...Array.from(frozen.querySelectorAll<HTMLElement>("*"))].forEach(
+      (el) => {
+        el.removeAttribute("id");
+        el.removeAttribute("data-transition-selected");
+        el.style.setProperty("view-transition-name", "none");
+      }
+    );
+    Object.assign(frozen.style, {
+      position: "absolute",
+      top: `${rect.top}px`,
+      left: `${rect.left}px`,
+      width: `${rect.width}px`,
+      height: `${rect.height}px`,
+      margin: "0",
+    });
+    outgoing.append(frozen);
+    document.body.append(outgoing);
+    const originalPane = currentPage.querySelector<HTMLElement>(
+      "[data-site-content]"
+    );
+    const frozenPane = frozen.querySelector<HTMLElement>("[data-site-content]");
+    if (originalPane && frozenPane) {
+      const paneRect = originalPane.getBoundingClientRect();
+      // The overview's mobile top margin collapses through its parent. Once
+      // frozen in an absolute layer it no longer collapses, so preserve the
+      // measured pane position instead of laying out that margin a second time.
+      Object.assign(frozenPane.style, {
+        position: "absolute",
+        top: `${paneRect.top - rect.top}px`,
+        left: `${paneRect.left - rect.left}px`,
+        width: `${paneRect.width}px`,
+        height: `${paneRect.height}px`,
+        margin: "0",
+      });
+      frozenPane.scrollTop = originalPane.scrollTop;
+    }
+    // This stays visible while loading; remove its selected image only once
+    // the moving poster starts, so cold routes never expose an empty canvas.
+  }
 
   const clip = (rect: DOMRect, radius: string) =>
     `inset(${rect.top}px ${innerWidth - rect.right}px ${
@@ -74,6 +138,8 @@ export function captureProjectTransition(source?: HTMLElement | null) {
     cleaned = true;
     animations.forEach((animation) => animation.cancel());
     overlay?.remove();
+    outgoing.remove();
+    if (target) target.style.visibility = targetVisibility;
     if (page) page.style.opacity = pageOpacity;
   };
   return {
@@ -93,9 +159,7 @@ export function captureProjectTransition(source?: HTMLElement | null) {
     async play() {
       if (cancelled) return;
       const tokens = getComputedStyle(document.documentElement);
-      const duration = parseFloat(
-        tokens.getPropertyValue("--page-transition-duration")
-      );
+      const duration = 320;
       const easing = tokens.getPropertyValue("--ease-out").trim();
       const options: KeyframeAnimationOptions = {
         duration,
@@ -106,18 +170,33 @@ export function captureProjectTransition(source?: HTMLElement | null) {
         animations.push(
           page.animate([{ opacity: 0 }, { opacity: 1 }], options)
         );
-      const target = Array.from(
+      animations.push(
+        outgoing.animate([{ opacity: 1 }, { opacity: 0 }], options)
+      );
+      target = Array.from(
         document.querySelectorAll<HTMLElement>("[data-work-visual]")
       ).find(
         (visual) =>
           visual.style.getPropertyValue("view-transition-name") === name &&
-          !visual.closest("[data-swipe-preview]")
+          !visual.closest("[data-swipe-preview]") &&
+          !outgoing.contains(visual)
       );
       const targetImage = target?.querySelector<HTMLImageElement>(
         "img[data-video-poster], img"
       );
       if (overlay && snapshot && target && targetImage && bounds) {
         const to = target.getBoundingClientRect();
+        targetVisibility = target.style.visibility;
+        target.style.visibility = "hidden";
+        // Match the frozen visual by its poster URL after stripping transition names.
+        outgoing
+          .querySelectorAll<HTMLImageElement>("[data-work-visual] img")
+          .forEach((img) => {
+            if (img.src === media?.src) {
+              const visual = img.closest<HTMLElement>("[data-work-visual]");
+              if (visual) visual.style.visibility = "hidden";
+            }
+          });
         animations.push(
           snapshot.animate(
             [
@@ -134,11 +213,6 @@ export function captureProjectTransition(source?: HTMLElement | null) {
               {
                 clipPath: clip(to, getComputedStyle(target).borderRadius),
                 opacity: 1,
-                offset: 0.8,
-              },
-              {
-                clipPath: clip(to, getComputedStyle(target).borderRadius),
-                opacity: 0,
               },
             ],
             options

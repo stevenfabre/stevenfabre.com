@@ -1,5 +1,5 @@
 import styles from "./work.module.css";
-import { SiteLink } from "../../src/components/SiteNavigation";
+import WorkPageSelect from "./WorkPageSelect";
 
 import { companies, companyDetails, allFilms } from "./work-data";
 import Footer from "../../src/components/Footer";
@@ -15,13 +15,7 @@ export default function WorkPortfolio() {
       <div id="top" className="absolute top-0" />
       <header className="pb-[52px]">
         <h1 className="text-balance text-3xl tracking-tight font-semibold text-neutral-900 @sm/content:text-4xl @sm/content:tracking-tight dark:text-neutral-100 @xl/content:text-6xl @xl/content:tracking-tight">
-          <SiteLink
-            href="/"
-            className="rounded-sm text-neutral-400 transition-colors duration-150 hover:text-neutral-900 focus-visible:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4 dark:text-neutral-500 dark:hover:text-neutral-100 dark:focus-visible:text-neutral-100"
-          >
-            Steven Fabre
-          </SiteLink>{" "}
-          <span className="text-neutral-400 dark:text-neutral-500">/</span> Work
+          <WorkPageSelect />
         </h1>
         <p className="text-pretty text-lg leading-relaxed mt-8 xl:mt-10 @xl/content:text-xl @xl/content:leading-relaxed">
           I’ve spent 20 years designing and building products. I love figuring

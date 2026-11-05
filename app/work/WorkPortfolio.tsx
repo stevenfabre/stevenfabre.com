@@ -9,7 +9,7 @@ import ExternalLink from "./ExternalLink";
 export default function WorkPortfolio() {
   return (
     <main
-      className="relative min-w-0 self-start pt-24 sm:pt-28 lg:pt-32 xl:pt-44 @container/content w-full max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto"
+      className="relative min-w-0 self-start pt-10 sm:pt-16 lg:pt-32 xl:pt-44 @container/content w-full max-w-lg xl:max-w-3xl px-4 xl:px-8 mx-auto"
       id="content"
     >
       <div id="top" className="absolute top-0" />

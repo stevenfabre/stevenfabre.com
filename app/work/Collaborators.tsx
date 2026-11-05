@@ -5,7 +5,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
   if (!people.length) return null;
   return (
     <section
-      className="mt-8 text-sm leading-normal"
+      className="mt-8 rounded-xl bg-neutral-100 p-5 text-sm leading-normal dark:bg-neutral-900 sm:p-6"
       aria-label="Project collaborators"
     >
       <h2 className="mb-3 text-[13px] font-normal text-[var(--muted)]">

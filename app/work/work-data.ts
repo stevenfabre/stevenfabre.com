@@ -311,6 +311,28 @@ export const films: Record<string, Film> = {
     ],
     gallery: [
       {
+        kind: "image",
+        file: "liveblocks-louvre-campaign-complex-post",
+        post: {
+          platform: "instagram",
+          name: "Complex",
+          handle: "complex",
+          // Counts visible in the archived Complex Instagram screenshot.
+          engagement: { likes: 27700, replies: 88, shares: 1223 },
+          avatar: "liveblocks-louvre-campaign-complex-post.jpg",
+          text: "Banksy is that you? 👀\n\nThe Las Vegas Sphere was captured being displayed on the Louvre pyramid in Paris.",
+          publishedAt: "2025-07",
+        },
+        imageExtension: "jpg",
+        title: "The campaign on Complex",
+        imageAlt:
+          "Turner Novak’s screenshot of Complex sharing the Louvre campaign",
+        aspectRatio: "1125 / 2012",
+        caption:
+          "A couple of days later, the campaign appeared on Complex. Screenshot shared by Turner Novak, July 10, 2025.",
+        source: "https://www.instagram.com/p/DL6GLE3OfDY/",
+      },
+      {
         file: "liveblocks-louvre-campaign-sphere",
         post: {
           name: "Turner Novak",
@@ -370,28 +392,7 @@ export const films: Record<string, Film> = {
         caption: "The film I shared to celebrate the launch. July 8, 2025.",
         source: "https://x.com/stevenfabre/status/1942679545435312456",
       },
-      {
-        kind: "image",
-        file: "liveblocks-louvre-campaign-complex-post",
-        post: {
-          platform: "instagram",
-          name: "Complex",
-          handle: "complex",
-          // Counts visible in the archived Complex Instagram screenshot.
-          engagement: { likes: 27700, replies: 88, shares: 1223 },
-          avatar: "liveblocks-louvre-campaign-complex-post.jpg",
-          text: "Banksy is that you? 👀\n\nThe Las Vegas Sphere was captured being displayed on the Louvre pyramid in Paris.",
-          publishedAt: "2025-07",
-        },
-        imageExtension: "jpg",
-        title: "The campaign on Complex",
-        imageAlt:
-          "Turner Novak’s screenshot of Complex sharing the Louvre campaign",
-        aspectRatio: "1125 / 2012",
-        caption:
-          "A couple of days later, the campaign appeared on Complex. Screenshot shared by Turner Novak, July 10, 2025.",
-        source: "https://www.instagram.com/p/DL6GLE3OfDY/",
-      },
+
     ],
   },
   liveblocksBrand: {

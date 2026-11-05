@@ -5,8 +5,6 @@ import {
   Repeat2,
   ChartNoAxesColumn,
   Send,
-  Bookmark,
-  Share,
 } from "lucide-react";
 import type { SocialPost } from "./work-data";
 import ButtonLink from "../../src/components/ButtonLink";
@@ -138,15 +136,12 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
         { label: "Likes", count: counts.likes, Icon: Heart },
         { label: "Comments", count: counts.replies, Icon: MessageCircle },
         { label: "Shares", count: counts.shares, Icon: Send },
-        { label: "Save on Instagram", Icon: Bookmark, count: undefined },
       ]
     : [
         { label: "Replies", count: counts.replies, Icon: MessageCircle },
         { label: "Reposts", count: counts.reposts, Icon: Repeat2 },
         { label: "Likes", count: counts.likes, Icon: Heart },
         { label: "Views", count: counts.views, Icon: ChartNoAxesColumn },
-        { label: "Bookmark on X", Icon: Bookmark, count: undefined },
-        { label: "Share on X", Icon: Share, count: undefined },
       ];
   const format = new Intl.NumberFormat("en-US", {
     notation: "compact",
@@ -154,13 +149,15 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
   });
   return (
     <div
-      className={`mt-3 flex items-center gap-2 text-xs tabular-nums ${
-        instagram ? "text-[var(--ink)]" : "justify-between text-[var(--muted)]"
+      className={`mt-3 flex items-center text-xs tabular-nums ${
+        instagram
+          ? "gap-5 text-[var(--ink)]"
+          : "gap-2 justify-between text-[var(--muted)]"
       }`}
       aria-label="Post engagement"
       title="Engagement counts from the archived post; not live."
     >
-      {actions.map(({ label, count, Icon }, index) => (
+      {actions.map(({ label, count, Icon }) => (
         <a
           key={label}
           href={source}
@@ -169,12 +166,10 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
           aria-label={`${label}${
             count === undefined ? "" : `: ${count.toLocaleString("en-US")}`
           }. Open original post.`}
-          className={`inline-flex min-h-8 items-center gap-1 rounded hover:text-[var(--ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
-            instagram && index === actions.length - 1 ? "ml-auto" : ""
-          }`}
+          className="inline-flex min-h-8 items-center gap-1 rounded hover:text-[var(--ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <Icon
-            size={instagram ? 19 : 15}
+            size={instagram || Icon === Repeat2 ? 19 : 15}
             strokeWidth={1.6}
             aria-hidden="true"
             className="shrink-0"

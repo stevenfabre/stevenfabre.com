@@ -72,6 +72,34 @@
   border: 1px solid rgb(0 0 0 / 12%);
   z-index: 1;
 }
+/* A quiet sweep over empty thumbnails until their poster has decoded. */
+.project[data-thumbnail-loading] .video::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgb(255 255 255 / 4%) 40%,
+    rgb(255 255 255 / 10%) 50%,
+    rgb(255 255 255 / 4%) 60%,
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  animation: thumbnail-loading 1.8s ease-in-out infinite;
+}
+@keyframes thumbnail-loading {
+  to { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project[data-thumbnail-loading] .video::before {
+    animation: none;
+    transform: none;
+    opacity: 0.5;
+  }
+}
 :global(.dark) .video::after {
   border-color: rgb(255 255 255 / 12%);
 }

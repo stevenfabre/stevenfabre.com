@@ -124,8 +124,37 @@ function ProjectPreview({
   paused: boolean;
   onHover: (slug: string | null) => void;
 }) {
+  const figure = useRef<HTMLElement>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const image = figure.current?.querySelector("img");
+    if (!image) return;
+    let cancelled = false;
+    const finish = () => {
+      if (!cancelled) setLoading(false);
+    };
+    const reveal = () => {
+      // Wait for decoded pixels, including when the image came from cache.
+      void image.decode().catch(() => {}).then(finish);
+    };
+    setLoading(true);
+    if (image.complete) reveal();
+    else {
+      image.addEventListener("load", reveal);
+      image.addEventListener("error", finish);
+    }
+    return () => {
+      cancelled = true;
+      image.removeEventListener("load", reveal);
+      image.removeEventListener("error", finish);
+    };
+  }, [film.file]);
+
   return (
     <figure
+      ref={figure}
+      data-thumbnail-loading={loading || undefined}
       id={`project-${film.slug}`}
       className={styles.project}
       aria-label={film.title}

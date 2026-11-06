@@ -13,6 +13,8 @@ export type Slideshow = {
 };
 
 export default function ProjectSlideshow({ images, caption, thumbnails = false }: Slideshow) {
+  const swipe = useRef<{ id: number; x: number; y: number } | null>(null);
+  const [touching, setTouching] = useState(false);
   const thumbnailList = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLElement>(null);
   const [index, setIndex] = useState(0);
@@ -58,6 +60,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
   useEffect(() => {
     if (
       hovered ||
+      touching ||
       !rotationEnabled ||
       !visible ||
       images.length < 2 ||
@@ -69,7 +72,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
         setIndex((current) => (current + 1) % images.length);
     }, thumbnails ? 4000 : 1000);
     return () => clearInterval(timer);
-  }, [hovered, rotationEnabled, visible, loaded.length, images.length, thumbnails, index]);
+  }, [hovered, touching, rotationEnabled, visible, loaded.length, images.length, thumbnails, index]);
 
   return (
     <figure
@@ -91,6 +94,39 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
       }}
     >
       <div className={`group/gallery relative overflow-hidden rounded-lg ${thumbnails ? "aspect-[3/2]" : "aspect-[65/32]"}`}>
+        <div
+          className={thumbnails ? "absolute inset-0 touch-pan-y" : "absolute inset-0"}
+          onPointerDown={(event) => {
+            if (!thumbnails || event.pointerType !== "touch") return;
+            if (!event.isPrimary) {
+              swipe.current = null;
+              setTouching(false);
+              return;
+            }
+            swipe.current = { id: event.pointerId, x: event.clientX, y: event.clientY };
+            setTouching(true);
+            event.currentTarget.setPointerCapture(event.pointerId);
+          }}
+          onPointerUp={(event) => {
+            const start = swipe.current;
+            swipe.current = null;
+            setTouching(false);
+            if (!start || start.id !== event.pointerId) return;
+            const dx = event.clientX - start.x;
+            const dy = event.clientY - start.y;
+            const threshold = Math.max(48, event.currentTarget.clientWidth * 0.15);
+            if (Math.abs(dx) < threshold || Math.abs(dx) <= Math.abs(dy)) return;
+            setIndex((current) => (current + (dx < 0 ? 1 : -1) + images.length) % images.length);
+          }}
+          onPointerCancel={() => {
+            swipe.current = null;
+            setTouching(false);
+          }}
+          onLostPointerCapture={() => {
+            swipe.current = null;
+            setTouching(false);
+          }}
+        >
         {images.map((image, slide) => (
           <Image
             key={image.src}
@@ -112,9 +148,10 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
             }
           />
         ))}
+        </div>
       {thumbnails && (
-        <div className="absolute inset-x-3 bottom-3 z-10 rounded-lg bg-black/45 p-2 opacity-0 backdrop-blur-md transition-opacity duration-200 group-hover/gallery:opacity-100 group-focus-within/gallery:opacity-100 [@media(hover:none)]:opacity-100">
-          <HorizontalScroll label="Choose a team photo" snap>
+        <div className="absolute inset-x-0 bottom-0 z-10 bg-linear-to-b from-transparent to-black/95 px-3 pb-3 pt-8 opacity-0 transition-opacity duration-200 group-hover/gallery:opacity-100 group-focus-within/gallery:opacity-100 [@media(hover:none)]:opacity-100">
+          <HorizontalScroll label="Choose a team photo">
             <div ref={thumbnailList} className="relative flex w-max gap-2">
               {images.map((image, slide) => (
                 <button
@@ -122,7 +159,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
                   type="button"
                   aria-label={`Show photo ${slide + 1}: ${image.alt}`}
                   aria-pressed={slide === index}
-                  className="relative size-8 shrink-0 snap-start overflow-hidden rounded-md opacity-50 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none aria-pressed:opacity-100 md:size-10"
+                  className="relative size-8 shrink-0 overflow-hidden rounded-md opacity-50 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none aria-pressed:opacity-100 md:size-10"
                   onClick={() => { setIndex(slide); }}
                 >
                   <Image src={image.src} alt="" fill sizes="40px" className="object-cover" />

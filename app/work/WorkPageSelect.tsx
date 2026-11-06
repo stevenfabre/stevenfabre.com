@@ -3,7 +3,6 @@
 import {
   useCallback,
   useEffect,
-  useId,
   useRef,
   useState,
   type CSSProperties,
@@ -33,8 +32,6 @@ export default function WorkPageSelect() {
   const reducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [openedFromFocus, setOpenedFromFocus] = useState(false);
-  const surfaceId = useId();
   const selectedHref = useRef<string | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const value = useRef<HTMLSpanElement>(null);
@@ -68,7 +65,6 @@ export default function WorkPageSelect() {
   const [typography, setTypography] = useState<CSSProperties>();
 
   function syncTypography(open: boolean) {
-    if (open) setOpenedFromFocus(focused);
     setOpen(open);
     if (!open || !trigger.current) return;
     // The portal sits outside the heading's responsive container. Copy its
@@ -109,15 +105,11 @@ export default function WorkPageSelect() {
         className="group relative isolate -mx-2 inline-flex cursor-pointer items-center gap-2 rounded-2xl px-2 text-left focus-visible:outline-none"
       >
         {focused && !open && (
-          <motion.span
+          <span
             aria-hidden="true"
-            layoutId={surfaceId}
             // Extend only the painted surface to match the menu's padding.
             // The trigger keeps its original dimensions and text baseline.
             className="surface-popover pointer-events-none absolute -inset-x-0.5 -inset-y-1.5 -z-10 md:-inset-x-2.5 md:-inset-y-2.5"
-            transition={{
-              layout: { type: "spring", duration: 0.4, bounce: 0.6 },
-            }}
           />
         )}
         <Select.Value ref={value}>Work</Select.Value>
@@ -147,11 +139,7 @@ export default function WorkPageSelect() {
           style={typography}
           className="z-50 outline-none"
         >
-          <MenuSurface
-            open={open}
-            surfaceId={surfaceId}
-            openedFromFocus={openedFromFocus}
-          >
+          <MenuSurface open={open}>
             <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
               {pages.map(({ label, href }, index) => (
                 <Select.Item
@@ -200,13 +188,9 @@ export default function WorkPageSelect() {
 function MenuSurface({
   children,
   open,
-  surfaceId,
-  openedFromFocus,
 }: {
   children: ReactNode;
   open: boolean;
-  surfaceId: string;
-  openedFromFocus: boolean;
 }) {
   const reducedMotion = useReducedMotion();
   const [scope, animateItems] = useAnimate<HTMLDivElement>();
@@ -296,26 +280,19 @@ function MenuSurface({
           y: reducedMotion ? 0 : backgroundY,
         }}
       >
-        {/* Shared geometry grows the focused trigger surface into the menu;
-            cursor motion stays on the wrapper so the two transforms compose. */}
+        {/* Keep entrance scaling separate from cursor-driven movement. */}
         <motion.div
-          layoutId={open && !reducedMotion ? surfaceId : undefined}
           className="surface-popover absolute inset-0"
-          initial={
-            openedFromFocus
-              ? false
-              : { opacity: 0, scale: reducedMotion ? 1 : 0.9 }
-          }
+          initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.9 }}
           animate={{
             opacity: open ? 1 : 0,
             scale: open || reducedMotion ? 1 : 0.9,
           }}
           transition={{
-            layout: { type: "spring", duration: 0.4, bounce: 0.6 },
-            scale: { type: "spring", duration: 0.4, bounce: 0.6 },
+            scale: { type: "spring", duration: 0.4, bounce: 0.2 },
             opacity: { duration: 0.16, ease: [0.23, 1, 0.32, 1] },
           }}
-          style={{ borderRadius: 16, transformOrigin: "50% 75%" }}
+          style={{ transformOrigin: "50% 75%" }}
         />
       </motion.div>
       <div className="relative">{children}</div>

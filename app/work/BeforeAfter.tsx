@@ -37,7 +37,7 @@ export default function BeforeAfter({ visual }: { visual: ProjectVisual }) {
   return (
     <div
       data-no-project-swipe
-      className="relative h-full w-full touch-pan-y select-none overflow-hidden"
+      className="relative h-full w-full cursor-ew-resize touch-pan-y select-none overflow-hidden"
       style={{ aspectRatio: visual.aspectRatio }}
       onPointerMove={move}
       onPointerLeave={() => {

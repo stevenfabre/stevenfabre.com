@@ -1,6 +1,6 @@
 // Shared dimensions for square controls and their icons.
 export const squareControlSize =
-  "size-10 sm:size-8 [&_svg]:size-6 sm:[&_svg]:size-5";
+  "size-10 sm:size-8 [&_svg]:size-5 sm:[&_svg]:size-4";
 
 // Shared button treatment for links, email actions, and the theme toggle.
 export const iconControl =

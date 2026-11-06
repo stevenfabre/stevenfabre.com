@@ -149,6 +149,7 @@ export type Film = ProjectVisual & {
   context: string[];
   paragraphs?: string[];
   afterGalleryParagraphs?: string[];
+  slideshow?: { images: { src: string; alt: string }[]; caption: string };
   contribution: string;
   gallery?: ProjectVisual[];
   galleryLayout?: "grid" | "stack";
@@ -791,6 +792,27 @@ export const films: Record<string, Film> = {
     paragraphs: [
       "I designed a new gallery that made the templates easier to discover and browse. We wanted people to see what they could make before they opened the editor. After the redesign, adoption of the email builder increased by 50%.",
     ],
+    slideshow: {
+      caption: "A closer look at the template gallery interactions.",
+      images: [
+        {
+          src: "/work/media/campaign-monitor-gallery-detail-1.png",
+          alt: "Template gallery interaction detail, step 1 of 4",
+        },
+        {
+          src: "/work/media/campaign-monitor-gallery-detail-2.png",
+          alt: "Template gallery interaction detail, step 2 of 4",
+        },
+        {
+          src: "/work/media/campaign-monitor-gallery-detail-3.png",
+          alt: "Template gallery interaction detail, step 3 of 4",
+        },
+        {
+          src: "/work/media/campaign-monitor-gallery-detail-4.png",
+          alt: "Template gallery interaction detail, step 4 of 4",
+        },
+      ],
+    },
     afterGalleryParagraphs: [
       "I also worked on the small interactions: how a template responded on hover, when you clicked it, and while the builder loaded. Each state gave people feedback so they knew what was happening.",
     ],

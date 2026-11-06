@@ -1,3 +1,4 @@
+import ProjectSlideshow from "./ProjectSlideshow";
 import ResponsibilityIcon from "./ResponsibilityIcon";
 import BeforeAfter from "./BeforeAfter";
 import { ProjectTextPreviews, renderProjectText } from "./ProjectText";
@@ -98,6 +99,7 @@ export default function ProjectContent({
                   {renderProjectText(paragraph)}
                 </p>
               ))}
+              {film.slideshow && <ProjectSlideshow {...film.slideshow} />}
               {film.collaborators && (
                 <Collaborators people={film.collaborators} />
               )}

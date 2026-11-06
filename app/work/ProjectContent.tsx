@@ -101,8 +101,8 @@ export default function ProjectContent({
               className="mt-8 grid grid-cols-2 items-start gap-8 border-t border-black/10 pt-5 text-sm leading-relaxed text-[var(--muted)] dark:border-white/10 md:block md:border-0 md:sticky md:top-[calc(var(--bar-height)+24px)] md:self-start md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
               aria-label="Project credits"
             >
-              <div className="min-w-0 [&>p+p]:mt-0.5">
-                <p className="font-medium text-[var(--ink)]">
+              <div className="min-w-0 grid gap-1">
+                <p className="flex items-center font-medium text-[var(--ink)]">
                   <ExternalLink href={company.url} iconSize={13}>
                     {company.name}
                   </ExternalLink>

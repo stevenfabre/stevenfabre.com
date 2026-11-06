@@ -1,3 +1,9 @@
+export type Slideshow = {
+  images: { src: string; alt: string; caption?: string }[];
+  caption: string;
+  thumbnails?: boolean;
+};
+
 export const companyDetails: Record<
   string,
   { role: string; description: string }
@@ -151,11 +157,7 @@ export type Film = ProjectVisual & {
   paragraphs?: string[];
   afterGalleryParagraphs?: string[];
   slideshowAfterParagraph?: number;
-  slideshow?: {
-    images: { src: string; alt: string; caption?: string }[];
-    caption: string;
-    thumbnails?: boolean;
-  };
+  slideshow?: Slideshow;
   youtube?: { id: string; title: string };
   contribution: string;
   gallery?: ProjectVisual[];

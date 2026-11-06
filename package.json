@@ -40,5 +40,10 @@
     "postcss": "^8.4.49",
     "prettier": "^2.8.4",
     "tailwindcss": "^4.3.3"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "^8.5.28"
+    }
   }
 }

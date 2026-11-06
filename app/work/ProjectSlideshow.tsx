@@ -7,11 +7,7 @@ import { Tooltip } from "../../src/components/Tooltip";
 import Icon from "../../src/components/Icon";
 import { iconControl } from "../../src/components/buttonStyles";
 
-export type Slideshow = {
-  images: { src: string; alt: string; caption?: string }[];
-  caption: string;
-  thumbnails?: boolean;
-};
+import type { Slideshow } from "./work-data";
 
 export default function ProjectSlideshow({ images, caption, thumbnails = false }: Slideshow) {
   const swipe = useRef<{ id: number; x: number; y: number } | null>(null);
@@ -130,7 +126,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
             alt={image.alt}
             fill
             sizes="(min-width: 1280px) 704px, (min-width: 768px) 480px, 100vw"
-            loading="eager"
+            loading="lazy"
             aria-hidden={slide !== index}
             className={`transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${thumbnails ? "object-cover" : "object-contain"} ${slide === index ? "opacity-100" : "opacity-0"}`}
             onLoad={() =>

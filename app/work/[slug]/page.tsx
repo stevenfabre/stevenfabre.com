@@ -5,6 +5,9 @@ import ProjectViewer from "../ProjectViewer";
 
 type Props = { params: Promise<{ slug: string }> };
 
+// Projects and legacy URLs are known at build time; unknown slugs are real 404s.
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const canonicalSlug = projectRedirects[slug]?.split("#")[0] || slug;
@@ -40,5 +43,7 @@ export default async function ProjectPage({ params }: Props) {
 }
 
 export function generateStaticParams() {
-  return allFilms.map(({ slug }) => ({ slug }));
+  return [...allFilms.map(({ slug }) => slug), ...Object.keys(projectRedirects)].map(
+    (slug) => ({ slug })
+  );
 }

@@ -1,10 +1,11 @@
+import Image from "next/image";
 import HeadingLink from "../../src/components/HeadingLink";
 import ProjectYouTube from "./ProjectYouTube";
 import ProjectSlideshow from "./ProjectSlideshow";
 import ResponsibilityIcon from "./ResponsibilityIcon";
 import BeforeAfter from "./BeforeAfter";
 import { ProjectTextPreviews, renderProjectText } from "./ProjectText";
-import { type Film, companies, companyDetails } from "./work-data";
+import { type Film, type Slideshow, companies, companyDetails } from "./work-data";
 import ProjectVideo from "./ProjectVideo";
 import ProjectImage from "./ProjectImage";
 import ProjectGallery from "./ProjectGallery";
@@ -71,7 +72,7 @@ export default function ProjectContent({
                 <Fragment key={paragraph}>
                   <p className="mt-6">{renderProjectText(paragraph)}</p>
                   {film.slideshow && film.slideshowAfterParagraph === index + 2 && (
-                    <ProjectSlideshow {...film.slideshow} />
+                    <SlideshowContent slideshow={film.slideshow} preview={preview} />
                   )}
                 </Fragment>
               ))}
@@ -106,7 +107,7 @@ export default function ProjectContent({
                   {renderProjectText(paragraph)}
                 </p>
               ))}
-              {film.slideshow && film.slideshowAfterParagraph == null && <ProjectSlideshow {...film.slideshow} />}
+              {film.slideshow && film.slideshowAfterParagraph == null && <SlideshowContent slideshow={film.slideshow} preview={preview} />}
               {film.youtube && (
                 <figure className="mt-8">
                   {preview ? (
@@ -174,4 +175,32 @@ export default function ProjectContent({
   );
 }
 
-// Project copy supports simple links to related work without a Markdown dependency.
+// Swipe neighbors need a still frame, not another running gallery.
+function SlideshowContent({
+  slideshow,
+  preview,
+}: {
+  slideshow: Slideshow;
+  preview: boolean;
+}) {
+  if (!preview) return <ProjectSlideshow {...slideshow} />;
+  const image = slideshow.images[0];
+  if (!image) return null;
+  return (
+    <figure className="mt-8">
+      <div className={`relative overflow-hidden rounded-lg ${slideshow.thumbnails ? "aspect-[3/2]" : "aspect-[65/32]"}`}>
+        <Image
+          src={image.src}
+          alt=""
+          fill
+          sizes="(min-width: 1280px) 704px, (min-width: 768px) 480px, 100vw"
+          className={slideshow.thumbnails ? "object-cover" : "object-contain"}
+        />
+        <span className="pointer-events-none absolute inset-0 rounded-[inherit] border border-[var(--media-border)]" />
+      </div>
+      <figcaption className="mt-3 truncate text-sm leading-relaxed text-[var(--muted)] opacity-70">
+        {image.caption ?? slideshow.caption}
+      </figcaption>
+    </figure>
+  );
+}

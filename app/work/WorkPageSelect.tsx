@@ -107,7 +107,7 @@ export default function WorkPageSelect() {
             });
           }}
           style={typography}
-          className={`${popoverSurface} z-50 overflow-hidden`}
+          className={`${popoverSurface} z-50 overflow-hidden outline-none`}
         >
           <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
             {pages.map(({ label, href }) => (

@@ -272,7 +272,6 @@ export const films: Record<string, Film> = {
     contributions: [
       "Web design",
       "Engineering",
-      "Film design",
       "Video production",
     ],
     introduction:

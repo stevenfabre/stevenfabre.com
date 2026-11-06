@@ -92,7 +92,7 @@ export default function ProjectNavigation({
       aria-label="Project navigation"
     >
       <div className="flex size-full items-center justify-between gap-2">
-        <div className="flex items-center gap-2 max-[520px]:gap-0">
+        <div className="flex items-center gap-0">
           <Tooltip content="Previous project" side="bottom" delayDuration={200}>
             <ButtonLink
               variant="icon"

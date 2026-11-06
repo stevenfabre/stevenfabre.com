@@ -210,6 +210,16 @@ export const films: Record<string, Film> = {
           caption: "A team surfing lesson in Ericeira."
         },
         {
+          src: "/work/media/liveblocks-curacao-retreat.jpg",
+          alt: "The Liveblocks team together on a boat during our Curaçao retreat.",
+          caption: "Together at our team retreat in Curaçao.",
+        },
+        {
+          src: "/work/media/liveblocks-taghazout-retreat.jpg",
+          alt: "The Liveblocks team with sandboards at our Taghazout retreat in Morocco.",
+          caption: "Sandboarding together at our retreat in Taghazout, Morocco.",
+        },
+        {
           src: "/work/media/liveblocks-mexico-offsite.jpg",
           alt: "Our first offsite in Mexico, 2021.",
           caption: "Our first offsite in Mexico, 2021."

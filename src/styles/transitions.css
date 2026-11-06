@@ -17,6 +17,12 @@
   animation-timing-function: var(--ease-out);
 }
 
+/* Page snapshots crossfade in viewport coordinates. Interpolating the root's
+   document geometry makes a scroll-position change look like a page jump. */
+::view-transition-group(root) {
+  animation: none;
+}
+
 /* Equal fade timing prevents a flash of the canvas between snapshots. */
 ::view-transition-image-pair(*) {
   isolation: isolate;

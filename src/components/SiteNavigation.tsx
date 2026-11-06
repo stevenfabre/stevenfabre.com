@@ -44,6 +44,7 @@ type Navigate = (
 const Navigation = createContext<{
   navigate: Navigate;
   ready: (href: string) => void;
+  restoreContentScroll: () => boolean;
 } | null>(null);
 
 export function useSiteNavigation() {
@@ -51,6 +52,10 @@ export function useSiteNavigation() {
   if (!context)
     throw new Error("Site navigation requires SiteNavigationProvider");
   return context.navigate;
+}
+
+export function useContentScrollRestoration() {
+  return useContext(Navigation)?.restoreContentScroll;
 }
 
 // Render in page content, never in a loading boundary: a pathname alone does
@@ -87,72 +92,81 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
     null
   );
 
-  const ready = useCallback(async (href: string) => {
+  const restoreContentScroll = useCallback(() => {
     const navigation = pending.current;
-    if (!navigation) {
-      // Initial deep links may target the independently scrolling overview pane.
-      if (
-        location.pathname === href &&
-        location.hash &&
-        history.state?.portfolioScroll?.pathname !== href
-      ) {
+    if (!navigation?.scrollToContent) return false;
+
+    const pane = document.querySelector<HTMLElement>("[data-site-content]");
+    if (pane) pane.scrollTop = 0;
+    // Use the actual content boundary, including the mobile portrait offset.
+    const top =
+      pane && window.matchMedia("(max-width: 767px)").matches
+        ? Math.min(
+            navigation.startingScroll ?? 0,
+            window.scrollY + pane.getBoundingClientRect().top
+          )
+        : 0;
+    window.scrollTo({ top, behavior: "instant" });
+    return true;
+  }, []);
+
+  const ready = useCallback(
+    async (href: string) => {
+      const navigation = pending.current;
+      if (!navigation) {
+        // Initial deep links may target the independently scrolling overview pane.
+        if (
+          location.pathname === href &&
+          location.hash &&
+          history.state?.portfolioScroll?.pathname !== href
+        ) {
+          try {
+            document
+              .getElementById(decodeURIComponent(location.hash.slice(1)))
+              ?.scrollIntoView({ block: "nearest", behavior: "instant" });
+          } catch {
+            /* Ignore malformed fragments. */
+          }
+        }
+        return;
+      }
+      if (navigation.destination.pathname !== href) return;
+      const { destination, scroll } = navigation;
+      if (scroll) {
+        const pane = document.querySelector<HTMLElement>("[data-site-content]");
+        if (pane) pane.scrollTop = scroll.pane;
+        window.scrollTo({ top: scroll.window, behavior: "instant" });
+      }
+      if (destination.hash) {
         try {
-          document
-            .getElementById(decodeURIComponent(location.hash.slice(1)))
-            ?.scrollIntoView({ block: "nearest", behavior: "instant" });
+          const target = document.getElementById(
+            decodeURIComponent(destination.hash.slice(1))
+          );
+          const bounds = target?.getBoundingClientRect();
+          if (
+            !scroll ||
+            !bounds ||
+            bounds.top < 0 ||
+            bounds.bottom > innerHeight
+          ) {
+            target?.scrollIntoView({ block: "nearest", behavior: "instant" });
+          }
         } catch {
           /* Ignore malformed fragments. */
         }
+      } else if (destination.pathname.startsWith("/work/")) {
+        window.scrollTo({ top: 0, behavior: "instant" });
       }
-      return;
-    }
-    if (navigation.destination.pathname !== href) return;
-    const { destination, scroll } = navigation;
-    if (scroll) {
-      const pane = document.querySelector<HTMLElement>("[data-site-content]");
-      if (pane) pane.scrollTop = scroll.pane;
-      window.scrollTo({ top: scroll.window, behavior: "instant" });
-    }
-    if (destination.hash) {
-      try {
-        const target = document.getElementById(
-          decodeURIComponent(destination.hash.slice(1))
-        );
-        const bounds = target?.getBoundingClientRect();
-        if (
-          !scroll ||
-          !bounds ||
-          bounds.top < 0 ||
-          bounds.bottom > innerHeight
-        ) {
-          target?.scrollIntoView({ block: "nearest", behavior: "instant" });
-        }
-      } catch {
-        /* Ignore malformed fragments. */
-      }
-    } else if (destination.pathname.startsWith("/work/")) {
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-    if (navigation.scrollToContent) {
-      const pane = document.querySelector<HTMLElement>("[data-site-content]");
-      if (pane) pane.scrollTop = 0;
-      // Use the actual content boundary, including the mobile portrait offset.
-      const top =
-        pane && window.matchMedia("(max-width: 767px)").matches
-          ? Math.min(
-              navigation.startingScroll ?? 0,
-              window.scrollY + pane.getBoundingClientRect().top
-            )
-          : 0;
-      window.scrollTo({ top, behavior: "instant" });
-    }
-    images.current?.selectDestination();
-    fallback.current?.prepareDestination();
-    if (images.current || fallback.current) await decodeVisibleImages();
-    if (pending.current !== navigation) return;
-    navigation.finish();
-    pending.current = null;
-  }, []);
+      restoreContentScroll();
+      images.current?.selectDestination();
+      fallback.current?.prepareDestination();
+      if (images.current || fallback.current) await decodeVisibleImages();
+      if (pending.current !== navigation) return;
+      navigation.finish();
+      pending.current = null;
+    },
+    [restoreContentScroll]
+  );
 
   useEffect(
     () => () => {
@@ -282,7 +296,10 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
     [pathname, router]
   );
 
-  const value = useMemo(() => ({ navigate, ready }), [navigate, ready]);
+  const value = useMemo(
+    () => ({ navigate, ready, restoreContentScroll }),
+    [navigate, ready, restoreContentScroll]
+  );
   return <Navigation.Provider value={value}>{children}</Navigation.Provider>;
 }
 

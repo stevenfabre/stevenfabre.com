@@ -1,5 +1,6 @@
 "use client";
 
+import { useContentScrollRestoration } from "./SiteNavigation";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
@@ -37,6 +38,7 @@ const Portrait = memo(function Portrait() {
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const restoreContentScroll = useContentScrollRestoration();
   const content = useRef<HTMLDivElement>(null);
   const positions = useRef<Record<string, { pane: number; window: number }>>(
     {}
@@ -45,6 +47,8 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
 
   useLayoutEffect(() => {
     if (!hasPortrait || !content.current) return;
+    // Explicit navigation positioning wins before the new page can paint.
+    if (restoreContentScroll?.()) return;
     const saved = history.state?.portfolioScroll;
     if (window.location.hash && saved?.pathname !== pathname) return;
     const previous =
@@ -52,7 +56,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
       (saved?.pathname === pathname ? saved : undefined);
     content.current.scrollTop = previous?.pane || 0;
     window.scrollTo({ top: previous?.window || 0, behavior: "instant" });
-  }, [pathname, hasPortrait]);
+  }, [pathname, hasPortrait, restoreContentScroll]);
 
   useEffect(() => {
     if (!hasPortrait) return;
@@ -69,7 +73,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
       pane?.removeEventListener("scroll", rememberScroll);
       window.removeEventListener("scroll", rememberScroll);
     };
-  }, [pathname, hasPortrait]);
+  }, [pathname, hasPortrait, restoreContentScroll]);
 
   if (!hasPortrait) return <>{children}</>;
 

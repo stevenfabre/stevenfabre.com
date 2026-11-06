@@ -74,17 +74,7 @@ function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
     };
   }, [film.file, paused]);
   return (
-    <div
-      className={styles.video}
-      data-work-visual
-      style={
-        {
-          viewTransitionName: `film-${film.file}`,
-          "--film-ratio": film.aspectRatio,
-          "--thumbnail-position": film.thumbnailPosition,
-        } as CSSProperties
-      }
-    >
+    <>
       {/* An actual image survives video decoding and browser snapshots. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -106,12 +96,7 @@ function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
         preload="none"
         aria-hidden="true"
       />
-      <WorkLink
-        className="absolute inset-0 cursor-pointer"
-        href={`/work/${film.slug}`}
-        aria-label={`View project: ${film.title}`}
-      />
-    </div>
+    </>
   );
 }
 
@@ -136,7 +121,10 @@ function ProjectPreview({
     };
     const reveal = () => {
       // Wait for decoded pixels, including when the image came from cache.
-      void image.decode().catch(() => {}).then(finish);
+      void image
+        .decode()
+        .catch(() => {})
+        .then(finish);
     };
     setLoading(true);
     if (image.complete) reveal();
@@ -167,28 +155,28 @@ function ProjectPreview({
       }}
       onPointerLeave={() => onHover(null)}
     >
-      {film.kind ? (
-        <div
-          className={styles.video}
-          data-work-visual
-          style={
-            {
-              viewTransitionName: `film-${film.file}`,
-              "--film-ratio": film.aspectRatio,
-              "--thumbnail-position": film.thumbnailPosition,
-            } as CSSProperties
-          }
-        >
+      <div
+        className={styles.video}
+        data-work-visual
+        style={
+          {
+            viewTransitionName: `film-${film.file}`,
+            "--film-ratio": film.aspectRatio,
+            "--thumbnail-position": film.thumbnailPosition,
+          } as CSSProperties
+        }
+      >
+        {film.kind ? (
           <ProjectImage film={film} loading="lazy" />
-          <WorkLink
-            href={`/work/${film.slug}`}
-            className="absolute inset-0 cursor-pointer"
-            aria-label={`View project: ${film.title}`}
-          />
-        </div>
-      ) : (
-        <Video film={film} paused={paused} />
-      )}
+        ) : (
+          <Video film={film} paused={paused} />
+        )}
+        <WorkLink
+          href={`/work/${film.slug}`}
+          className="absolute inset-0 cursor-pointer"
+          aria-label={`View project: ${film.title}`}
+        />
+      </div>
     </figure>
   );
 }

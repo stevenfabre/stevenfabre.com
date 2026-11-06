@@ -20,23 +20,6 @@
   outline: 2px solid #737373;
   outline-offset: 2px;
 }
-.role,
-.years {
-  font-size: 16px;
-  line-height: 1.625;
-}
-.role {
-  margin-top: 2px;
-}
-.years {
-  text-align: right;
-  white-space: nowrap;
-  color: #a3a3a3;
-  font-variant-numeric: tabular-nums;
-}
-:global(.dark) .years {
-  color: #737373;
-}
 .projectList {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -91,7 +74,9 @@
   animation: thumbnail-loading 1.8s ease-in-out infinite;
 }
 @keyframes thumbnail-loading {
-  to { transform: translateX(100%); }
+  to {
+    transform: translateX(100%);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .project[data-thumbnail-loading] .video::before {
@@ -117,8 +102,6 @@
   }
 }
 
-
-
 @media (max-width: 767px) {
   .projectList {
     gap: 16px;
@@ -126,11 +109,5 @@
   .video {
     view-transition-class: project;
     border-radius: 8px;
-  }
-}
-@container content (min-width: 32rem) {
-  .role,
-  .years {
-    font-size: 18px;
   }
 }

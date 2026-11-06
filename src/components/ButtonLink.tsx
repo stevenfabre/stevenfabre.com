@@ -2,7 +2,6 @@
 
 import { forwardRef, type AnchorHTMLAttributes } from "react";
 import cx from "../utils/cx";
-import styles from "./ButtonLink.module.css";
 import { SiteLink } from "./SiteNavigation";
 
 type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -29,9 +28,9 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
     ref
   ) {
     const classes = cx(
-      "inline-flex h-10 shrink-0 items-center justify-center rounded-md text-neutral-500 no-underline transition-colors duration-150 [-webkit-tap-highlight-color:transparent] hover:bg-neutral-200 focus:bg-neutral-200 focus-visible:outline-none sm:h-8 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800",
+      "inline-flex h-10 shrink-0 items-center justify-center rounded-md no-underline transition-colors duration-150 [-webkit-tap-highlight-color:transparent] focus-visible:outline-none sm:h-8",
       appearance === "ghost" &&
-        "hover:text-neutral-900 focus:text-neutral-900 dark:hover:text-neutral-100 dark:focus:text-neutral-100",
+        "data-[keyboard-pressed=true]:bg-neutral-200 data-[keyboard-pressed=true]:text-neutral-900 dark:data-[keyboard-pressed=true]:bg-neutral-800 dark:data-[keyboard-pressed=true]:text-neutral-100 text-neutral-500 hover:bg-neutral-200 focus:bg-neutral-200 hover:text-neutral-900 focus:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 dark:hover:text-neutral-100 dark:focus:text-neutral-100",
       variant === "icon"
         ? "w-10 sm:w-8 [&_svg]:size-6 sm:[&_svg]:size-5"
         : "gap-1 text-sm font-medium [&_svg]:size-4",
@@ -43,7 +42,8 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
           : compact
           ? "pl-2.5 pr-3.5"
           : "pl-3 pr-4"),
-      appearance === "raised" && styles.raised,
+      appearance === "raised" &&
+        "rounded-[9px] border border-black/[0.08] bg-white text-neutral-700 shadow-[0_1px_2px_#0000000a,0_3px_6px_-3px_#0000001a] transition-[background-color,box-shadow] duration-120 hover:bg-neutral-50 focus-visible:bg-neutral-200 active:bg-neutral-100 active:shadow-[0_1px_2px_#00000008] active:duration-60 dark:border-white/[0.09] dark:border-t-white/[0.13] dark:bg-[#242424] dark:text-neutral-200 dark:shadow-[0_1px_2px_#00000033,0_3px_6px_-3px_#0000003d] dark:hover:bg-[#2c2c2c] dark:focus-visible:bg-neutral-700 dark:active:bg-[#202020] dark:active:shadow-[0_1px_2px_#00000024]",
       className
     );
     if (clientNavigation && href) {

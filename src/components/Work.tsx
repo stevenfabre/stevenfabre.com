@@ -1,6 +1,6 @@
 import linkStyles from "./HeadingLink.module.css";
-import { headingControl } from "./controlStyles";
-import Icon from "./Icon";
+import { headingLink } from "./controlStyles";
+import HeadingArrow from "./HeadingArrow";
 import Experience, { ExperienceProps } from "./Experience";
 import { SiteLink } from "./SiteNavigation";
 
@@ -80,27 +80,9 @@ export default function Work() {
   return (
     <>
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
-        <SiteLink
-          href="/work"
-          className={`${headingControl} ${linkStyles.link}`}
-        >
+        <SiteLink href="/work" className={`${headingLink} ${linkStyles.link}`}>
           Work
-          <span
-            aria-hidden="true"
-            className={linkStyles.arrow}
-            style={{ width: 16, height: 16 }}
-          >
-            <Icon
-              name="arrow-up-right"
-              size={16}
-              className={linkStyles.departing}
-            />
-            <Icon
-              name="arrow-up-right"
-              size={16}
-              className={linkStyles.arriving}
-            />
-          </span>
+          <HeadingArrow />
         </SiteLink>
       </h2>
       {experiences}

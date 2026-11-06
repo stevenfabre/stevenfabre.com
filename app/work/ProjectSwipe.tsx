@@ -12,7 +12,8 @@ import {
 } from "react";
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
 import { swipeDestination } from "./swipe";
-import styles from "./ProjectSwipe.module.css";
+const neighborClass =
+  "pointer-events-none absolute h-[calc(100svh-var(--bar-height))] w-full overflow-hidden [&_[data-work-visual]]:[view-transition-name:none!important] [&_[data-site-footer]]:[view-transition-name:none!important]";
 
 const mobileQuery = "(max-width: 767px)";
 const settling = { type: spring, duration: 0.5, bounce: 0.2 };
@@ -254,7 +255,7 @@ export default function ProjectSwipe({
   return (
     <main
       ref={viewport}
-      className={styles.viewport}
+      className="w-full flex-1 overflow-x-clip max-md:touch-pan-y max-md:touch-pinch-zoom"
       onPointerDownCapture={start}
       onPointerMove={move}
       onPointerUp={finish}
@@ -279,10 +280,10 @@ export default function ProjectSwipe({
         }
       }}
     >
-      <div ref={track} className={styles.track} data-project-swipe>
+      <div ref={track} className="relative" data-project-swipe>
         {neighbors && (
           <div
-            className={styles.neighbor}
+            className={neighborClass}
             aria-hidden="true"
             {...{ inert: true }}
             style={{ left: -neighbors.width, top: neighbors.top }}
@@ -294,7 +295,7 @@ export default function ProjectSwipe({
         {children}
         {neighbors && (
           <div
-            className={styles.neighbor}
+            className={neighborClass}
             aria-hidden="true"
             {...{ inert: true }}
             style={{ left: neighbors.width, top: neighbors.top }}

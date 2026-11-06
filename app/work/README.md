@@ -41,3 +41,10 @@ the portrait, and navigation stay in the page snapshot. Videos retain a real
 poster image until a decoded frame is ready, and remain hidden during snapshots
 to avoid empty hardware-video surfaces on iOS. Closing restores the saved
 overview scroll position before measuring the destination thumbnail.
+
+Use Tailwind for component layout, spacing, colors, and interaction states.
+`controlStyles.ts` shares heading, icon-control, and popover treatments;
+`HeadingArrow` owns the paired arrow markup. Footer links are data-driven, and
+`videoPlayback.ts` owns the preview-to-player session handoff. Keep CSS modules
+for coordinated keyframes, media geometry/cropping, and browser-specific range
+pseudo-elements rather than duplicating ordinary utility styles.

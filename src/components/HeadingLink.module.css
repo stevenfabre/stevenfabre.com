@@ -1,10 +1,4 @@
-.link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3em;
-  text-decoration: none;
-}
-
+/* Hover choreography shared by internal and external heading links. */
 .arrow {
   display: inline-grid;
   overflow: hidden;
@@ -30,8 +24,6 @@
   filter: blur(4px);
   transform: translate(-50%, 75%);
 }
-
-
 
 .link:focus-visible .arrow {
   opacity: 1;

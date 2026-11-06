@@ -7,28 +7,10 @@ import type { ProjectVisual } from "./work-data";
 import { getMediaDimensions } from "./media";
 import playerStyles from "./ProjectVideo.module.css";
 
-type PreviewPlayback = {
-  file: string;
-  time: number;
-  playing: boolean;
-  savedAt: number;
-};
-
-function getPreviewPlayback(file: string): PreviewPlayback | null {
-  try {
-    const saved = sessionStorage.getItem("work-playback");
-    if (!saved) return null;
-    const playback = JSON.parse(saved) as PreviewPlayback;
-    return playback.file === file &&
-      Number.isFinite(playback.time) &&
-      playback.time >= 0 &&
-      Date.now() - playback.savedAt < 15000
-      ? playback
-      : null;
-  } catch {
-    return null;
-  }
-}
+import {
+  readVideoPlayback,
+  clearVideoPlayback,
+} from "../../src/utils/videoPlayback";
 
 export default function ProjectVideo({
   film,
@@ -132,11 +114,11 @@ export default function ProjectVideo({
     }
     soundPreferenceReady.current = true;
     let cancelled = false;
-    const playback = getPreviewPlayback(film.file);
+    const playback = readVideoPlayback(film.file);
     const restore = () => {
       if (!playback || cancelled) return;
       try {
-        sessionStorage.removeItem("work-playback");
+        clearVideoPlayback();
         video.currentTime = Math.min(
           playback.time,
           video.duration || playback.time

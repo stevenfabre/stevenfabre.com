@@ -4,28 +4,37 @@ import Link from "next/link";
 import EmailLink from "./EmailLink";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { Tooltip } from "./Tooltip";
+import { iconControl } from "./controlStyles";
 import cx from "../utils/cx";
+
+const socials = [
+  { name: "x", label: "X", href: "https://x.com/stevenfabre" },
+  {
+    name: "linkedin",
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/steven-fabre-5510bb38",
+  },
+  {
+    name: "instagram",
+    label: "Instagram",
+    href: "https://www.instagram.com/stevenfabre",
+  },
+  {
+    name: "youtube",
+    label: "YouTube",
+    href: "https://www.youtube.com/@StevenFabre",
+  },
+  { name: "github", label: "GitHub", href: "https://github.com/stevenfabre" },
+] as const;
+type Social = (typeof socials)[number]["name"] | "email";
+const defaultSocials: Social[] = [...socials.map(({ name }) => name), "email"];
 
 export default function Footer({
   className,
-  includedSocials = [
-    "x",
-    "linkedin",
-    "instagram",
-    "youtube",
-    "github",
-    "email",
-  ],
+  includedSocials = defaultSocials,
 }: {
   className?: string;
-  includedSocials?: (
-    | "x"
-    | "linkedin"
-    | "instagram"
-    | "youtube"
-    | "github"
-    | "email"
-  )[];
+  includedSocials?: Social[];
 }) {
   return (
     <footer
@@ -36,98 +45,26 @@ export default function Footer({
       )}
     >
       <ul className="flex flex-wrap sm:gap-0.5">
-        {includedSocials.includes("x") && (
-          <li>
-            <Tooltip content="X" delayDuration={200}>
-              <Link
-                className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 focus:text-neutral-900 dark:hover:text-neutral-100 dark:focus:text-neutral-100 focus-visible:outline-none size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
-                href="https://x.com/stevenfabre"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <svg
-                  aria-hidden="true"
-                  focusable="false"
-                  className="fill-current size-6 sm:size-5"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+        {socials
+          .filter(({ name }) => includedSocials.includes(name))
+          .map(({ name, label, href }) => (
+            <li key={name}>
+              <Tooltip content={label} delayDuration={200}>
+                <Link
+                  className={iconControl}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <path d="M14.4538 3H16.8288L11.6402 8.93026L17.7442 17H12.9648L9.22139 12.1058L4.93811 17H2.56171L8.11145 10.657L2.25586 3H7.15658L10.5403 7.47354L14.4538 3ZM13.6203 15.5785H14.9363L6.4415 4.34687H5.02929L13.6203 15.5785Z" />
-                </svg>
-                <span className="sr-only">X</span>
-              </Link>
-            </Tooltip>
-          </li>
-        )}
-        {includedSocials.includes("linkedin") && (
-          <li>
-            <Tooltip content="LinkedIn" delayDuration={200}>
-              <Link
-                className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 focus:text-neutral-900 dark:hover:text-neutral-100 dark:focus:text-neutral-100 focus-visible:outline-none size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
-                href="https://www.linkedin.com/in/steven-fabre-5510bb38"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <BrandIcon name="linkedin" className="size-6 sm:size-5" />
-                <span className="sr-only">LinkedIn</span>
-              </Link>
-            </Tooltip>
-          </li>
-        )}
-        {includedSocials.includes("instagram") && (
-          <li>
-            <Tooltip content="Instagram" delayDuration={200}>
-              <Link
-                className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 focus:text-neutral-900 dark:hover:text-neutral-100 dark:focus:text-neutral-100 focus-visible:outline-none size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
-                href="https://www.instagram.com/stevenfabre"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <BrandIcon name="instagram" className="size-6 sm:size-5" />
-                <span className="sr-only">Instagram</span>
-              </Link>
-            </Tooltip>
-          </li>
-        )}
-        {includedSocials.includes("youtube") && (
-          <li>
-            <Tooltip content="YouTube" delayDuration={200}>
-              <Link
-                className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 focus:text-neutral-900 dark:hover:text-neutral-100 dark:focus:text-neutral-100 focus-visible:outline-none size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
-                href="https://www.youtube.com/@StevenFabre"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <BrandIcon name="youtube" className="size-6 sm:size-5" />
-                <span className="sr-only">YouTube</span>
-              </Link>
-            </Tooltip>
-          </li>
-        )}
-        {includedSocials.includes("github") && (
-          <li>
-            <Tooltip content="GitHub" delayDuration={200}>
-              <Link
-                className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 focus:text-neutral-900 dark:hover:text-neutral-100 dark:focus:text-neutral-100 focus-visible:outline-none size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
-                href="https://github.com/stevenfabre"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <BrandIcon name="github" className="size-6 sm:size-5" />
-                <span className="sr-only">GitHub</span>
-              </Link>
-            </Tooltip>
-          </li>
-        )}
+                  <BrandIcon name={name} className="size-6 sm:size-5" />
+                  <span className="sr-only">{label}</span>
+                </Link>
+              </Tooltip>
+            </li>
+          ))}
         {includedSocials.includes("email") && (
           <li>
-            <EmailLink
-              className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 focus:text-neutral-900 dark:hover:text-neutral-100 dark:focus:text-neutral-100 focus-visible:outline-none size-10 sm:size-8 bg-neutral-200/0 hover:bg-neutral-200 focus:bg-neutral-200 rounded-md dark:bg-neutral-800/0 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 flex items-center justify-center"
-              email="hello@stevenfabre.com"
-            >
+            <EmailLink className={iconControl} email="hello@stevenfabre.com">
               <Icon name="envelope" className="size-6 sm:size-5" />
               <span className="sr-only">hello@stevenfabre.com</span>
             </EmailLink>

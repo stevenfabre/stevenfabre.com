@@ -11,6 +11,7 @@ import ButtonLink from "../../src/components/ButtonLink";
 import BrandIcon from "../../src/components/BrandIcon";
 import ViewOnX from "./ViewOnX";
 import styles from "./SocialPostCard.module.css";
+import cx from "../../src/utils/cx";
 
 export default function SocialPostCard({
   post,
@@ -33,11 +34,18 @@ export default function SocialPostCard({
     <figure
       data-platform={post.platform}
       id={id}
-      className={`${className} ${styles.card}`}
+      className={cx(
+        className,
+        "rounded-[14px] border border-[var(--media-border)] bg-white p-4 shadow-[0_2px_6px_#00000005] dark:bg-[#141414] dark:shadow-[0_2px_6px_#0000001a]",
+        instagram && styles.instagram
+      )}
       style={style}
     >
       <a
-        className={styles.author}
+        className={cx(
+          "inline-flex max-w-full items-center gap-2.5 rounded leading-[1.4] no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-500",
+          instagram && "mb-4"
+        )}
         href={
           instagram
             ? `https://www.instagram.com/${post.handle}/`
@@ -56,6 +64,7 @@ export default function SocialPostCard({
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
           <img
+            className="size-9 shrink-0 rounded-full object-cover"
             src={`/work/media/${post.avatar}`}
             alt=""
             width={36}
@@ -64,41 +73,25 @@ export default function SocialPostCard({
           />
         )}
         <span>
-          <span className={styles.name}>{post.name}</span>
-          <span className={styles.handle}>@{post.handle}</span>
+          <span className="block text-sm font-semibold text-[var(--ink)]">
+            {post.name}
+          </span>
+          <span className="block text-xs text-[var(--muted)]">
+            @{post.handle}
+          </span>
         </span>
       </a>
-      {!instagram && (
-        <blockquote className={styles.copy} cite={source}>
-          {post.text.split(/(@[A-Za-z0-9_]+)/g).map((part, index) =>
-            part.startsWith("@") ? (
-              <span key={index} className={styles.mention}>
-                {part}
-              </span>
-            ) : (
-              part
-            )
-          )}
-        </blockquote>
-      )}
+      {!instagram && <PostCopy text={post.text} source={source} />}
       {children}
       <SocialActions post={post} source={source} />
-      {instagram && (
-        <blockquote className={styles.copy} cite={source}>
-          {post.text.split(/(@[A-Za-z0-9_]+)/g).map((part, index) =>
-            part.startsWith("@") ? (
-              <span key={index} className={styles.mention}>
-                {part}
-              </span>
-            ) : (
-              part
-            )
-          )}
-        </blockquote>
-      )}
-      <figcaption className={styles.footer}>
+      {instagram && <PostCopy text={post.text} source={source} />}
+      <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-3">
         {post.publishedAt && (
-          <time dateTime={post.publishedAt} title={date.toUTCString()}>
+          <time
+            className="text-xs text-[var(--muted)]"
+            dateTime={post.publishedAt}
+            title={date.toUTCString()}
+          >
             {date.toLocaleDateString("en-US", {
               month: "short",
               day: post.publishedAt.length === 7 ? undefined : "numeric",
@@ -150,9 +143,7 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
   return (
     <div
       className={`mt-3 flex items-center justify-start gap-5 text-xs tabular-nums ${
-        instagram
-          ? "text-[var(--ink)]"
-          : "text-[var(--muted)]"
+        instagram ? "text-[var(--ink)]" : "text-[var(--muted)]"
       }`}
       aria-label="Post engagement"
       title="Engagement counts from the archived post; not live."
@@ -174,9 +165,30 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
             aria-hidden="true"
             className="shrink-0"
           />
-          {count !== undefined && <span className="font-medium">{format.format(count)}</span>}
+          {count !== undefined && (
+            <span className="font-medium">{format.format(count)}</span>
+          )}
         </a>
       ))}
     </div>
+  );
+}
+
+function PostCopy({ text, source }: { text: string; source: string }) {
+  return (
+    <blockquote
+      className="my-4 whitespace-pre-line text-[15px] leading-[1.55] text-[var(--ink)] [overflow-wrap:anywhere]"
+      cite={source}
+    >
+      {text.split(/(@[A-Za-z0-9_]+)/g).map((part, index) =>
+        part.startsWith("@") ? (
+          <span key={index} className="text-[#0875be] dark:text-[#63b7f0]">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </blockquote>
   );
 }

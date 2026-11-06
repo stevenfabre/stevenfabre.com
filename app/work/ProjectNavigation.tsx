@@ -7,7 +7,6 @@ import { initializeProjectReturn } from "../../src/utils/projectNavigation";
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
 import ProjectCounter from "./ProjectCounter";
 import WorkIcon from "./WorkIcon";
-import styles from "./detail.module.css";
 
 type Project = { slug: string; title: string };
 
@@ -88,12 +87,12 @@ export default function ProjectNavigation({
 
   return (
     <nav
-      className={styles.navigation}
+      className="sticky top-0 z-30 h-[var(--bar-height)] w-[calc(100%+var(--page-padding)*2)] shrink-0 -mx-[var(--page-padding)] px-[var(--bar-padding)] bg-[var(--bar-background)] text-[13px] text-[var(--muted)] backdrop-blur-[16px] backdrop-saturate-[0.6] [view-transition-name:project-navigation] data-[scrolled=true]:shadow-[0_1px_0_#0000000f] dark:data-[scrolled=true]:shadow-[0_1px_0_#ffffff0f] max-[520px]:text-xs"
       data-scrolled={scrolled}
       aria-label="Project navigation"
     >
       <div className="flex size-full items-center justify-between gap-2">
-        <div className={styles.controls}>
+        <div className="flex items-center gap-2 max-[520px]:gap-0">
           <Tooltip content="Previous project" side="bottom" delayDuration={200}>
             <ButtonLink
               variant="icon"

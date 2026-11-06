@@ -1,4 +1,3 @@
-import styles from "./work.module.css";
 import WorkPageSelect from "./WorkPageSelect";
 
 import { companies, companyDetails, allFilms } from "./work-data";
@@ -34,9 +33,13 @@ export default function WorkPortfolio() {
               <h2 className="font-semibold text-lg leading-relaxed @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
                 <ExternalLink href={company.url}>{company.name}</ExternalLink>
               </h2>
-              <p className={styles.years}>{company.years}</p>
+              <p className="text-right text-base leading-relaxed whitespace-nowrap tabular-nums text-neutral-400 dark:text-neutral-500 @xl/content:text-lg">
+                {company.years}
+              </p>
             </div>
-            <p className={styles.role}>{companyDetails[company.id].role}</p>
+            <p className="mt-0.5 text-base leading-relaxed @xl/content:text-lg">
+              {companyDetails[company.id].role}
+            </p>
             <p className="mt-5 text-base leading-[1.65] text-balance @xl/content:text-lg">
               {companyDetails[company.id].description}
             </p>

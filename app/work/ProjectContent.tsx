@@ -34,9 +34,7 @@ export default function ProjectContent({
           } as CSSProperties
         }
       >
-        <div
-          className={`${styles.stage} grid items-center justify-items-center`}
-        >
+        <div className="grid h-[var(--visual-height)] items-center justify-items-center">
           <div
             className={styles.visual}
             data-work-visual

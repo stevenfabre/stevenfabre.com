@@ -1,5 +1,6 @@
 "use client";
 
+import { saveVideoPlayback } from "../utils/videoPlayback";
 import { popoverSurface } from "./controlStyles";
 import {
   createContext,
@@ -157,20 +158,7 @@ export function WorkPreviewProvider({
     const video = position.current?.querySelector<HTMLVideoElement>(
       `video[data-file="${file}"]`
     );
-    if (!video) return;
-    try {
-      sessionStorage.setItem(
-        "work-playback",
-        JSON.stringify({
-          file,
-          time: video.currentTime,
-          playing: !video.paused,
-          savedAt: Date.now(),
-        })
-      );
-    } catch {
-      /* The link still works without storage. */
-    }
+    if (video) saveVideoPlayback(video);
   }, []);
 
   return (

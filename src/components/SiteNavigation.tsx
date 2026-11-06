@@ -98,14 +98,14 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
 
     const pane = document.querySelector<HTMLElement>("[data-site-content]");
     if (pane) pane.scrollTop = 0;
-    // Use the actual content boundary, including the mobile portrait offset.
-    const top =
-      pane && window.matchMedia("(max-width: 767px)").matches
-        ? Math.min(
-            navigation.startingScroll ?? 0,
-            window.scrollY + pane.getBoundingClientRect().top
-          )
-        : 0;
+    let top = 0;
+    if (pane && window.matchMedia("(max-width: 767px)").matches) {
+      const contentTop = window.scrollY + pane.getBoundingClientRect().top;
+      // Home preserves any partially visible portrait; Work starts at content.
+      top = navigation.destination.pathname === "/"
+        ? Math.min(navigation.startingScroll ?? 0, contentTop)
+        : contentTop;
+    }
     window.scrollTo({ top, behavior: "instant" });
     return true;
   }, []);
@@ -241,7 +241,9 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
           }, 8000);
           pending.current = {
             destination,
-            scrollToContent,
+            scrollToContent:
+              scrollToContent ||
+              (pathname === "/" && destination.pathname === "/work" && !destination.hash),
             startingScroll,
             scroll,
             finish: () => {

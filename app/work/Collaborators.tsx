@@ -14,7 +14,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
         Collaborators
       </h2>
       <HorizontalScroll label="Scroll collaborators">
-        <ul className="flex w-max gap-4">
+        <ul className="flex w-max gap-8">
           {people.map((person) => (
             <li
               className="flex max-w-52 shrink-0 items-center gap-3"

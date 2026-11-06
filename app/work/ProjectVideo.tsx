@@ -39,6 +39,7 @@ export default function ProjectVideo({
     if (video) return registerNativeAudio(video);
   }, [film.file]);
   const [playing, setPlaying] = useState(false);
+  const [controlsVisible, setControlsVisible] = useState(false);
   const [muted, setMuted] = useState(true);
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -46,6 +47,7 @@ export default function ProjectVideo({
     const video = ref.current;
     if (!video) return;
     userRequestedPlayback.current = true;
+    setControlsVisible(true);
     manuallyPaused.current = !video.paused;
     if (video.paused) void video.play().catch(() => {});
     else video.pause();
@@ -144,6 +146,7 @@ export default function ProjectVideo({
       video.load();
     }
     let visible = false;
+    let playPending = false;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const syncPlayback = () => {
       if (
@@ -154,11 +157,23 @@ export default function ProjectVideo({
       ) {
         video.pause();
       } else if (
-        video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA &&
         !manuallyPaused.current &&
-        !video.ended
+        !video.ended &&
+        video.paused &&
+        !playPending
       ) {
-        void video.play().catch(() => {});
+        // Safari may defer decoding until play() is requested. Waiting for
+        // canplay first can leave a visible player stuck on its poster.
+        playPending = true;
+        void video
+          .play()
+          .catch(() => {
+            if (!cancelled && visible && !document.hidden)
+              setControlsVisible(true);
+          })
+          .finally(() => {
+            playPending = false;
+          });
       }
     };
     const visibilityObserver = new IntersectionObserver(
@@ -217,7 +232,11 @@ export default function ProjectVideo({
     };
   }, [film.file, preload]);
   return (
-    <div className={playerStyles.player}>
+    <div
+      className={playerStyles.player}
+      data-frame-ready={frameReady || undefined}
+      data-controls-visible={controlsVisible || !playing || undefined}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={posterRef}
@@ -245,7 +264,7 @@ export default function ProjectVideo({
         }}
         onClick={() => {
           if (window.matchMedia("(hover: none), (pointer: coarse)").matches)
-            fullscreen();
+            setControlsVisible((visible) => !visible);
           else togglePlay();
         }}
         tabIndex={0}

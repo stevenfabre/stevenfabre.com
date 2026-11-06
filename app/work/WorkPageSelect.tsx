@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useImperativeHandle,
   useRef,
   useState,
   type CSSProperties,
@@ -29,12 +30,15 @@ const pages = [
 ];
 const selectedPage = "/work";
 const selectedPageIndex = pages.findIndex(({ href }) => href === selectedPage);
+type MenuMotion = { move: (x: number, y: number) => void; reset: () => void };
 
 export default function WorkPageSelect() {
   const navigate = useSiteNavigation();
   const reducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [touching, setTouching] = useState(false);
+  const menuMotion = useRef<MenuMotion>(null);
   const [dismissedSurface, setDismissedSurface] = useState<DOMRect | null>(
     null
   );
@@ -146,6 +150,14 @@ export default function WorkPageSelect() {
     open,
     content: menuContent,
     onOpen: () => syncTypography(true),
+    onPosition: (x, y) => {
+      setTouching(true);
+      menuMotion.current?.move(x, y);
+    },
+    onEnd: () => {
+      setTouching(false);
+      menuMotion.current?.reset();
+    },
     onSelect: (href) => {
       if (href === selectedPage) prepareDismissal();
       else selectedHref.current = href;
@@ -218,9 +230,14 @@ export default function WorkPageSelect() {
             });
           }}
           style={typography}
-          className="z-50 outline-none"
+          data-touching={touching || undefined}
+          className="z-50 outline-none motion-safe:[&[data-touching]_[data-highlighted]_[data-touch-label]]:scale-105"
         >
-          <MenuSurface open={open} backgroundRef={menuBackground}>
+          <MenuSurface
+            open={open}
+            backgroundRef={menuBackground}
+            motionRef={menuMotion}
+          >
             <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
               {pages.map(({ label, href }, index) => (
                 <Select.Item
@@ -257,7 +274,12 @@ export default function WorkPageSelect() {
                         },
                       }}
                     >
-                      {label}
+                      <span
+                        data-touch-label
+                        className="inline-block origin-left transition-transform duration-150 motion-reduce:transition-none"
+                      >
+                        {label}
+                      </span>
                     </motion.span>
                   </Select.ItemText>
                 </Select.Item>
@@ -276,10 +298,12 @@ function MenuSurface({
   children,
   open,
   backgroundRef,
+  motionRef,
 }: {
   children: ReactNode;
   open: boolean;
   backgroundRef: RefObject<HTMLDivElement>;
+  motionRef: RefObject<MenuMotion>;
 }) {
   const reducedMotion = useReducedMotion();
   const [scope, animateItems] = useAnimate<HTMLDivElement>();
@@ -332,6 +356,20 @@ function MenuSurface({
   const resist = (distance: number) =>
     (distance * 12) / (100 + Math.abs(distance));
 
+  function move(x: number, y: number) {
+    if (reducedMotion || !scope.current) return;
+    const bounds = scope.current.getBoundingClientRect();
+    const offsetX = resist(x - bounds.left - bounds.width / 2);
+    const offsetY = resist(y - bounds.top - bounds.height / 2);
+    const transition = { type: "spring" as const, duration: 0.3, bounce: 0 };
+    animateItems("[data-menu-item]", { y: offsetY }, transition);
+    // Background moves on both axes; labels only move vertically.
+    const surfaceTransition = { ...transition, duration: 0.2 };
+    animate(backgroundX, offsetX * 1.75, surfaceTransition);
+    animate(backgroundY, offsetY * 1.75, surfaceTransition);
+  }
+  useImperativeHandle(motionRef, () => ({ move, reset }));
+
   return (
     <div
       ref={scope}
@@ -344,19 +382,7 @@ function MenuSurface({
           !matchMedia("(hover: hover) and (pointer: fine)").matches
         )
           return;
-        const bounds = event.currentTarget.getBoundingClientRect();
-        const offsetX = resist(event.clientX - bounds.left - bounds.width / 2);
-        const offsetY = resist(event.clientY - bounds.top - bounds.height / 2);
-        const transition = {
-          type: "spring" as const,
-          duration: 0.3,
-          bounce: 0,
-        };
-        animateItems("[data-menu-item]", { y: offsetY }, transition);
-        // The surface responds sooner and travels a little farther than the text.
-        const surfaceTransition = { ...transition, duration: 0.2 };
-        animate(backgroundX, offsetX * 1.75, surfaceTransition);
-        animate(backgroundY, offsetY * 1.75, surfaceTransition);
+        move(event.clientX, event.clientY);
       }}
       onPointerLeave={reset}
       onPointerCancel={reset}

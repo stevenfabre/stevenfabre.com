@@ -14,12 +14,16 @@ export function useTouchSelect({
   onOpen,
   onSelect,
   onDismiss,
+  onPosition,
+  onEnd,
 }: {
   open: boolean;
   content: RefObject<HTMLElement>;
   onOpen: () => void;
   onSelect: (value: string) => void;
   onDismiss: () => void;
+  onPosition?: (x: number, y: number) => void;
+  onEnd?: () => void;
 }) {
   const cleanup = useRef<(() => void) | null>(null);
   const clearClick = useRef<(() => void) | null>(null);
@@ -44,6 +48,7 @@ export function useTouchSelect({
     clearClick.current?.();
     const { pointerId, clientX: startX, clientY: startY } = event;
     let moved = false;
+    let initialFrame = 0;
 
     const itemAt = (x: number, y: number) => {
       const item = document
@@ -53,6 +58,7 @@ export function useTouchSelect({
     };
     const move = (event: PointerEvent) => {
       if (event.pointerId !== pointerId) return;
+      onPosition?.(event.clientX, event.clientY);
       moved ||= Math.hypot(event.clientX - startX, event.clientY - startY) > 6;
       if (!moved) return;
       const item = itemAt(event.clientX, event.clientY);
@@ -104,6 +110,7 @@ export function useTouchSelect({
       if (event.pointerId !== pointerId) cancel();
     };
     const detach = () => {
+      window.cancelAnimationFrame(initialFrame);
       document.removeEventListener("pointermove", move, true);
       document.removeEventListener("pointerup", finish, true);
       document.removeEventListener("pointercancel", cancelPointer, true);
@@ -111,6 +118,7 @@ export function useTouchSelect({
       window.removeEventListener("blur", cancel);
       window.removeEventListener("resize", cancel);
       cleanup.current = null;
+      onEnd?.();
     };
     cleanup.current = detach;
     document.addEventListener("pointermove", move, true);
@@ -120,5 +128,9 @@ export function useTouchSelect({
     window.addEventListener("blur", cancel);
     window.addEventListener("resize", cancel);
     onOpen();
+    // Wait until the portal has aligned its text before applying touch motion.
+    initialFrame = window.requestAnimationFrame(() =>
+      onPosition?.(startX, startY)
+    );
   };
 }

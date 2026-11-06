@@ -93,6 +93,11 @@ export default function ProjectContent({
                   layout={film.galleryLayout}
                 />
               )}
+              {film.afterGalleryParagraphs?.map((paragraph) => (
+                <p key={paragraph} className="mt-6">
+                  {renderProjectText(paragraph)}
+                </p>
+              ))}
               {film.collaborators && (
                 <Collaborators people={film.collaborators} />
               )}

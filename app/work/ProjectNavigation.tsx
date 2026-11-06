@@ -97,6 +97,7 @@ export default function ProjectNavigation({
             <ButtonLink
               variant="icon"
               href={`/work/${previous.slug}`}
+              className="[&_svg]:size-4 sm:[&_svg]:size-4"
               data-project-direction="previous"
               data-keyboard-pressed={pressed === "previous" || undefined}
               aria-keyshortcuts="ArrowLeft"
@@ -111,6 +112,7 @@ export default function ProjectNavigation({
             <ButtonLink
               variant="icon"
               href={`/work/${next.slug}`}
+              className="[&_svg]:size-4 sm:[&_svg]:size-4"
               data-project-direction="next"
               data-keyboard-pressed={pressed === "next" || undefined}
               aria-keyshortcuts="ArrowRight"

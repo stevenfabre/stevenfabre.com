@@ -1,3 +1,4 @@
+import linkStyles from "./HeadingLink.module.css";
 import heading from "./HeadingControl.module.css";
 import Icon from "./Icon";
 import Experience, { ExperienceProps } from "./Experience";
@@ -81,22 +82,23 @@ export default function Work() {
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
         <SiteLink
           href="/work"
-          className={`${heading.control} group inline-flex items-center gap-1.5`}
+          className={`${heading.control} ${linkStyles.link}`}
         >
           Work
           <span
             aria-hidden="true"
-            className="relative size-4 overflow-hidden opacity-40 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+            className={linkStyles.arrow}
+            style={{ width: 16, height: 16 }}
           >
             <Icon
               name="arrow-up-right"
               size={16}
-              className="transition-[transform,opacity,filter] duration-200 ease-out motion-safe:group-hover:translate-x-full motion-safe:group-hover:-translate-y-full motion-safe:group-hover:opacity-0 motion-safe:group-hover:blur-sm motion-reduce:transition-none"
+              className={linkStyles.departing}
             />
             <Icon
               name="arrow-up-right"
               size={16}
-              className="absolute inset-0 -translate-x-full translate-y-full opacity-0 blur-sm transition-[transform,opacity,filter] duration-200 ease-out motion-safe:group-hover:translate-x-0 motion-safe:group-hover:translate-y-0 motion-safe:group-hover:opacity-100 motion-safe:group-hover:blur-none motion-reduce:hidden"
+              className={linkStyles.arriving}
             />
           </span>
         </SiteLink>

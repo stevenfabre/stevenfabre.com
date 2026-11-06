@@ -22,8 +22,11 @@
   color: #e5e5e5;
   border-top-color: rgb(255 255 255 / 13%);
 }
-.raised.raised:focus {
-  background: var(--raised-surface);
+.raised.raised:focus-visible {
+  background: #e5e5e5;
+}
+:global(.dark) .raised.raised:focus-visible {
+  background: #404040;
 }
 @media (hover: hover) and (pointer: fine) {
   .raised.raised:hover {

@@ -1,7 +1,7 @@
 import type { AnchorHTMLAttributes } from "react";
 import WorkIcon from "./WorkIcon";
 import heading from "../../src/components/HeadingControl.module.css";
-import styles from "./external-link.module.css";
+import styles from "../../src/components/HeadingLink.module.css";
 
 type Props = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;

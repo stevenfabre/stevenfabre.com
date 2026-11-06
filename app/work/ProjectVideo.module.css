@@ -24,8 +24,14 @@
   cursor: pointer;
 }
 .controls button:hover { background: rgb(255 255 255 / 15%); }
-.controls button:focus-visible,
-.controls input:focus-visible { outline: 2px solid white; outline-offset: 2px; }
+.controls button:focus-visible { outline: none; background: rgb(255 255 255 / 15%); }
+.controls input:focus-visible { outline: none; }
+.progress:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 30%);
+}
+.progress:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 30%);
+}
 @media (hover: hover) and (pointer: fine) {
   .controls { display: flex; opacity: 0; pointer-events: none; transition: opacity 120ms ease-out; }
   .player:hover .controls,

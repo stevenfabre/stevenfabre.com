@@ -65,13 +65,12 @@ function InvestmentStage({
 }) {
   if (!stage) return null;
 
-  const badge = (
-    <StageBadge
-      stage={stage}
-      currentStage={currentStage}
-      hasTooltip={Boolean(tooltip)}
-    />
-  );
+  // Pass a DOM element to Radix so its ref and focus/pointer handlers attach.
+  const badge = renderStageBadge({
+    stage,
+    currentStage,
+    hasTooltip: Boolean(tooltip),
+  });
 
   return tooltip ? (
     <Tooltip content={tooltip} delayDuration={200} sideOffset={4} side="left">
@@ -82,7 +81,7 @@ function InvestmentStage({
   );
 }
 
-function StageBadge({
+function renderStageBadge({
   stage,
   currentStage,
   hasTooltip,

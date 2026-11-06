@@ -15,7 +15,7 @@ export const companyDetails: Record<
   invision: {
     role: "Product Design",
     description:
-      "I spent nearly five years working on InVision Studio, from its inception through launch. I joined after the Easee acquisition, when almost nothing had been built, and led design for prototyping and motion. I designed and built features too, from a color picker to an update window that introduced users to the people behind Studio.",
+      "I spent nearly five years working on InVision Studio, from its inception through launch. I joined after the [Easee](/work/easee) acquisition to lead design on the prototyping and motion initiatives.",
   },
   gifmock: {
     role: "Founder",

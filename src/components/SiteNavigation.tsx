@@ -35,7 +35,11 @@ type TransitionDocument = Document & {
 };
 type Navigate = (
   href: string,
-  options?: { source?: HTMLElement | null; animate?: boolean }
+  options?: {
+    source?: HTMLElement | null;
+    animate?: boolean;
+    scrollToContent?: boolean;
+  }
 ) => boolean;
 const Navigation = createContext<{
   navigate: Navigate;
@@ -71,6 +75,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pending = useRef<{
     destination: URL;
+    scrollToContent?: boolean;
     scroll?: { pane: number; window: number };
     finish: () => void;
   } | null>(null);
@@ -127,6 +132,16 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
     } else if (destination.pathname.startsWith("/work/")) {
       window.scrollTo({ top: 0, behavior: "instant" });
     }
+    if (navigation.scrollToContent) {
+      const pane = document.querySelector<HTMLElement>("[data-site-content]");
+      if (pane) pane.scrollTop = 0;
+      // Use the actual content boundary, including the mobile portrait offset.
+      const top =
+        pane && window.matchMedia("(max-width: 767px)").matches
+          ? window.scrollY + pane.getBoundingClientRect().top
+          : 0;
+      window.scrollTo({ top, behavior: "instant" });
+    }
     images.current?.selectDestination();
     fallback.current?.prepareDestination();
     if (images.current || fallback.current) await decodeVisibleImages();
@@ -147,7 +162,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
   );
 
   const navigate = useCallback<Navigate>(
-    (href, { source, animate = true } = {}) => {
+    (href, { source, animate = true, scrollToContent = false } = {}) => {
       const doc = document as TransitionDocument;
       const destination = new URL(href, location.href);
       if (destination.origin !== location.origin) return false;
@@ -207,6 +222,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
           }, 8000);
           pending.current = {
             destination,
+            scrollToContent,
             scroll,
             finish: () => {
               window.clearTimeout(timeout);

@@ -63,7 +63,7 @@ export default function WorkPageSelect() {
   return (
     <Select.Root
       value="/work"
-      onValueChange={(href) => navigate(href)}
+      onValueChange={(href) => navigate(href, { scrollToContent: true })}
       onOpenChange={syncTypography}
     >
       <Select.Trigger

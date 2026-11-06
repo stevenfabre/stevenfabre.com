@@ -1,0 +1,12 @@
+.control {
+  padding-inline: 8px;
+  margin-inline: -8px;
+  border-radius: 6px;
+}
+.control:focus-visible {
+  outline: none;
+  background-color: #e5e5e5;
+}
+:global(.dark) .control:focus-visible {
+  background-color: #262626;
+}

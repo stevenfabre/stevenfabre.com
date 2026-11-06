@@ -31,11 +31,7 @@
   transform: translate(-50%, 75%);
 }
 
-.link:focus-visible {
-  outline: 2px solid #737373;
-  outline-offset: 2px;
-  border-radius: 2px;
-}
+
 
 .link:focus-visible .arrow {
   opacity: 1;

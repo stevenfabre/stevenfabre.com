@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type CSSProperties } from "react";
+import heading from "../../src/components/HeadingControl.module.css";
 import * as Select from "@radix-ui/react-select";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
@@ -38,7 +39,7 @@ export default function WorkPageSelect() {
       <Select.Trigger
         ref={trigger}
         aria-label="Page: Work"
-        className="group inline-flex cursor-pointer items-center gap-2 rounded-sm text-left outline-offset-2 focus-visible:outline-2 focus-visible:outline-neutral-500"
+        className={`${heading.control} group inline-flex cursor-pointer items-center gap-2 text-left`}
       >
         <Select.Value>Work</Select.Value>
         <Select.Icon asChild>

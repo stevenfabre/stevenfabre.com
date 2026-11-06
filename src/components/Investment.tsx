@@ -93,8 +93,8 @@ function StageBadge({
 }) {
   return (
     <span
-      className="group inline-flex shrink-0"
-      tabIndex={0}
+      className="group inline-flex shrink-0 focus-visible:outline-none"
+      tabIndex={hasTooltip ? 0 : undefined}
     >
       <span
         className={`uppercase text-xs tracking-wider inline-flex font-medium text-neutral-500 border border-neutral-200 dark:border-neutral-800 px-1 py-0.5 rounded shrink-0 cursor-default ${

@@ -29,7 +29,7 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
     ref
   ) {
     const classes = cx(
-      "inline-flex h-10 shrink-0 items-center justify-center rounded-md text-neutral-500 no-underline transition-colors duration-150 [-webkit-tap-highlight-color:transparent] hover:bg-neutral-200 focus:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 dark:focus-visible:outline-neutral-100 sm:h-8 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800",
+      "inline-flex h-10 shrink-0 items-center justify-center rounded-md text-neutral-500 no-underline transition-colors duration-150 [-webkit-tap-highlight-color:transparent] hover:bg-neutral-200 focus:bg-neutral-200 focus-visible:outline-none sm:h-8 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800",
       appearance === "ghost" &&
         "hover:text-neutral-900 focus:text-neutral-900 dark:hover:text-neutral-100 dark:focus:text-neutral-100",
       variant === "icon"

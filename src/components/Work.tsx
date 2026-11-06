@@ -1,3 +1,4 @@
+import heading from "./HeadingControl.module.css";
 import Icon from "./Icon";
 import Experience, { ExperienceProps } from "./Experience";
 import { SiteLink } from "./SiteNavigation";
@@ -80,7 +81,7 @@ export default function Work() {
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
         <SiteLink
           href="/work"
-          className="group inline-flex items-center gap-1.5 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          className={`${heading.control} group inline-flex items-center gap-1.5`}
         >
           Work
           <span

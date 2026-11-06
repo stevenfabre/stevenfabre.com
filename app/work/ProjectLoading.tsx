@@ -11,7 +11,6 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
   const { slug } = useParams<{ slug: string }>();
   const index = projects.findIndex((project) => project.slug === slug);
   const project = projects[index];
-  const line = "rounded-sm bg-neutral-900/5 dark:bg-white/5";
 
   return (
     <div className={styles.page} aria-busy="true">
@@ -26,24 +25,33 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
       )}
       <main className="w-full flex-1">
         <div className="h-[var(--visual-height)]" aria-hidden="true" />
-        <div className="mx-auto mt-16 w-full max-w-[var(--caption-width)] lg:grid lg:grid-cols-[180px_minmax(0,1fr)] lg:items-start lg:gap-x-8 max-[520px]:w-[calc(100%-8px)]">
-          <div aria-hidden="true" className="lg:col-start-2 lg:row-start-1">
-            <div className="mb-4 flex h-7 items-center xl:h-8">
-              <div className={`${line} h-4 w-44`} />
+        <div className="mx-auto mt-16 w-full max-w-[var(--caption-width)] leading-relaxed lg:grid lg:grid-cols-[180px_minmax(0,1fr)] lg:items-start lg:gap-x-8 max-[520px]:w-[calc(100%-8px)]">
+          <div
+            aria-hidden="true"
+            className="text-lg text-[var(--muted)] lg:col-start-2 lg:row-start-1"
+          >
+            <div className="mb-4 text-lg font-semibold leading-relaxed text-[var(--ink)] xl:text-xl">
+              <SkeletonLine width="w-44" />
             </div>
-            <div className="space-y-3 pt-1.5">
-              <div className={`${line} h-4 w-full`} />
-              <div className={`${line} h-4 w-full`} />
-              <div className={`${line} h-4 w-3/4`} />
+            <div>
+              <SkeletonLine />
+              <SkeletonLine />
+              <SkeletonLine width="w-3/4" />
             </div>
           </div>
           <div
             aria-hidden="true"
-            className="mt-8 space-y-2 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:pt-1 xl:pt-1.5"
+            className="mt-8 text-sm leading-relaxed text-[var(--muted)] [&>p+p]:mt-0.5 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:pt-1 xl:pt-1.5"
           >
-            <div className={`${line} h-3.5 w-24`} />
-            <div className={`${line} h-3.5 w-32`} />
-            <div className={`${line} h-3.5 w-20`} />
+            <p className="font-medium text-[var(--ink)]">
+              <SkeletonLine width="w-24" />
+            </p>
+            <p>
+              <SkeletonLine width="w-32" />
+            </p>
+            <p className="opacity-70">
+              <SkeletonLine width="w-20" />
+            </p>
           </div>
         </div>
         <span role="status" className="sr-only">
@@ -51,5 +59,18 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
         </span>
       </main>
     </div>
+  );
+}
+
+// A baseline-aligned 1ex rectangle matches the font's lowercase x-height.
+// The zero-width space preserves the same line box as the eventual text.
+function SkeletonLine({ width = "w-full" }: { width?: string }) {
+  return (
+    <span className="block">
+      {"\u200b"}
+      <span
+        className={`inline-block h-[1ex] align-baseline rounded-sm bg-current opacity-10 ${width}`}
+      />
+    </span>
   );
 }

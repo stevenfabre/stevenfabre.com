@@ -123,7 +123,7 @@ export default function ProjectSlideshow({
     const lockScroll = (event: TouchEvent) => {
       const gesture = swipe.current;
       const touch = event.touches[0];
-      if (!gesture || !touch) return;
+      if (!gesture || event.touches.length !== 1 || !touch) return;
       const dx = touch.clientX - gesture.x;
       const dy = touch.clientY - gesture.y;
       if (
@@ -235,11 +235,11 @@ export default function ProjectSlideshow({
         }`}
       >
         <div
-          className="absolute inset-0 touch-pan-y"
+          className="absolute inset-0 touch-pan-y touch-pinch-zoom"
           onPointerDown={(event) => {
             if (event.pointerType !== "touch" || images.length < 2) return;
             if (!event.isPrimary) {
-              settle(0);
+              if (swipe.current) settle(0);
               return;
             }
             sequence.current++;
@@ -270,7 +270,11 @@ export default function ProjectSlideshow({
             const dx = event.clientX - gesture.x;
             const dy = event.clientY - gesture.y;
             if (!gesture.horizontal) {
-              if (Math.abs(dx) < 8 || Math.abs(dx) <= Math.abs(dy)) return;
+              if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
+              if (Math.abs(dy) >= Math.abs(dx)) {
+                settle(0);
+                return;
+              }
               gesture.horizontal = true;
               event.currentTarget.setPointerCapture(event.pointerId);
               setSwiping(true);
@@ -288,11 +292,13 @@ export default function ProjectSlideshow({
             const gesture = swipe.current;
             if (!gesture || gesture.id !== event.pointerId) return;
             const velocity =
-              event.timeStamp - gesture.lastTime > 80 ? 0 : gesture.velocity;
+              event.timeStamp - gesture.lastTime < 100 ? gesture.velocity : 0;
             settle(
               gesture.horizontal
                 ? swipeDestination(
-                    offset.current,
+                    // Catching a returning spring must not give a short drag
+                    // a head start toward selecting another photo.
+                    event.clientX - gesture.x,
                     velocity,
                     event.currentTarget.clientWidth
                   )
@@ -300,11 +306,18 @@ export default function ProjectSlideshow({
               velocity
             );
           }}
-          onPointerCancel={() => {
-            if (swipe.current) settle(0);
+          onPointerCancel={(event) => {
+            if (swipe.current?.id === event.pointerId) settle(0);
           }}
-          onLostPointerCapture={() => {
-            if (swipe.current) settle(0);
+          onLostPointerCapture={(event) => {
+            // Touch initially captures the image. Transferring capture to
+            // this viewport bubbles a capture-loss event from that image;
+            // only losing the viewport's own capture cancels the swipe.
+            if (
+              event.target === event.currentTarget &&
+              swipe.current?.id === event.pointerId
+            )
+              settle(0);
           }}
         >
           <div ref={track} className="absolute inset-0">

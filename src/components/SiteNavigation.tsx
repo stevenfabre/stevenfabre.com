@@ -220,6 +220,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       }
       const shouldAnimate =
         animate &&
+        !(pathname === "/" && destination.pathname === "/work") &&
         !(
           pathname.startsWith("/work/") &&
           destination.pathname.startsWith("/work/")

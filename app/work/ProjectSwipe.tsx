@@ -87,6 +87,30 @@ export default function ProjectSwipe({
   );
 
   useEffect(() => {
+    const element = viewport.current;
+    if (!element) return;
+
+    // Pointer capture alone doesn't stop Safari taking over for page scrolling.
+    // Cancel native panning once horizontal intent is established, including
+    // the first touchmove, while leaving vertical drags and pinch zoom native.
+    const lockHorizontalSwipe = (event: TouchEvent) => {
+      const current = gesture.current;
+      if (!current || event.touches.length !== 1) return;
+      const touch = event.touches[0];
+      const dx = Math.abs(touch.clientX - current.startX);
+      const dy = Math.abs(touch.clientY - current.startY);
+      if (event.cancelable && (current.horizontal || (dx >= 8 && dx > dy)))
+        event.preventDefault();
+    };
+
+    element.addEventListener("touchmove", lockHorizontalSwipe, {
+      passive: false,
+    });
+    return () => element.removeEventListener("touchmove", lockHorizontalSwipe);
+  }, []);
+
+  useEffect(() => {
+    let viewportWidth = window.innerWidth;
     const interrupt = () => {
       if (!gesture.current && !committed.current && position.current === 0)
         return;
@@ -106,14 +130,21 @@ export default function ProjectSwipe({
       )
         interrupt();
     };
+    const resize = () => {
+      // Safari's browser chrome can change viewport height mid-gesture.
+      // Only a width change invalidates our horizontal swipe geometry.
+      if (window.innerWidth === viewportWidth) return;
+      viewportWidth = window.innerWidth;
+      interrupt();
+    };
     document.addEventListener("pointerdown", outside, true);
     window.addEventListener("keydown", interrupt, true);
-    window.addEventListener("resize", interrupt);
+    window.addEventListener("resize", resize);
     window.addEventListener("blur", interrupt);
     return () => {
       document.removeEventListener("pointerdown", outside, true);
       window.removeEventListener("keydown", interrupt, true);
-      window.removeEventListener("resize", interrupt);
+      window.removeEventListener("resize", resize);
       window.removeEventListener("blur", interrupt);
     };
   }, []);

@@ -321,7 +321,7 @@ export const films: Record<string, Film> = {
     introduction:
       "RAISE Summit, a major AI conference, was taking place at the Louvre. To celebrate Liveblocks 3.0 and reach that audience, I imagined turning the pyramid into a giant screen. I worked on the concept, art direction, and marketing campaign, with Mike Slater creating the films in 3D and VFX.",
     paragraphs: [
-      "We released them during RAISE Summit in Paris. Turner Novak, Soleio, and Almonk shared different versions, and Complex picked up the campaign a couple of days later. The films below show how the idea traveled, from our launch to other people sharing it.",
+      "We released them during RAISE Summit in Paris. Turner Novak, Soleio, and Almonk shared different versions, and Complex picked up the campaign a couple of days later. Together, the posts generated millions of views. The films below show how the idea traveled, from our launch to other people sharing it.",
     ],
     context: [],
     contribution: "",

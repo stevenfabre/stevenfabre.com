@@ -314,10 +314,12 @@ function PreviewFrame({
 
 export function WorkPreviewLink({
   company,
+  label = company,
   children,
   className,
 }: {
   company: string;
+  label?: string;
   children: ReactNode;
   className?: string;
 }) {
@@ -330,7 +332,7 @@ export function WorkPreviewLink({
       className={className}
       href={project.href}
       clientNavigation
-      aria-label={`View ${company} work`}
+      aria-label={`View ${label} work`}
       onPointerEnter={(event) => {
         if (
           event.pointerType !== "mouse" ||
@@ -356,7 +358,7 @@ export function WorkPreviewLink({
         // Keep the shared visual mounted until the old snapshot is captured.
       }}
     >
-      {company}
+      {label}
     </CompanyLink>
   );
 }

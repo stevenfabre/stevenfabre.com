@@ -5,27 +5,27 @@ export const companyDetails: Record<
   liveblocks: {
     role: "Co-founder & CEO",
     description:
-      "I co-founded Liveblocks to help teams build collaborative software. I’ve raised funding, hired and managed our engineering and design team, and stayed close to the work through design, code, and art direction.",
+      "I co-founded Liveblocks to help teams build collaborative software and grew the business from zero to multiple millions in annual recurring revenue. Along the way, I raised over $10M and built the team, systems, and culture to grow without compromising on quality.",
   },
   messenger: {
     role: "Product Design",
     description:
-      "At Meta, I worked on design systems for Messenger. I designed and built Chat Builder in Figma to help our designers put together realistic conversations, then made a film to introduce it to the team.",
+      "At Meta, I worked on design systems for Messenger. One of my projects was Chat Builder, a Figma plugin I designed and built to generate all the layers needed to recreate realistic conversations across any breakpoint or device.",
   },
   invision: {
     role: "Product Design",
     description:
-      "I spent nearly five years on InVision Studio, leading design for prototyping and motion. I designed and built features too, from a color picker to an update window that introduced users to the people behind Studio.",
+      "I spent nearly five years working on InVision Studio, from its inception through launch. I joined after the Easee acquisition, when almost nothing had been built, and led design for prototyping and motion. I designed and built features too, from a color picker to an update window that introduced users to the people behind Studio.",
   },
   gifmock: {
     role: "Founder",
     description:
-      "I designed and built Gifmock to help designers turn their work into high-quality GIFs. I ran the business too, looking after the editing experience, launch videos, and updates as the tools around it changed.",
+      "I designed and built Gifmock to help designers create high-quality GIFs. I ran the business too, looking after the editing experience, launch videos, and updates as the tools around it changed.",
   },
   easee: {
     role: "Founder",
     description:
-      "I started Easee on nights and weekends to help designers make web animations without writing code. I built the product, brand, and business around it, before Easee was acquired by InVision in 2016.",
+      "I started Easee on nights and weekends to help designers make web animations without writing code. I built the product, brand, and business around it, before Easee was acquired by [InVision](/work/invision-studio) in 2016.",
   },
   "campaign-monitor": {
     role: "Product Design",
@@ -179,10 +179,10 @@ export const films: Record<string, Film> = {
       "Art direction",
     ],
     introduction:
-      "I met my co-founder Guillaume at InVision, where we shared a love of building creative tools. We started working on a collaborative presentation tool, but kept running into the same problem: the multiplayer infrastructure we needed was difficult to put together.",
+      "I met my co-founder Guillaume at [InVision](/work/invision-studio), where we shared a love of building creative tools. We started working on a collaborative presentation tool, but kept running into the same problem: the multiplayer infrastructure we needed was difficult to put together.",
     paragraphs: [
       "We built our own, then realized that other teams were dealing with the same thing. So we set the presentation tool aside and turned that infrastructure into Liveblocks. We launched in 2021 to help software teams bring real-time collaboration to their products.",
-      "As co-founder and CEO, I’ve raised funding, hired and managed a world-class engineering and design team, and helped shape both the product and the company around it. A lot of my work is making sure we’re building the right things and giving people the context and room to do their best work.",
+      "As co-founder and CEO, I raised over $10M and grew the business from zero to multiple millions in annual recurring revenue. At its peak, our team was 15 people. I interviewed and helped hire everyone, and managed up to 10 people directly. I designed the systems and culture that let us grow while keeping a high bar for quality. My rule is simple: only ship something you’re proud to put your name on.",
       "I still love making things myself. I design, write code, and art direct projects alongside the team. I care about the details of what we ship, and about building a company where other people care about them too.",
     ],
     context: [],
@@ -204,7 +204,7 @@ export const films: Record<string, Film> = {
     aspectRatio: "3 / 2",
     contributions: ["Art direction"],
     introduction:
-      "I led the art direction for the Liveblocks homepage redesign. Marc Bouchenoire did the design and engineering, building it in Three.js. The hero is a multiplayer game that visitors can play together, alongside AI agents.",
+      "Liveblocks enables multiplayer experiences, so we wanted the homepage to let people experience that firsthand. Show, don’t tell: we created a 3D multiplayer game that visitors can play together, alongside AI agents. I led the art direction, and Marc Bouchenoire designed and built it in Three.js.",
     paragraphs: [
       "The shapes have live reflections, and there’s an Easter egg further down the page: drop in an SVG and it becomes a shape you can play with. I like that the page gives people something to try while introducing what Liveblocks makes possible.",
     ],
@@ -298,7 +298,7 @@ export const films: Record<string, Film> = {
         title: "Next.js Template Week on launch day",
         aspectRatio: "1544 / 1080",
         caption:
-          "The first template goes live: a Linear-like issue tracker. September 17, 2024.",
+          "The page pairs each template with a countdown. As a new template is revealed, its preview and launch link replace the countdown, inviting visitors to explore what they can build. Here, the first reveal introduces a Linear-like issue tracker.",
         source: "https://x.com/stevenfabre/status/1836058063503016157",
       },
     ],
@@ -312,7 +312,7 @@ export const films: Record<string, Film> = {
     aspectRatio: "9 / 16",
     contributions: ["Concept", "Art direction", "Marketing campaign"],
     introduction:
-      "To celebrate Liveblocks 3.0, I had an idea: what if the Louvre pyramid became a giant screen? I worked on the concept, art direction, and marketing campaign, with Mike Slater creating the films in 3D and VFX.",
+      "RAISE Summit, a major AI conference, was taking place at the Louvre. To celebrate Liveblocks 3.0 and reach that audience, I imagined turning the pyramid into a giant screen. I worked on the concept, art direction, and marketing campaign, with Mike Slater creating the films in 3D and VFX.",
     paragraphs: [
       "We released them during RAISE Summit in Paris. Turner Novak, Soleio, and Almonk shared different versions, and Complex picked up the campaign a couple of days later. The films below show how the idea traveled, from our launch to other people sharing it.",
     ],
@@ -435,7 +435,7 @@ export const films: Record<string, Film> = {
       {
         name: "Pierre Le Vaillant",
         avatar: "/work/collaborators/pierre-levaillant.jpg",
-        role: "Brand design & execution",
+        role: "Brand design",
         href: "https://x.com/levaillantp",
       },
     ],
@@ -567,9 +567,8 @@ export const films: Record<string, Film> = {
     aspectRatio: "16 / 9",
     contributions: ["Design leadership", "Prototyping", "Motion design"],
     introduction:
-      "I joined InVision when it acquired [Easee](/work/easee), the animation tool I’d been building. At the time, designing a product meant moving between tools: Sketch or Photoshop for screens, InVision for prototypes, another tool for animation, then handing it all to a developer.",
+      "InVision acquired my animation tool, [Easee](/work/easee), in 2016. I joined the team to help build Studio from the ground up. At the time, designing a product meant moving between tools: Sketch or Photoshop for screens, InVision for prototypes, another tool for animation, then handing it all to a developer.",
     paragraphs: [
-      "The film above was put together by Andy Orsow.",
       "Studio aimed to bring that workflow into one place. I worked on it for over four years, starting with a team of five that grew to more than 60 people.",
       "My main focus was prototyping and animation, building on the work I’d done with Easee. I led design for those features and built prototypes to work through how they should feel.",
       "I later led the cloud initiative: bringing Studio online and making it multiplayer, much like Figma. Working on that challenge eventually led me to start [Liveblocks](/work/building-liveblocks).",

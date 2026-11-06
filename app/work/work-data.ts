@@ -361,8 +361,8 @@ export const films: Record<string, Film> = {
     collaborators: [
       {
         name: "Mike Slater",
+        avatar: "/work/collaborators/mike-slater.png",
         role: "3D & VFX",
-        href: "https://mkslate.com/work/live-blocks",
       },
     ],
     gallery: [

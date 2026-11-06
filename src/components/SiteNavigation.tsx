@@ -47,6 +47,15 @@ const Navigation = createContext<{
   restoreContentScroll: () => boolean;
 } | null>(null);
 
+function scrollToAnchor(target: HTMLElement | null) {
+  // A company section can span several screens. "nearest" may align its
+  // bottom or leave it partly visible; company links should start at its title.
+  target?.scrollIntoView({
+    block: target.hasAttribute("data-work-company") ? "start" : "nearest",
+    behavior: "instant",
+  });
+}
+
 export function useSiteNavigation() {
   const context = useContext(Navigation);
   if (!context)
@@ -121,9 +130,9 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
           history.state?.portfolioScroll?.pathname !== href
         ) {
           try {
-            document
-              .getElementById(decodeURIComponent(location.hash.slice(1)))
-              ?.scrollIntoView({ block: "nearest", behavior: "instant" });
+            scrollToAnchor(
+              document.getElementById(decodeURIComponent(location.hash.slice(1)))
+            );
           } catch {
             /* Ignore malformed fragments. */
           }
@@ -149,7 +158,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
             bounds.top < 0 ||
             bounds.bottom > innerHeight
           ) {
-            target?.scrollIntoView({ block: "nearest", behavior: "instant" });
+            scrollToAnchor(target);
           }
         } catch {
           /* Ignore malformed fragments. */

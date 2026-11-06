@@ -25,8 +25,9 @@ export default function WorkPortfolio() {
       {companies.map((company) => (
         <section
           id={company.id}
+          data-work-company
           key={company.id}
-          className="scroll-mt-16 md:scroll-mt-24 pb-11 md:pb-16"
+          className="scroll-mt-6 pb-11 md:pb-16"
         >
           <header className="mb-7">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4">

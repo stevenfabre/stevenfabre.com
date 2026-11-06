@@ -25,3 +25,12 @@
 .viewport {
   padding: 6px;
 }
+@media (max-width: 767px) {
+  .viewport {
+    padding: 4px;
+  }
+  .item {
+    padding: 2px 6px;
+    line-height: 1.1;
+  }
+}

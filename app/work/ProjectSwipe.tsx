@@ -241,7 +241,9 @@ export default function ProjectSwipe({
       reset();
       return;
     }
-    const offset = current.origin + event.clientX - current.startX;
+    // Judge intent from this gesture alone. Catching a returning spring
+    // should not give a tiny new drag a head start toward navigation.
+    const offset = event.clientX - current.startX;
     // A held drag should not inherit the velocity of its last movement.
     const velocity =
       event.timeStamp - current.lastTime < 100 ? current.velocity : 0;

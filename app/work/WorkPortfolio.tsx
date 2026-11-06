@@ -29,7 +29,7 @@ export default function WorkPortfolio() {
             id={company.id}
             data-work-company
             key={company.id}
-            className="scroll-mt-11 pb-11 md:scroll-mt-16 md:pb-16"
+            className="scroll-mt-16 pb-16"
           >
             <header className="mb-7">
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4">

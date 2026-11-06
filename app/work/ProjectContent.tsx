@@ -5,7 +5,12 @@ import ProjectSlideshow from "./ProjectSlideshow";
 import ResponsibilityIcon from "./ResponsibilityIcon";
 import BeforeAfter from "./BeforeAfter";
 import { ProjectTextPreviews, renderProjectText } from "./ProjectText";
-import { type Film, type Slideshow, companies, companyDetails } from "./work-data";
+import {
+  type Film,
+  type Slideshow,
+  companies,
+  companyDetails,
+} from "./work-data";
 import ProjectVideo from "./ProjectVideo";
 import ProjectImage from "./ProjectImage";
 import ProjectGallery from "./ProjectGallery";
@@ -70,10 +75,36 @@ export default function ProjectContent({
               <p>{renderProjectText(film.introduction)}</p>
               {film.paragraphs?.map((paragraph, index) => (
                 <Fragment key={paragraph}>
+                  {film.youtube &&
+                    index === (film.paragraphs?.length ?? 0) - 1 && (
+                      <figure className="mt-8">
+                        {preview ? (
+                          // Swipe neighbors are inert visual copies, never active players.
+                          <div className="aspect-video w-full" />
+                        ) : (
+                          <ProjectYouTube {...film.youtube} />
+                        )}
+                        <figcaption className="mt-3 text-sm text-[var(--muted)]">
+                          <HeadingLink
+                            iconSize={12}
+                            className="[--link-arrow-opacity:1] opacity-70 transition-colors hover:text-neutral-950 hover:opacity-100 focus-visible:text-neutral-950 focus-visible:opacity-100 dark:hover:text-neutral-50 dark:focus-visible:text-neutral-50"
+                            href={`https://www.youtube.com/watch?v=${film.youtube.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {film.youtube.title}
+                          </HeadingLink>
+                        </figcaption>
+                      </figure>
+                    )}
                   <p className="mt-6">{renderProjectText(paragraph)}</p>
-                  {film.slideshow && film.slideshowAfterParagraph === index + 2 && (
-                    <SlideshowContent slideshow={film.slideshow} preview={preview} />
-                  )}
+                  {film.slideshow &&
+                    film.slideshowAfterParagraph === index + 2 && (
+                      <SlideshowContent
+                        slideshow={film.slideshow}
+                        preview={preview}
+                      />
+                    )}
                 </Fragment>
               ))}
               {film.contribution && <p className="mt-6">{film.contribution}</p>}
@@ -107,27 +138,11 @@ export default function ProjectContent({
                   {renderProjectText(paragraph)}
                 </p>
               ))}
-              {film.slideshow && film.slideshowAfterParagraph == null && <SlideshowContent slideshow={film.slideshow} preview={preview} />}
-              {film.youtube && (
-                <figure className="mt-8">
-                  {preview ? (
-                    // Swipe neighbors are inert visual copies, never active players.
-                    <div className="aspect-video w-full" />
-                  ) : (
-                    <ProjectYouTube {...film.youtube} />
-                  )}
-                  <figcaption className="mt-3 text-sm text-[var(--muted)]">
-                    <HeadingLink
-                      iconSize={12}
-                      className="[--link-arrow-opacity:1] opacity-70 transition-colors hover:text-neutral-950 hover:opacity-100 focus-visible:text-neutral-950 focus-visible:opacity-100 dark:hover:text-neutral-50 dark:focus-visible:text-neutral-50"
-                      href={`https://www.youtube.com/watch?v=${film.youtube.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {film.youtube.title}
-                    </HeadingLink>
-                  </figcaption>
-                </figure>
+              {film.slideshow && film.slideshowAfterParagraph == null && (
+                <SlideshowContent
+                  slideshow={film.slideshow}
+                  preview={preview}
+                />
               )}
               {film.collaborators && (
                 <Collaborators people={film.collaborators} />
@@ -188,7 +203,11 @@ function SlideshowContent({
   if (!image) return null;
   return (
     <figure className="mt-8">
-      <div className={`relative overflow-hidden rounded-lg ${slideshow.thumbnails ? "aspect-[3/2]" : "aspect-[65/32]"}`}>
+      <div
+        className={`relative overflow-hidden rounded-lg ${
+          slideshow.thumbnails ? "aspect-[3/2]" : "aspect-[65/32]"
+        }`}
+      >
         <Image
           src={image.src}
           alt=""

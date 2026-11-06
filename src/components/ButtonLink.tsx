@@ -43,7 +43,7 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
           ? "pl-2.5 pr-3.5"
           : "pl-3 pr-4"),
       appearance === "raised" &&
-        "rounded-[9px] border border-black/[0.08] bg-white text-neutral-700 shadow-[0_1px_2px_#0000000a,0_3px_6px_-3px_#0000001a] transition-[background-color,box-shadow] duration-120 hover:bg-neutral-50 focus-visible:bg-neutral-200 active:bg-neutral-100 active:shadow-[0_1px_2px_#00000008] active:duration-60 dark:border-white/[0.09] dark:border-t-white/[0.13] dark:bg-[#242424] dark:text-neutral-200 dark:shadow-[0_1px_2px_#00000033,0_3px_6px_-3px_#0000003d] dark:hover:bg-[#2c2c2c] dark:focus-visible:bg-neutral-700 dark:active:bg-[#202020] dark:active:shadow-[0_1px_2px_#00000024]",
+        "rounded-lg border border-black/8 bg-white text-neutral-700 shadow-raised transition-[background-color,box-shadow] duration-120 hover:bg-neutral-50 focus-visible:bg-neutral-200 active:bg-neutral-100 active:shadow-pressed active:duration-60 dark:border-white/9 dark:border-t-white/13 dark:bg-[#242424] dark:text-neutral-200 dark:hover:bg-[#2c2c2c] dark:focus-visible:bg-neutral-700 dark:active:bg-[#202020]",
       className
     );
     if (clientNavigation && href) {

@@ -1,10 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState, type CSSProperties } from "react";
-import {
-  headingControl,
-  popoverSurface,
-} from "../../src/components/controlStyles";
+import { headingControl } from "../../src/components/HeadingLink";
 import * as Select from "@radix-ui/react-select";
 import { ChevronsUpDown } from "lucide-react";
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
@@ -107,7 +104,7 @@ export default function WorkPageSelect() {
             });
           }}
           style={typography}
-          className={`${popoverSurface} z-50 overflow-hidden outline-none`}
+          className="surface-popover z-50 overflow-hidden outline-none"
         >
           <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
             {pages.map(({ label, href }) => (

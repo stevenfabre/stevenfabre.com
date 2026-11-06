@@ -9,3 +9,29 @@ body {
 ::selection {
   @apply bg-neutral-300 text-neutral-950 dark:bg-neutral-700 dark:text-neutral-50;
 }
+
+/* Shared surface tokens; components own their interaction and layout styles. */
+@theme inline {
+  --shadow-popover: var(--surface-popover-shadow);
+  --shadow-raised: var(--surface-raised-shadow);
+  --shadow-pressed: var(--surface-pressed-shadow);
+  --shadow-post: var(--surface-post-shadow);
+}
+
+:root {
+  --surface-popover-shadow: 0 8px 16px #00000006, 0 20px 48px #0000001a;
+  --surface-raised-shadow: 0 1px 2px #0000000a, 0 3px 6px -3px #0000001a;
+  --surface-pressed-shadow: 0 1px 2px #00000008;
+  --surface-post-shadow: 0 2px 6px #00000005;
+}
+
+.dark {
+  --surface-popover-shadow: 0 20px 48px #00000066;
+  --surface-raised-shadow: 0 1px 2px #00000033, 0 3px 6px -3px #0000003d;
+  --surface-pressed-shadow: 0 1px 2px #00000024;
+  --surface-post-shadow: 0 2px 6px #0000001a;
+}
+
+@utility surface-popover {
+  @apply rounded-2xl bg-white shadow-popover dark:bg-neutral-800;
+}

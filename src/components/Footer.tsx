@@ -4,7 +4,7 @@ import Link from "next/link";
 import EmailLink from "./EmailLink";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { Tooltip } from "./Tooltip";
-import { iconControl } from "./controlStyles";
+import { iconControl } from "./buttonStyles";
 import cx from "../utils/cx";
 
 const socials = [

@@ -1,8 +1,5 @@
-import linkStyles from "./HeadingLink.module.css";
-import { headingLink } from "./controlStyles";
-import HeadingArrow from "./HeadingArrow";
+import HeadingLink from "./HeadingLink";
 import Experience, { ExperienceProps } from "./Experience";
-import { SiteLink } from "./SiteNavigation";
 
 const EXPERIENCES: ExperienceProps[] = [
   {
@@ -80,10 +77,9 @@ export default function Work() {
   return (
     <>
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
-        <SiteLink href="/work" className={`${headingLink} ${linkStyles.link}`}>
+        <HeadingLink href="/work" clientNavigation>
           Work
-          <HeadingArrow />
-        </SiteLink>
+        </HeadingLink>
       </h2>
       {experiences}
     </>

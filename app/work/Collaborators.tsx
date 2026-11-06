@@ -13,7 +13,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
       </h2>
       <ul className="flex flex-wrap gap-x-10 gap-y-4">
         {people.map((person) => (
-          <li className="grid gap-[3px]" key={person.name}>
+          <li className="grid gap-1" key={person.name}>
             <span className="font-medium text-[var(--ink)]">
               {person.href ? (
                 <ExternalLink href={person.href} iconSize={13}>

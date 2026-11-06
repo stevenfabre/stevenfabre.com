@@ -1,6 +1,6 @@
 "use client";
 
-import { iconControl } from "./controlStyles";
+import { iconControl } from "./buttonStyles";
 import Icon from "./Icon";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";

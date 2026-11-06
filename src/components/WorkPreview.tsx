@@ -1,7 +1,6 @@
 "use client";
 
 import { saveVideoPlayback } from "../utils/videoPlayback";
-import { popoverSurface } from "./controlStyles";
 import {
   createContext,
   useCallback,
@@ -170,7 +169,7 @@ export function WorkPreviewProvider({
         createPortal(
           <div ref={position} className={styles.position} aria-hidden="true">
             <div
-              className={`${popoverSurface} ${styles.card}`}
+              className={`surface-popover ${styles.card}`}
               data-open={selection?.open || false}
               data-keyboard={selection?.keyboard || false}
             >

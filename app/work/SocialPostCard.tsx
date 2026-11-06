@@ -36,7 +36,7 @@ export default function SocialPostCard({
       id={id}
       className={cx(
         className,
-        "rounded-[14px] border border-[var(--media-border)] bg-white p-4 shadow-[0_2px_6px_#00000005] dark:bg-[#141414] dark:shadow-[0_2px_6px_#0000001a]",
+        "rounded-2xl border border-[var(--media-border)] bg-white p-4 shadow-post dark:bg-[#141414]",
         instagram && styles.instagram
       )}
       style={style}

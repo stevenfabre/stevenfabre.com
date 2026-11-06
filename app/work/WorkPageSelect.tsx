@@ -138,33 +138,41 @@ export default function WorkPageSelect() {
   );
 }
 
-// Keep Radix’s alignment and measurement on a stationary wrapper. Only the
-// visual surface follows the pointer, so its movement cannot feed back into
-// pointer coordinates or shift the initial alignment with the heading.
+// Measure a stationary wrapper so neither layer's movement feeds back into
+// pointer coordinates or shifts the initial alignment with the heading.
 function MenuSurface({ children }: { children: ReactNode }) {
   const reducedMotion = useReducedMotion();
+  const backgroundX = useMotionValue(0);
+  const backgroundY = useMotionValue(0);
   const y = useMotionValue(0);
   const reset = () => {
     const transition = { type: "spring" as const, duration: 0.3, bounce: 0.3 };
     animate(y, 0, transition);
+    animate(backgroundX, 0, { ...transition, duration: 0.25 });
+    animate(backgroundY, 0, { ...transition, duration: 0.25 });
   };
   useEffect(() => {
     // Radix can focus the listbox outside this surface before an item.
     const stop = () => {
       y.jump(0);
+      backgroundX.jump(0);
+      backgroundY.jump(0);
     };
     document.addEventListener("keydown", stop);
     return () => {
       document.removeEventListener("keydown", stop);
       y.stop();
+      backgroundX.stop();
+      backgroundY.stop();
     };
-  }, [y]);
+  }, [y, backgroundX, backgroundY]);
   // As displacement increases, resistance grows smoothly toward a 10px limit.
   const resist = (distance: number) =>
     (distance * 10) / (100 + Math.abs(distance));
 
   return (
     <div
+      className="relative isolate"
       onPointerMove={(event) => {
         if (
           reducedMotion ||
@@ -174,24 +182,31 @@ function MenuSurface({ children }: { children: ReactNode }) {
         )
           return;
         const bounds = event.currentTarget.getBoundingClientRect();
+        const offsetX = resist(event.clientX - bounds.left - bounds.width / 2);
+        const offsetY = resist(event.clientY - bounds.top - bounds.height / 2);
         const transition = {
           type: "spring" as const,
           duration: 0.3,
           bounce: 0,
         };
-        animate(
-          y,
-          resist(event.clientY - bounds.top - bounds.height / 2),
-          transition
-        );
+        animate(y, offsetY, transition);
+        // The surface responds sooner and travels a little farther than the text.
+        const surfaceTransition = { ...transition, duration: 0.2 };
+        animate(backgroundX, offsetX * 1.35, surfaceTransition);
+        animate(backgroundY, offsetY * 1.35, surfaceTransition);
       }}
       onPointerLeave={reset}
       onPointerCancel={reset}
     >
       <motion.div
-        className="surface-popover overflow-hidden"
-        style={{ y: reducedMotion ? 0 : y }}
-      >
+        aria-hidden="true"
+        className="surface-popover pointer-events-none absolute inset-0"
+        style={{
+          x: reducedMotion ? 0 : backgroundX,
+          y: reducedMotion ? 0 : backgroundY,
+        }}
+      />
+      <motion.div className="relative" style={{ y: reducedMotion ? 0 : y }}>
         {children}
       </motion.div>
     </div>

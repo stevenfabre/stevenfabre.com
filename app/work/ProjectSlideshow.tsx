@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import HorizontalScroll from "../../src/components/HorizontalScroll";
+import { Tooltip } from "../../src/components/Tooltip";
 import Icon from "../../src/components/Icon";
 import { iconControl } from "../../src/components/buttonStyles";
 
@@ -180,49 +181,55 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
           ))}
         </div>
         <div className="flex h-lh shrink-0 items-center gap-px">
-          <button
-            type="button"
-            className={iconControl}
-            aria-label={
-              rotationEnabled ? "Pause slideshow" : "Resume slideshow"
-            }
-            onPointerDown={() => {
-              // Remember intent before focusing the button pauses rotation.
-              pointerAction.current = rotationEnabled;
-            }}
-            onPointerCancel={() => {
-              pointerAction.current = null;
-            }}
-            onClick={(event) => {
-              const pause =
-                event.detail !== 0
-                  ? pointerAction.current ?? rotationEnabled
-                  : rotationEnabled;
-              pointerAction.current = null;
-              setPaused(pause);
-              if (!pause) setExplicitPlay(true);
-            }}
-          >
-            <Icon name={rotationEnabled ? "pause" : "play"} />
-          </button>
-          <button
-            type="button"
-            className={iconControl}
-            aria-label="Previous image"
-            onClick={() =>
-              setIndex((index + images.length - 1) % images.length)
-            }
-          >
-            <Icon name="chevron-left" />
-          </button>
-          <button
-            type="button"
-            className={iconControl}
-            aria-label="Next image"
-            onClick={() => setIndex((index + 1) % images.length)}
-          >
-            <Icon name="chevron-right" />
-          </button>
+          <Tooltip content={rotationEnabled ? "Pause" : "Play"}>
+            <button
+              type="button"
+              className={iconControl}
+              aria-label={
+                rotationEnabled ? "Pause slideshow" : "Resume slideshow"
+              }
+              onPointerDown={() => {
+                // Remember intent before focusing the button pauses rotation.
+                pointerAction.current = rotationEnabled;
+              }}
+              onPointerCancel={() => {
+                pointerAction.current = null;
+              }}
+              onClick={(event) => {
+                const pause =
+                  event.detail !== 0
+                    ? pointerAction.current ?? rotationEnabled
+                    : rotationEnabled;
+                pointerAction.current = null;
+                setPaused(pause);
+                if (!pause) setExplicitPlay(true);
+              }}
+            >
+              <Icon name={rotationEnabled ? "pause" : "play"} />
+            </button>
+          </Tooltip>
+          <Tooltip content="Previous">
+            <button
+              type="button"
+              className={iconControl}
+              aria-label="Previous image"
+              onClick={() =>
+                setIndex((index + images.length - 1) % images.length)
+              }
+            >
+              <Icon name="chevron-left" />
+            </button>
+          </Tooltip>
+          <Tooltip content="Next">
+            <button
+              type="button"
+              className={iconControl}
+              aria-label="Next image"
+              onClick={() => setIndex((index + 1) % images.length)}
+            >
+              <Icon name="chevron-right" />
+            </button>
+          </Tooltip>
         </div>
       </figcaption>
     </figure>

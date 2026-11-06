@@ -8,6 +8,14 @@
 [data-site-portrait] {
   view-transition-name: site-portrait;
 }
+@media (max-width: 767px) {
+  /* The content overlaps the fixed portrait on mobile. Extracting the photo
+     into a named snapshot lifts it above that content during the crossfade,
+     briefly exposing the covered part and looking like a scroll jump. */
+  [data-site-portrait] {
+    view-transition-name: none;
+  }
+}
 [data-site-footer] {
   view-transition-name: site-footer;
 }

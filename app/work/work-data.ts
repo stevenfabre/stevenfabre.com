@@ -545,13 +545,21 @@ export const films: Record<string, Film> = {
     file: "invision-studio",
     slug: "invision-studio",
     collaborators: [
-      { name: "Scott Savarie", role: "Product design" },
+      {
+        name: "Scott Savarie",
+        avatar: "/work/collaborators/scott-savarie.jpg",
+        role: "Product design",
+      },
       {
         name: "Tom Giannattasio",
         avatar: "/work/collaborators/tom-giannattasio.jpg",
         role: "Product design",
       },
-      { name: "Andy Orsow", role: "Video production" },
+      {
+        name: "Andy Orsow",
+        avatar: "/work/collaborators/andy-orsow.jpg",
+        role: "Video production",
+      },
     ],
     title: "InVision Studio",
     company: "invision",
@@ -732,7 +740,13 @@ export const films: Record<string, Film> = {
     ],
     context: [],
     contribution: "",
-    collaborators: [{ name: "Buzz Usborne", role: "Product design" }],
+    collaborators: [
+      {
+        name: "Buzz Usborne",
+        avatar: "/work/collaborators/buzz-usborne.jpg",
+        role: "Product design",
+      },
+    ],
     galleryLayout: "stack",
     gallery: [
       {
@@ -769,7 +783,13 @@ export const films: Record<string, Film> = {
     ],
     context: [],
     contribution: "",
-    collaborators: [{ name: "Bradley Rodgers", role: "Illustration" }],
+    collaborators: [
+      {
+        name: "Bradley Rodgers",
+        avatar: "/work/collaborators/bradley-rodgers.jpg",
+        role: "Illustration",
+      },
+    ],
   },
   campaignMonitorGallery: {
     kind: "image",
@@ -790,7 +810,13 @@ export const films: Record<string, Film> = {
     ],
     context: [],
     contribution: "",
-    collaborators: [{ name: "Buzz Usborne", role: "Product design" }],
+    collaborators: [
+      {
+        name: "Buzz Usborne",
+        avatar: "/work/collaborators/buzz-usborne.jpg",
+        role: "Product design",
+      },
+    ],
     galleryLayout: "stack",
     gallery: [
       {

@@ -25,10 +25,10 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
       )}
       <main className="w-full flex-1">
         <div className="h-[var(--visual-height)]" aria-hidden="true" />
-        <div className="mx-auto mt-16 w-full max-w-[var(--caption-width)] leading-relaxed lg:grid lg:grid-cols-[180px_minmax(0,1fr)] lg:items-start lg:gap-x-8 max-[520px]:w-[calc(100%-8px)]">
+        <div className="mx-auto mt-16 w-full max-w-[var(--caption-width)] leading-relaxed md:grid md:grid-cols-[180px_minmax(0,1fr)] md:items-start md:gap-x-8 max-[520px]:w-[calc(100%-8px)]">
           <div
             aria-hidden="true"
-            className="text-lg text-[var(--muted)] lg:col-start-2 lg:row-start-1"
+            className="@container text-lg text-[var(--muted)] md:col-start-2 md:row-start-1"
           >
             <div className="mb-4 text-lg font-semibold leading-relaxed text-[var(--ink)] xl:text-xl">
               <SkeletonLine width="w-44" />
@@ -41,7 +41,7 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
           </div>
           <div
             aria-hidden="true"
-            className="mt-8 text-sm leading-relaxed text-[var(--muted)] [&>p+p]:mt-0.5 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:pt-1 xl:pt-1.5"
+            className="mt-8 text-sm leading-relaxed text-[var(--muted)] [&>p+p]:mt-0.5 md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
           >
             <p className="font-medium text-[var(--ink)]">
               <SkeletonLine width="w-24" />

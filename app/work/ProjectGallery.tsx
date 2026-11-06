@@ -28,9 +28,9 @@ export default function ProjectGallery({
   return (
     <section
       className={cx(
-        "mt-12 grid w-full grid-cols-2 gap-x-6 gap-y-12 max-[520px]:mt-10 max-[520px]:grid-cols-1 max-[520px]:gap-8",
-        layout === "stack" && "grid-cols-1",
-        hasPosts && "items-start gap-6 max-[800px]:grid-cols-1"
+        "mt-12 grid w-full grid-cols-1 @2xl:grid-cols-2 gap-x-6 gap-y-12 max-[520px]:mt-10 max-[520px]:grid-cols-1 max-[520px]:gap-8",
+        layout === "stack" && "@2xl:grid-cols-1",
+        hasPosts && "items-start gap-6"
       )}
       data-layout={layout}
       data-posts={hasPosts || undefined}
@@ -82,7 +82,7 @@ export default function ProjectGallery({
           >
             {media}
             <figcaption className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
-              <p>{visual.caption || visual.title}</p>
+              <p className="opacity-70">{visual.caption || visual.title}</p>
               {visual.source && (
                 <div className="mt-2">
                   <ViewOnX href={visual.source} />

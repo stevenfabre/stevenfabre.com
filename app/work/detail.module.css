@@ -86,7 +86,7 @@
     --visual-height: max(0px, calc(100svh - var(--bar-height) - 10.5rem));
   }
 }
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .page {
     --caption-width: calc(180px + 32px + var(--text-width));
   }

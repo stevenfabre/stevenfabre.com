@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
 /** Native touch scrolling with mouse dragging; links remain clickable until a drag begins. */
 export default function HorizontalScroll({
@@ -14,10 +14,38 @@ export default function HorizontalScroll({
     null
   );
   const suppressClick = useRef(false);
+  const viewport = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const element = viewport.current;
+    if (!element) return;
+    const updateEdges = () => {
+      element.style.setProperty(
+        "--fade-left",
+        element.scrollLeft > 1 ? "24px" : "0px"
+      );
+      element.style.setProperty(
+        "--fade-right",
+        element.scrollWidth - element.clientWidth - element.scrollLeft > 1
+          ? "24px"
+          : "0px"
+      );
+    };
+    const observer = new ResizeObserver(updateEdges);
+    observer.observe(element);
+    if (element.firstElementChild) observer.observe(element.firstElementChild);
+    element.addEventListener("scroll", updateEdges, { passive: true });
+    updateEdges();
+    return () => {
+      observer.disconnect();
+      element.removeEventListener("scroll", updateEdges);
+    };
+  }, []);
 
   return (
     <div
-      className="select-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      ref={viewport}
+      className="select-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,transparent,black_var(--fade-left,0px),black_calc(100%_-_var(--fade-right,0px)),transparent)]"
       tabIndex={0}
       role="region"
       aria-label={label}

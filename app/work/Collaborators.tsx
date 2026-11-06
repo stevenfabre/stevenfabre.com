@@ -7,7 +7,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
   if (!people.length) return null;
   return (
     <section
-      className="mt-8 min-w-0 text-sm leading-normal"
+      className="mt-8 min-w-0 border-t border-black/10 pt-6 dark:border-white/10 text-sm leading-normal"
       aria-label="Project collaborators"
     >
       <h2 className="mb-3 text-[13px] font-normal text-[var(--muted)]">
@@ -39,7 +39,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
                     .join("")}
                 </span>
               )}
-              <div className="grid gap-1">
+              <div className="grid">
                 <span className="font-medium text-[var(--ink)]">
                   {person.href ? (
                     <ExternalLink href={person.href} iconSize={13}>

@@ -54,8 +54,8 @@ export default function ProjectContent({
           </div>
         </div>
 
-        <figcaption className="mx-auto mt-16 w-full max-w-[var(--caption-width)] leading-relaxed lg:grid lg:grid-cols-[180px_minmax(0,1fr)] lg:items-start lg:gap-x-8 max-[520px]:w-[calc(100%-8px)]">
-          <div className="text-lg text-[var(--muted)] text-pretty lg:col-start-2 lg:row-start-1">
+        <figcaption className="mx-auto mt-16 w-full max-w-[var(--caption-width)] leading-relaxed md:grid md:grid-cols-[180px_minmax(0,1fr)] md:items-start md:gap-x-8 max-[520px]:w-[calc(100%-8px)]">
+          <div className="@container text-lg text-[var(--muted)] text-pretty md:col-start-2 md:row-start-1">
             <h1 className="mb-4 text-lg font-semibold leading-relaxed text-[var(--ink)] xl:text-xl">
               {film.title}
             </h1>
@@ -94,7 +94,7 @@ export default function ProjectContent({
             )}
           </div>
           <aside
-            className="mt-8 text-sm leading-relaxed text-[var(--muted)] [&>p+p]:mt-0.5 lg:sticky lg:top-[calc(var(--bar-height)+24px)] lg:self-start lg:col-start-1 lg:row-start-1 lg:mt-0 lg:pt-1 xl:pt-1.5"
+            className="mt-8 text-sm leading-relaxed text-[var(--muted)] [&>p+p]:mt-0.5 md:sticky md:top-[calc(var(--bar-height)+24px)] md:self-start md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
             aria-label="Project credits"
           >
             <p className="font-medium text-[var(--ink)]">
@@ -110,7 +110,7 @@ export default function ProjectContent({
               ))}
             </ul>
           </aside>
-          <Footer className="static w-full bg-transparent backdrop-blur-none dark:bg-transparent lg:col-start-2" />
+          <Footer className="static w-full bg-transparent backdrop-blur-none dark:bg-transparent md:col-start-2" />
         </figcaption>
       </figure>
     </div>

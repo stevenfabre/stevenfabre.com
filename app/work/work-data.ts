@@ -150,7 +150,11 @@ export type Film = ProjectVisual & {
   context: string[];
   paragraphs?: string[];
   afterGalleryParagraphs?: string[];
-  slideshow?: { images: { src: string; alt: string }[]; caption: string };
+  slideshow?: {
+    images: { src: string; alt: string; caption?: string }[];
+    caption: string;
+    thumbnails?: boolean;
+  };
   youtube?: { id: string; title: string };
   contribution: string;
   gallery?: ProjectVisual[];
@@ -161,38 +165,57 @@ export type Film = ProjectVisual & {
 
 export const films: Record<string, Film> = {
   liveblocksOverview: {
-    galleryLayout: "stack",
-    gallery: [
-      {
-        kind: "image",
-        file: "liveblocks-punta-cana",
-        imageExtension: "jpg",
-        title: "The team together in Punta Cana, 2025.",
-        imageAlt:
-          "Liveblocks team posing together during the Punta Cana retreat",
-        aspectRatio: "1600 / 1066",
-        caption: "The team together in Punta Cana, 2025.",
-      },
-      {
-        kind: "image",
-        file: "liveblocks-ericeira",
-        imageExtension: "jpg",
-        title: "Our team offsite in Ericeira, Portugal, 2024.",
-        imageAlt: "The Liveblocks team gathered in Ericeira",
-        aspectRatio: "1600 / 1066",
-        caption: "Our team offsite in Ericeira, Portugal, 2024.",
-      },
-      {
-        kind: "image",
-        file: "liveblocks-team-icebreaker",
-        imageExtension: "jpg",
-        title: "Making time to connect. An icebreaker at our Ericeira offsite.",
-        imageAlt: "Nimesh leading a team icebreaker in Ericeira",
-        aspectRatio: "1600 / 1067",
-        caption:
-          "Making time to connect. An icebreaker at our Ericeira offsite.",
-      },
-    ],
+    slideshow: {
+      caption: "Team moments at Liveblocks",
+      thumbnails: true,
+      images: [
+        {
+          src: "/work/media/liveblocks-punta-cana.jpg",
+          alt: "The team together in Punta Cana, 2025.",
+          caption: "The team together in Punta Cana, 2025."
+        },
+        {
+          src: "/work/media/liveblocks-punta-cana-cap.jpg",
+          alt: "A Liveblocks World Tour cap at our Punta Cana retreat.",
+          caption: "A Liveblocks World Tour cap at our Punta Cana retreat."
+        },
+        {
+          src: "/work/media/liveblocks-punta-cana-presentation.jpg",
+          alt: "Sharing ideas at our Punta Cana retreat.",
+          caption: "Sharing ideas at our Punta Cana retreat."
+        },
+        {
+          src: "/work/media/liveblocks-punta-cana-pool.jpg",
+          alt: "Time together away from our screens in Punta Cana.",
+          caption: "Time together away from our screens in Punta Cana."
+        },
+        {
+          src: "/work/media/liveblocks-ericeira.jpg",
+          alt: "Our team offsite in Ericeira, Portugal, 2024.",
+          caption: "Our team offsite in Ericeira, Portugal, 2024."
+        },
+        {
+          src: "/work/media/liveblocks-team-icebreaker.jpg",
+          alt: "An icebreaker at our Ericeira offsite.",
+          caption: "An icebreaker at our Ericeira offsite."
+        },
+        {
+          src: "/work/media/liveblocks-ericeira-surfboards.jpg",
+          alt: "Trading keyboards for surfboards in Ericeira.",
+          caption: "Trading keyboards for surfboards in Ericeira."
+        },
+        {
+          src: "/work/media/liveblocks-ericeira-surf-lesson.jpg",
+          alt: "A team surfing lesson in Ericeira.",
+          caption: "A team surfing lesson in Ericeira."
+        },
+        {
+          src: "/work/media/liveblocks-mexico-offsite.jpg",
+          alt: "Our first offsite in Mexico, 2021.",
+          caption: "Our first offsite in Mexico, 2021."
+        }
+      ]
+    },
     youtube: {
       id: "SG8eG7SYEko",
       title: "The story behind Liveblocks 3.0",

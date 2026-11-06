@@ -6,9 +6,11 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 export default function HorizontalScroll({
   children,
   label,
+  snap = false,
 }: {
   children: ReactNode;
   label: string;
+  snap?: boolean;
 }) {
   const drag = useRef<{ x: number; scroll: number; moved: boolean } | null>(
     null
@@ -49,7 +51,7 @@ export default function HorizontalScroll({
   return (
     <div
       ref={viewport}
-      className="data-[overflow]:cursor-grab data-[overflow]:active:cursor-grabbing data-[overflow]:active:[&_a]:cursor-grabbing outline-none focus-visible:bg-black/5 dark:focus-visible:bg-white/5 select-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,transparent,black_var(--fade-left,0px),black_calc(100%_-_var(--fade-right,0px)),transparent)]"
+      className={(snap ? "snap-x snap-mandatory " : "") + "data-[overflow]:cursor-grab data-[overflow]:active:cursor-grabbing data-[overflow]:active:[&_a]:cursor-grabbing outline-none focus-visible:bg-black/5 dark:focus-visible:bg-white/5 select-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,transparent,black_var(--fade-left,0px),black_calc(100%_-_var(--fade-right,0px)),transparent)]"}
       tabIndex={overflow ? 0 : -1}
       role="region"
       aria-label={label}

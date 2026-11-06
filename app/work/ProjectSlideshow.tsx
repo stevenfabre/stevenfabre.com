@@ -2,15 +2,18 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import HorizontalScroll from "../../src/components/HorizontalScroll";
 import Icon from "../../src/components/Icon";
 import { iconControl } from "../../src/components/buttonStyles";
 
 export type Slideshow = {
-  images: { src: string; alt: string }[];
+  images: { src: string; alt: string; caption?: string }[];
   caption: string;
+  thumbnails?: boolean;
 };
 
-export default function ProjectSlideshow({ images, caption }: Slideshow) {
+export default function ProjectSlideshow({ images, caption, thumbnails = false }: Slideshow) {
+  const thumbnailList = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLElement>(null);
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
@@ -36,6 +39,19 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
     };
   }, []);
 
+  useEffect(() => {
+    const list = thumbnailList.current;
+    const viewport = list?.parentElement;
+    const selected = list?.children[index] as HTMLElement | undefined;
+    if (!viewport || !selected) return;
+    const left = selected.offsetLeft;
+    const right = left + selected.offsetWidth;
+    if (left < viewport.scrollLeft)
+      viewport.scrollTo({ left, behavior: reducedMotion ? "instant" : "smooth" });
+    else if (right > viewport.scrollLeft + viewport.clientWidth)
+      viewport.scrollTo({ left: right - viewport.clientWidth, behavior: reducedMotion ? "instant" : "smooth" });
+  }, [index, reducedMotion]);
+
   const rotationEnabled = !paused && (!reducedMotion || explicitPlay);
 
   useEffect(() => {
@@ -58,7 +74,7 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
     <figure
       ref={container}
       className="mt-8"
-      aria-label="Template gallery interaction details"
+      aria-label={caption}
       data-no-project-swipe
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -67,7 +83,7 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
         if (!event.currentTarget.contains(event.relatedTarget)) setPaused(true);
       }}
     >
-      <div className="relative aspect-[65/32] overflow-hidden rounded-lg">
+      <div className={`relative overflow-hidden rounded-lg ${thumbnails ? "aspect-[3/2]" : "aspect-[65/32]"}`}>
         {images.map((image, slide) => (
           <Image
             key={image.src}
@@ -89,7 +105,7 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
         ))}
       </div>
       <figcaption className="mt-3 flex items-start justify-between gap-4 text-sm leading-relaxed text-[var(--muted)]">
-        <p className="opacity-70">{caption}</p>
+        <p className="opacity-70">{images[index]?.caption ?? caption}</p>
         <div className="flex h-lh shrink-0 items-center">
           <button
             type="button"
@@ -136,6 +152,27 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
           </button>
         </div>
       </figcaption>
+      {thumbnails && (
+        <div className="mt-4">
+          <HorizontalScroll label="Choose a team photo" snap>
+            <div ref={thumbnailList} className="relative flex w-max gap-2">
+              {images.map((image, slide) => (
+                <button
+                  key={image.src}
+                  type="button"
+                  aria-label={`Show photo ${slide + 1}: ${image.alt}`}
+                  aria-pressed={slide === index}
+                  className="relative size-16 shrink-0 snap-start overflow-hidden rounded-md opacity-50 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none aria-pressed:opacity-100 md:size-20"
+                  onClick={() => { setIndex(slide); setPaused(true); }}
+                >
+                  <Image src={image.src} alt="" fill sizes="80px" className="object-cover" />
+                  <span className={`pointer-events-none absolute inset-0 rounded-md border-2 ${slide === index ? "border-neutral-900 dark:border-white" : "border-transparent"}`} />
+                </button>
+              ))}
+            </div>
+          </HorizontalScroll>
+        </div>
+      )}
     </figure>
   );
 }

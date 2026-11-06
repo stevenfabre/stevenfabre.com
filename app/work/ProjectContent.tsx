@@ -110,7 +110,7 @@ export default function ProjectContent({
               ))}
             </ul>
           </aside>
-          <Footer className="static w-full bg-transparent backdrop-blur-none dark:bg-transparent md:col-start-2" />
+          <Footer className="static mt-20 xl:mt-24 w-full bg-transparent backdrop-blur-none dark:bg-transparent md:col-start-2" />
         </figcaption>
       </figure>
     </div>

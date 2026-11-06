@@ -14,10 +14,10 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
         Collaborators
       </h2>
       <HorizontalScroll label="Scroll collaborators">
-        <ul className="flex w-max gap-6">
+        <ul className="flex w-max gap-4">
           {people.map((person) => (
             <li
-              className="flex w-60 shrink-0 items-center gap-3"
+              className="flex w-48 shrink-0 items-center gap-3"
               key={person.name}
             >
               {person.avatar ? (
@@ -39,17 +39,30 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
                     .join("")}
                 </span>
               )}
-              <div className="grid">
-                <span className="font-medium text-[var(--ink)]">
+              <div className="grid min-w-0 flex-1">
+                <span className="min-w-0 font-medium text-[var(--ink)]">
                   {person.href ? (
-                    <ExternalLink href={person.href} iconSize={13}>
-                      {person.name}
+                    <ExternalLink
+                      href={person.href}
+                      iconSize={13}
+                      className="flex min-w-0"
+                    >
+                      <span className="truncate" title={person.name}>
+                        {person.name}
+                      </span>
                     </ExternalLink>
                   ) : (
-                    person.name
+                    <span className="block truncate" title={person.name}>
+                      {person.name}
+                    </span>
                   )}
                 </span>
-                <span className="text-[var(--muted)]">{person.role}</span>
+                <span
+                  className="truncate text-[var(--muted)]"
+                  title={person.role}
+                >
+                  {person.role}
+                </span>
               </div>
             </li>
           ))}

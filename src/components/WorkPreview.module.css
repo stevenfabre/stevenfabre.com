@@ -6,10 +6,8 @@
   pointer-events: none;
 }
 .card {
+  composes: surface from "./PopoverSurface.module.css";
   padding: 6px;
-  border-radius: 14px;
-  background: white;
-  box-shadow: 0 8px 16px #00000006, 0 20px 48px #0000001a;
   opacity: 0;
   transform: translateY(4px) scale(0.96);
   transform-origin: center bottom;
@@ -66,10 +64,7 @@
 .drifting {
   animation: slow-zoom 5s linear infinite;
 }
-:global(.dark) .card {
-  background: #262626;
-  box-shadow: 0 0 0 1px #ffffff0d, 0 20px 48px #00000066;
-}
+
 @keyframes slow-zoom {
   from {
     transform: scale(1);

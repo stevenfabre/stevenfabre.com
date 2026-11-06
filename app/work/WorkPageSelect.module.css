@@ -1,0 +1,27 @@
+.content {
+  z-index: 50;
+  overflow: hidden;
+}
+.item {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+  color: #a3a3a3;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+}
+:global(.dark) .item {
+  color: #737373;
+}
+.item[data-highlighted],
+.viewport:not(:has([data-highlighted])) .item[data-state="checked"] {
+  color: #171717;
+}
+:global(.dark) .item[data-highlighted],
+:global(.dark) .viewport:not(:has([data-highlighted])) .item[data-state="checked"] {
+  color: #f5f5f5;
+}
+.viewport {
+  padding: 6px;
+}

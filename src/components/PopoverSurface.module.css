@@ -1,0 +1,9 @@
+.surface {
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 8px 16px #00000006, 0 20px 48px #0000001a;
+}
+:global(.dark) .surface {
+  background: #262626;
+  box-shadow: 0 0 0 1px #ffffff0d, 0 20px 48px #00000066;
+}

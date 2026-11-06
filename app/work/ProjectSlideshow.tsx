@@ -17,6 +17,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
   const container = useRef<HTMLElement>(null);
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
   const [paused, setPaused] = useState(false);
   const [explicitPlay, setExplicitPlay] = useState(false);
   const pointerAction = useRef<boolean | null>(null);
@@ -52,7 +53,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
       viewport.scrollTo({ left: right - viewport.clientWidth, behavior: reducedMotion ? "instant" : "smooth" });
   }, [index, reducedMotion]);
 
-  const rotationEnabled = !paused && (!reducedMotion || explicitPlay);
+  const rotationEnabled = !(thumbnails ? focused : paused) && (!reducedMotion || explicitPlay);
 
   useEffect(() => {
     if (
@@ -66,9 +67,9 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
     const timer = setInterval(() => {
       if (!document.hidden)
         setIndex((current) => (current + 1) % images.length);
-    }, 1000);
+    }, thumbnails ? 4000 : 1000);
     return () => clearInterval(timer);
-  }, [hovered, rotationEnabled, visible, loaded.length, images.length]);
+  }, [hovered, rotationEnabled, visible, loaded.length, images.length, thumbnails, index]);
 
   return (
     <figure
@@ -80,10 +81,16 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
       onMouseLeave={() => setHovered(false)}
       onFocusCapture={(event) => {
         // Entering with the keyboard stops rotation until explicitly resumed.
-        if (!event.currentTarget.contains(event.relatedTarget)) setPaused(true);
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          if (thumbnails) setFocused(true);
+          else setPaused(true);
+        }
+      }}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
       }}
     >
-      <div className={`relative overflow-hidden rounded-lg ${thumbnails ? "aspect-[3/2]" : "aspect-[65/32]"}`}>
+      <div className={`group/gallery relative overflow-hidden rounded-lg ${thumbnails ? "aspect-[3/2]" : "aspect-[65/32]"}`}>
         {images.map((image, slide) => (
           <Image
             key={image.src}
@@ -94,7 +101,9 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
             loading="eager"
             aria-hidden={slide !== index}
             className={
-              slide === index ? "object-contain" : "invisible object-contain"
+              thumbnails
+                ? `object-cover transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${slide === index ? "opacity-100" : "opacity-0"}`
+                : slide === index ? "object-contain" : "invisible object-contain"
             }
             onLoad={() =>
               setLoaded((current) =>
@@ -103,11 +112,32 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
             }
           />
         ))}
+      {thumbnails && (
+        <div className="absolute inset-x-3 bottom-3 z-10 rounded-lg bg-black/45 p-2 opacity-0 backdrop-blur-md transition-opacity duration-200 group-hover/gallery:opacity-100 group-focus-within/gallery:opacity-100 [@media(hover:none)]:opacity-100">
+          <HorizontalScroll label="Choose a team photo" snap>
+            <div ref={thumbnailList} className="relative flex w-max gap-2">
+              {images.map((image, slide) => (
+                <button
+                  key={image.src}
+                  type="button"
+                  aria-label={`Show photo ${slide + 1}: ${image.alt}`}
+                  aria-pressed={slide === index}
+                  className="relative size-8 shrink-0 snap-start overflow-hidden rounded-md opacity-50 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none aria-pressed:opacity-100 md:size-10"
+                  onClick={() => { setIndex(slide); }}
+                >
+                  <Image src={image.src} alt="" fill sizes="40px" className="object-cover" />
+                  <span className={`pointer-events-none absolute inset-0 rounded-md border-2 ${slide === index ? "border-white" : "border-transparent"}`} />
+                </button>
+              ))}
+            </div>
+          </HorizontalScroll>
+        </div>
+      )}
       </div>
       <figcaption className="mt-3 flex items-start justify-between gap-4 text-sm leading-relaxed text-[var(--muted)]">
         <p className="opacity-70">{images[index]?.caption ?? caption}</p>
         <div className="flex h-lh shrink-0 items-center">
-          <button
+          {!thumbnails && <button
             type="button"
             className={iconControl}
             aria-label={
@@ -131,7 +161,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
             }}
           >
             <Icon name={rotationEnabled ? "pause" : "play"} />
-          </button>
+          </button>}
           <button
             type="button"
             className={iconControl}
@@ -152,27 +182,6 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
           </button>
         </div>
       </figcaption>
-      {thumbnails && (
-        <div className="mt-4">
-          <HorizontalScroll label="Choose a team photo" snap>
-            <div ref={thumbnailList} className="relative flex w-max gap-2">
-              {images.map((image, slide) => (
-                <button
-                  key={image.src}
-                  type="button"
-                  aria-label={`Show photo ${slide + 1}: ${image.alt}`}
-                  aria-pressed={slide === index}
-                  className="relative size-16 shrink-0 snap-start overflow-hidden rounded-md opacity-50 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none aria-pressed:opacity-100 md:size-20"
-                  onClick={() => { setIndex(slide); setPaused(true); }}
-                >
-                  <Image src={image.src} alt="" fill sizes="80px" className="object-cover" />
-                  <span className={`pointer-events-none absolute inset-0 rounded-md border-2 ${slide === index ? "border-neutral-900 dark:border-white" : "border-transparent"}`} />
-                </button>
-              ))}
-            </div>
-          </HorizontalScroll>
-        </div>
-      )}
     </figure>
   );
 }

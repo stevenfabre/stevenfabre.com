@@ -258,12 +258,6 @@ export const films: Record<string, Film> = {
     ],
     context: [],
     contribution: "",
-    links: [
-      {
-        label: "The story behind Liveblocks",
-        href: "https://liveblocks.io/about",
-      },
-    ],
   },
   hero: {
     file: "liveblocks-homepage-redesign",

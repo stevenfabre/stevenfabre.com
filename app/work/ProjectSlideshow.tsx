@@ -70,7 +70,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
     const timer = setInterval(() => {
       if (!document.hidden)
         setIndex((current) => (current + 1) % images.length);
-    }, thumbnails ? 4000 : 1000);
+    }, thumbnails ? 4000 : 3000);
     return () => clearInterval(timer);
   }, [hovered, touching, rotationEnabled, visible, loaded.length, images.length, thumbnails, index]);
 
@@ -136,11 +136,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
             sizes="(min-width: 1280px) 704px, (min-width: 768px) 480px, 100vw"
             loading="eager"
             aria-hidden={slide !== index}
-            className={
-              thumbnails
-                ? `object-cover transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${slide === index ? "opacity-100" : "opacity-0"}`
-                : slide === index ? "object-contain" : "invisible object-contain"
-            }
+            className={`transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${thumbnails ? "object-cover" : "object-contain"} ${slide === index ? "opacity-100" : "opacity-0"}`}
             onLoad={() =>
               setLoaded((current) =>
                 current.includes(image.src) ? current : [...current, image.src]
@@ -172,7 +168,17 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
       )}
       </div>
       <figcaption className="mt-3 flex items-start justify-between gap-4 text-sm leading-relaxed text-[var(--muted)]">
-        <p className="opacity-70">{images[index]?.caption ?? caption}</p>
+        <div className="grid min-w-0 flex-1">
+          {images.map((image, slide) => (
+            <p
+              key={image.src}
+              aria-hidden={slide !== index}
+              className={`col-start-1 row-start-1 transition-[opacity,filter] duration-1000 ease-in-out motion-reduce:transition-none ${slide === index ? "opacity-70 blur-none" : "pointer-events-none opacity-0 blur-xs"}`}
+            >
+              {image.caption ?? caption}
+            </p>
+          ))}
+        </div>
         <div className="flex h-lh shrink-0 items-center">
           {!thumbnails && <button
             type="button"

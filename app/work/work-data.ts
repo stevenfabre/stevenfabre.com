@@ -900,18 +900,22 @@ export const films: Record<string, Film> = {
       images: [
         {
           src: "/work/media/campaign-monitor-gallery-detail-1.png",
+          caption: "Browse full email previews in the template gallery.",
           alt: "Template gallery interaction detail, step 1 of 4",
         },
         {
           src: "/work/media/campaign-monitor-gallery-detail-2.png",
+          caption: "A blue outline highlights the template on hover.",
           alt: "Template gallery interaction detail, step 2 of 4",
         },
         {
           src: "/work/media/campaign-monitor-gallery-detail-3.png",
+          caption: "Selecting a template provides immediate visual feedback.",
           alt: "Template gallery interaction detail, step 3 of 4",
         },
         {
           src: "/work/media/campaign-monitor-gallery-detail-4.png",
+          caption: "Other templates fade away while the selected design loads.",
           alt: "Template gallery interaction detail, step 4 of 4",
         },
       ],

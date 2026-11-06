@@ -53,7 +53,7 @@ export function useTouchSelect({
     const itemAt = (x: number, y: number) => {
       const item = document
         .elementFromPoint(x, y)
-        ?.closest<HTMLElement>("[data-page-value]:not([data-disabled])");
+        ?.closest<HTMLElement>("[data-select-value]:not([data-disabled])");
       return item && content.current?.contains(item) ? item : null;
     };
     const move = (event: PointerEvent) => {
@@ -94,7 +94,7 @@ export function useTouchSelect({
       suppressReleaseClick();
       // A tap opens the menu; a drag commits only the option under the finger.
       if (!moved) return;
-      const value = item?.dataset.pageValue;
+      const value = item?.dataset.selectValue;
       if (value) onSelect(value);
       else onDismiss();
     };

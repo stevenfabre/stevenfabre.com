@@ -1,8 +1,11 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import * as Select from "@radix-ui/react-select";
 import { ColorSwatch } from "./ColorSwatch";
 import { COLORS } from "./constants";
 import { iconControl } from "../buttonStyles";
 import { Tooltip } from "../Tooltip";
+import { SelectMenuSurface, type MenuMotion } from "../SelectMenuSurface";
+import { useTouchSelect } from "../../hooks/useTouchSelect";
 
 export default function Toolbar({
   currentColor,
@@ -12,80 +15,88 @@ export default function Toolbar({
   setColor: (color: string) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const container = useRef<HTMLDivElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const id = useId();
-
-  useEffect(() => {
-    if (!open) return;
-    const dismiss = (event: PointerEvent) => {
-      if (
-        event.target instanceof Node &&
-        !container.current?.contains(event.target)
-      )
-        setOpen(false);
-    };
-    document.addEventListener("pointerdown", dismiss);
-    return () => document.removeEventListener("pointerdown", dismiss);
-  }, [open]);
+  const [touching, setTouching] = useState(false);
+  const content = useRef<HTMLDivElement>(null);
+  const background = useRef<HTMLDivElement>(null);
+  const menuMotion = useRef<MenuMotion>(null);
+  const startTouchSelection = useTouchSelect({
+    open,
+    content,
+    onOpen: () => setOpen(true),
+    onPosition: (x, y) => {
+      setTouching(true);
+      menuMotion.current?.move(x, y);
+    },
+    onEnd: () => {
+      setTouching(false);
+      menuMotion.current?.reset();
+    },
+    onSelect: (color) => {
+      setColor(color);
+      setOpen(false);
+    },
+    onDismiss: () => setOpen(false),
+  });
 
   return (
-    <div
-      ref={container}
-      className="relative"
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Escape" && open) {
-          event.preventDefault();
-          event.stopPropagation();
-          setOpen(false);
-          trigger.current?.focus();
-        }
-      }}
+    <Select.Root
+      value={currentColor}
+      onValueChange={setColor}
+      open={open}
+      onOpenChange={setOpen}
     >
       <Tooltip content="Change color" open={open ? false : undefined}>
-        <button
-          ref={trigger}
-          type="button"
-          className={iconControl}
+        <Select.Trigger
           aria-label="Change drawing color"
-          aria-expanded={open}
-          aria-controls={open ? id : undefined}
-          onClick={() => setOpen((value) => !value)}
+          className={`${iconControl} touch-none select-none [-webkit-touch-callout:none]`}
+          onPointerDown={startTouchSelection}
         >
-          <span
-            aria-hidden="true"
-            className="relative size-3 rounded-full"
-            style={{ backgroundColor: currentColor }}
-          >
-            <span className="absolute inset-0 rounded-full border border-black/15" />
-          </span>
-        </button>
+          <Select.Value>
+            <ColorSwatch color={currentColor} />
+          </Select.Value>
+        </Select.Trigger>
       </Tooltip>
-      {open && (
-        <div
-          id={id}
-          role="group"
+      <Select.Portal>
+        <Select.Content
+          ref={content}
+          position="item-aligned"
           aria-label="Drawing colors"
-          className="surface-popover absolute bottom-full right-0 mb-2 flex p-1"
+          data-touching={touching || undefined}
+          className="z-50 outline-none motion-safe:[&[data-touching]_[data-highlighted]_[data-swatch]]:scale-110"
         >
-          {Object.entries(COLORS).map(([name, color]) => (
-            <ColorSwatch
-              key={name}
-              color={color}
-              label={name.charAt(0) + name.slice(1).toLowerCase()}
-              selected={currentColor === color}
-              onClick={() => {
-                setColor(color);
-                setOpen(false);
-                trigger.current?.focus();
-              }}
-            />
-          ))}
-        </div>
-      )}
-    </div>
+          <SelectMenuSurface
+            open={open}
+            backgroundRef={background}
+            motionRef={menuMotion}
+          >
+            <Select.Viewport className="p-1 [&:not(:has([data-highlighted]))_[data-state=checked]]:bg-neutral-100 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:bg-neutral-700">
+              {Object.entries(COLORS).map(([name, color]) => {
+                const label = name.charAt(0) + name.slice(1).toLowerCase();
+                return (
+                  <Select.Item
+                    key={name}
+                    value={color}
+                    textValue={label}
+                    aria-label={label}
+                    data-menu-item
+                    data-select-value={color}
+                    className="flex size-10 cursor-pointer select-none items-center justify-center rounded-xl outline-none data-[highlighted]:bg-neutral-100 dark:data-[highlighted]:bg-neutral-700 sm:size-8"
+                  >
+                    <Select.ItemText>
+                      <span
+                        data-swatch
+                        className="block transition-transform duration-150 motion-reduce:transition-none"
+                      >
+                        <ColorSwatch color={color} />
+                      </span>
+                    </Select.ItemText>
+                  </Select.Item>
+                );
+              })}
+            </Select.Viewport>
+          </SelectMenuSurface>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   );
 }

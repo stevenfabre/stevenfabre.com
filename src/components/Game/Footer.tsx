@@ -63,11 +63,11 @@ export default function Footer({ children }: { children: ReactNode }) {
         </svg>
       </Link>
       <div className="relative z-10 flex items-center gap-2 pointer-events-auto">
-        {children}
-        <span className="inline-flex items-center gap-2 h-10 mr-2 sm:h-8 text-sm text-neutral-100 dark:text-neutral-900 font-medium tabular-nums">
+        <span className="inline-flex items-center gap-2 h-10 sm:h-8 text-sm text-neutral-100 dark:text-neutral-900 font-medium tabular-nums">
           <Icon name="users" size={16} />
           <RollingNumber value={countOthers + 1} />
         </span>
+        {children}
       </div>
     </div>
   );

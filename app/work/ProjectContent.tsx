@@ -97,18 +97,23 @@ export default function ProjectContent({
               )}
             </div>
             <aside
-              className="mt-8 text-sm leading-relaxed text-[var(--muted)] [&>p+p]:mt-0.5 md:sticky md:top-[calc(var(--bar-height)+24px)] md:self-start md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
+              className="mt-8 grid grid-cols-2 items-start gap-x-6 border-t border-black/10 pt-6 text-sm leading-relaxed text-[var(--muted)] dark:border-white/10 md:block md:border-0 md:sticky md:top-[calc(var(--bar-height)+24px)] md:self-start md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
               aria-label="Project credits"
             >
-              <p className="font-medium text-[var(--ink)]">
-                <ExternalLink href={company.url} iconSize={13}>
-                  {company.name}
-                </ExternalLink>
-              </p>
-              <p>{companyDetails[company.id].role}</p>
-              <p className="opacity-70">{film.year}</p>
+              <div className="min-w-0 [&>p+p]:mt-0.5">
+                <p className="font-medium text-[var(--ink)]">
+                  <ExternalLink href={company.url} iconSize={13}>
+                    {company.name}
+                  </ExternalLink>
+                </p>
+                <p>{companyDetails[company.id].role}</p>
+                <p className="opacity-70">{film.year}</p>
+              </div>
               {film.contributions.length > 0 && (
-                <ul className="mt-5 grid gap-1" aria-label="My contributions">
+                <ul
+                  className="min-w-0 grid gap-1 md:mt-5"
+                  aria-label="My contributions"
+                >
                   {film.contributions.map((contribution) => (
                     <li key={contribution}>{contribution}</li>
                   ))}

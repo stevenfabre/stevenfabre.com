@@ -146,7 +146,7 @@ function MenuSurface({ children }: { children: ReactNode }) {
   const backgroundY = useMotionValue(0);
   const y = useMotionValue(0);
   const reset = () => {
-    const transition = { type: "spring" as const, duration: 0.3, bounce: 0.3 };
+    const transition = { type: "spring" as const, duration: 0.4, bounce: 0.4 };
     animate(y, 0, transition);
     animate(backgroundX, 0, { ...transition, duration: 0.25 });
     animate(backgroundY, 0, { ...transition, duration: 0.25 });

@@ -63,7 +63,7 @@ export default function BeforeAfter({ visual }: { visual: ProjectVisual }) {
         className="pointer-events-none absolute inset-0 motion-reduce:!transition-none"
         style={{
           clipPath: `inset(0 ${100 - position}% 0 0)`,
-          transition: `clip-path ${transition}`,
+          transition: returning ? `clip-path ${transition}` : "none",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -73,13 +73,21 @@ export default function BeforeAfter({ visual }: { visual: ProjectVisual }) {
           draggable={false}
           className="h-full w-full object-contain"
         />
+        <span className="absolute left-3 top-3 rounded-full bg-black/65 px-3 py-1 text-xs font-medium text-white">
+          Before
+        </span>
       </div>
-      <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/65 px-3 py-1 text-xs font-medium text-white">
-        Before
-      </span>
-      <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-black/65 px-3 py-1 text-xs font-medium text-white">
-        After
-      </span>
+      <div
+        className="pointer-events-none absolute inset-0 motion-reduce:!transition-none"
+        style={{
+          clipPath: `inset(0 0 0 ${position}%)`,
+          transition: returning ? `clip-path ${transition}` : "none",
+        }}
+      >
+        <span className="absolute right-3 top-3 rounded-full bg-black/65 px-3 py-1 text-xs font-medium text-white">
+          After
+        </span>
+      </div>
       <div
         role="slider"
         tabIndex={0}
@@ -90,12 +98,16 @@ export default function BeforeAfter({ visual }: { visual: ProjectVisual }) {
         aria-valuetext={`${Math.round(position)}% before`}
         aria-orientation="horizontal"
         className="absolute inset-y-0 z-10 w-px touch-none bg-white shadow-[0_0_2px_1px_#0002] motion-reduce:!transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-500"
-        style={{ left: `${position}%`, transition: `left ${transition}` }}
+        style={{
+          left: `${position}%`,
+          transition: returning ? `left ${transition}` : "none",
+        }}
         onKeyDown={(event) => {
           if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key))
             return;
           event.preventDefault();
           event.stopPropagation();
+          setReturning(false);
           setPosition((value) =>
             event.key === "Home"
               ? 0
@@ -109,8 +121,11 @@ export default function BeforeAfter({ visual }: { visual: ProjectVisual }) {
         }}
       >
         <span
-          className="absolute left-1/2 flex size-7 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-white text-neutral-800 shadow-sm motion-reduce:!transition-none"
-          style={{ top: `${handleY}%`, transition: `top ${transition}` }}
+          className="absolute left-1/2 flex [@media(hover:hover)_and_(pointer:fine)]:hidden size-7 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-white text-neutral-800 shadow-sm motion-reduce:!transition-none"
+          style={{
+            top: `${handleY}%`,
+            transition: returning ? `top ${transition}` : "none",
+          }}
         >
           <ChevronsLeftRight size={14} aria-hidden="true" />
         </span>

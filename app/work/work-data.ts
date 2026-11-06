@@ -788,7 +788,7 @@ export const films: Record<string, Film> = {
     introduction:
       "We had an email builder that customers weren’t finding. A survey helped me understand why: the template gallery was hard to get to, and the choice of templates didn’t give people enough reason to try it.",
     paragraphs: [
-      "I worked with Buzz Usborne on a new gallery that made the templates easier to discover and browse. We wanted people to see what they could make before they opened the editor. After the redesign, adoption of the email builder increased by 50%.",
+      "I designed a new gallery that made the templates easier to discover and browse. We wanted people to see what they could make before they opened the editor. After the redesign, adoption of the email builder increased by 50%.",
       "I also worked on the small interactions: how a template responded on hover, when you clicked it, and while the builder loaded. Each state gave people feedback so they knew what was happening.",
     ],
     context: [],

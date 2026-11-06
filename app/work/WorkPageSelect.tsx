@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useRef, useState, type CSSProperties } from "react";
-import surface from "../../src/components/PopoverSurface.module.css";
-import styles from "./WorkPageSelect.module.css";
-import heading from "../../src/components/HeadingControl.module.css";
+import {
+  headingControl,
+  popoverSurface,
+} from "../../src/components/controlStyles";
 import * as Select from "@radix-ui/react-select";
 import { ChevronsUpDown } from "lucide-react";
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
@@ -29,10 +30,18 @@ export default function WorkPageSelect() {
       );
       if (!label) return;
       content.style.transform = "";
-      const offset =
-        value.current.getBoundingClientRect().left -
-        label.getBoundingClientRect().left;
-      content.style.transform = `translateX(${offset}px)`;
+      // Compare glyph boxes, not line boxes: the mobile menu has tighter
+      // line-height, and Radix rounds its positioning to whole pixels.
+      const textBounds = (element: HTMLElement) => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        return range.getBoundingClientRect();
+      };
+      const from = textBounds(value.current);
+      const to = textBounds(label);
+      content.style.transform = `translate(${from.left - to.left}px, ${
+        from.top - to.top
+      }px)`;
     });
   }, []);
   const [typography, setTypography] = useState<CSSProperties>();
@@ -60,7 +69,7 @@ export default function WorkPageSelect() {
       <Select.Trigger
         ref={trigger}
         aria-label="Page: Work"
-        className={`${heading.control} group inline-flex cursor-pointer items-center gap-2 text-left`}
+        className={`${headingControl} group inline-flex cursor-pointer items-center gap-2 text-left`}
       >
         <Select.Value ref={value}>Work</Select.Value>
         <Select.Icon asChild>
@@ -75,11 +84,15 @@ export default function WorkPageSelect() {
           ref={alignContent}
           position="item-aligned"
           style={typography}
-          className={`${surface.surface} ${styles.content}`}
+          className={`${popoverSurface} z-50 overflow-hidden`}
         >
-          <Select.Viewport className={styles.viewport}>
+          <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
             {pages.map(({ label, href }) => (
-              <Select.Item key={href} value={href} className={styles.item}>
+              <Select.Item
+                key={href}
+                value={href}
+                className="flex cursor-pointer select-none items-center px-1.5 py-0.5 leading-[1.1] text-neutral-400 outline-none data-[highlighted]:text-neutral-900 dark:text-neutral-500 dark:data-[highlighted]:text-neutral-100 md:px-3 md:py-1 md:leading-[inherit]"
+              >
                 <Select.ItemText data-page-label>{label}</Select.ItemText>
               </Select.Item>
             ))}

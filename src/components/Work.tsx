@@ -1,5 +1,5 @@
 import linkStyles from "./HeadingLink.module.css";
-import heading from "./HeadingControl.module.css";
+import { headingControl } from "./controlStyles";
 import Icon from "./Icon";
 import Experience, { ExperienceProps } from "./Experience";
 import { SiteLink } from "./SiteNavigation";
@@ -82,7 +82,7 @@ export default function Work() {
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
         <SiteLink
           href="/work"
-          className={`${heading.control} ${linkStyles.link}`}
+          className={`${headingControl} ${linkStyles.link}`}
         >
           Work
           <span

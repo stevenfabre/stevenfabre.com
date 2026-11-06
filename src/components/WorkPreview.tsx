@@ -1,5 +1,6 @@
 "use client";
 
+import { popoverSurface } from "./controlStyles";
 import {
   createContext,
   useCallback,
@@ -181,7 +182,7 @@ export function WorkPreviewProvider({
         createPortal(
           <div ref={position} className={styles.position} aria-hidden="true">
             <div
-              className={styles.card}
+              className={`${popoverSurface} ${styles.card}`}
               data-open={selection?.open || false}
               data-keyboard={selection?.keyboard || false}
             >

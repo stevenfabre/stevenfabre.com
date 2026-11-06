@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes } from "react";
 import WorkIcon from "./WorkIcon";
-import heading from "../../src/components/HeadingControl.module.css";
+import { headingControl } from "../../src/components/controlStyles";
 import styles from "../../src/components/HeadingLink.module.css";
 
 type Props = AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -19,7 +19,7 @@ export default function ExternalLink({
       target="_blank"
       rel="noopener noreferrer"
       {...props}
-      className={[styles.link, heading.control, className].filter(Boolean).join(" ")}
+      className={[styles.link, headingControl, className].filter(Boolean).join(" ")}
     >
       {children}
       <span

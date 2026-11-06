@@ -6,7 +6,6 @@
   pointer-events: none;
 }
 .card {
-  composes: surface from "./PopoverSurface.module.css";
   padding: 6px;
   opacity: 0;
   transform: translateY(4px) scale(0.96);

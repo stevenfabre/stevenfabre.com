@@ -18,6 +18,7 @@ export default function WorkPageSelect() {
   const navigate = useSiteNavigation();
   const trigger = useRef<HTMLButtonElement>(null);
   const value = useRef<HTMLSpanElement>(null);
+  const closedTextBounds = useRef<DOMRect | null>(null);
   const alignContent = useCallback((content: HTMLDivElement | null) => {
     if (!content) return;
     // Radix clamps its item-aligned menu away from the viewport edge. On
@@ -37,7 +38,7 @@ export default function WorkPageSelect() {
         range.selectNodeContents(element);
         return range.getBoundingClientRect();
       };
-      const from = textBounds(value.current);
+      const from = closedTextBounds.current || textBounds(value.current);
       const to = textBounds(label);
       content.style.transform = `translate(${from.left - to.left}px, ${
         from.top - to.top
@@ -50,6 +51,13 @@ export default function WorkPageSelect() {
     if (!open || !trigger.current) return;
     // The portal sits outside the heading's responsive container. Copy its
     // resolved typography rather than duplicating container-query breakpoints.
+    if (value.current) {
+      // Anchor to the closed trigger, before Radix locks scrolling or focuses
+      // the menu. Measuring only after opening can preserve a shifted baseline.
+      const range = document.createRange();
+      range.selectNodeContents(value.current);
+      closedTextBounds.current = range.getBoundingClientRect();
+    }
     const style = getComputedStyle(trigger.current);
     setTypography({
       fontFamily: style.fontFamily,

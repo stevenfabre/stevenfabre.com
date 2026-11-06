@@ -76,6 +76,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
   const pending = useRef<{
     destination: URL;
     scrollToContent?: boolean;
+    startingScroll?: number;
     scroll?: { pane: number; window: number };
     finish: () => void;
   } | null>(null);
@@ -138,7 +139,10 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       // Use the actual content boundary, including the mobile portrait offset.
       const top =
         pane && window.matchMedia("(max-width: 767px)").matches
-          ? window.scrollY + pane.getBoundingClientRect().top
+          ? Math.min(
+              navigation.startingScroll ?? 0,
+              window.scrollY + pane.getBoundingClientRect().top
+            )
           : 0;
       window.scrollTo({ top, behavior: "instant" });
     }
@@ -166,6 +170,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       const doc = document as TransitionDocument;
       const destination = new URL(href, location.href);
       if (destination.origin !== location.origin) return false;
+      const startingScroll = window.scrollY;
       const request = ++sequence.current;
       active.current?.skipTransition();
       pending.current?.finish();
@@ -223,6 +228,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
           pending.current = {
             destination,
             scrollToContent,
+            startingScroll,
             scroll,
             finish: () => {
               window.clearTimeout(timeout);

@@ -2,7 +2,7 @@ import { animate } from "motion/mini";
 import { spring } from "motion";
 import { objectPositionOffsets } from "./objectPosition";
 
-const mediaTransition = { type: spring, duration: 0.4, bounce: 0.4 };
+const mediaTransition = { type: spring, duration: 0.4, bounce: 0.2 };
 
 // Keep a painted outgoing page during route streaming. Safari can discard native
 // full-page snapshots when its browser chrome changes the viewport during a route.

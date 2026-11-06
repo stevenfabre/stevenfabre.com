@@ -1,6 +1,14 @@
 "use client";
 
-import { useCallback, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { motion, useReducedMotion, useSpring } from "motion/react";
 import { headingControl } from "../../src/components/HeadingLink";
 import * as Select from "@radix-ui/react-select";
 import { ChevronsUpDown } from "lucide-react";
@@ -104,21 +112,74 @@ export default function WorkPageSelect() {
             });
           }}
           style={typography}
-          className="surface-popover z-50 overflow-hidden outline-none"
+          className="z-50 outline-none"
         >
-          <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
-            {pages.map(({ label, href }) => (
-              <Select.Item
-                key={href}
-                value={href}
-                className="flex cursor-pointer select-none items-center px-1.5 py-0.5 leading-[1.1] text-neutral-400 outline-none data-[highlighted]:text-neutral-900 dark:text-neutral-500 dark:data-[highlighted]:text-neutral-100 md:px-3 md:py-1 md:leading-[inherit]"
-              >
-                <Select.ItemText data-page-label>{label}</Select.ItemText>
-              </Select.Item>
-            ))}
-          </Select.Viewport>
+          <MenuSurface>
+            <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
+              {pages.map(({ label, href }) => (
+                <Select.Item
+                  key={href}
+                  value={href}
+                  className="flex cursor-pointer select-none items-center px-1.5 py-0.5 leading-[1.1] text-neutral-400 outline-none data-[highlighted]:text-neutral-900 dark:text-neutral-500 dark:data-[highlighted]:text-neutral-100 md:px-3 md:py-1 md:leading-[inherit]"
+                >
+                  <Select.ItemText data-page-label>{label}</Select.ItemText>
+                </Select.Item>
+              ))}
+            </Select.Viewport>
+          </MenuSurface>
         </Select.Content>
       </Select.Portal>
     </Select.Root>
+  );
+}
+
+// Keep Radix’s alignment and measurement on a stationary wrapper. Only the
+// visual surface follows the pointer, so its movement cannot feed back into
+// pointer coordinates or shift the initial alignment with the heading.
+function MenuSurface({ children }: { children: ReactNode }) {
+  const reducedMotion = useReducedMotion();
+  const x = useSpring(0, { duration: 0.3, bounce: 0 });
+  const y = useSpring(0, { duration: 0.3, bounce: 0 });
+  const reset = () => {
+    x.set(0);
+    y.set(0);
+  };
+  useEffect(() => {
+    // Radix can focus the listbox outside this surface before an item.
+    const stop = () => {
+      x.jump(0);
+      y.jump(0);
+    };
+    document.addEventListener("keydown", stop);
+    return () => document.removeEventListener("keydown", stop);
+  }, [x, y]);
+  // As displacement increases, resistance grows smoothly toward a 5px limit.
+  const resist = (distance: number) =>
+    (distance * 5) / (100 + Math.abs(distance));
+
+  return (
+    <div
+      onPointerMove={(event) => {
+        if (
+          reducedMotion ||
+          event.pointerType !== "mouse" ||
+          event.buttons ||
+          !matchMedia("(hover: hover) and (pointer: fine)").matches
+        )
+          return;
+        const bounds = event.currentTarget.getBoundingClientRect();
+        x.set(resist(event.clientX - bounds.left - bounds.width / 2));
+        y.set(resist(event.clientY - bounds.top - bounds.height / 2));
+      }}
+      onPointerLeave={reset}
+      onPointerCancel={reset}
+    >
+      <motion.div
+        className="surface-popover overflow-hidden"
+        style={{ x: reducedMotion ? 0 : x, y: reducedMotion ? 0 : y }}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 }

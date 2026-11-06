@@ -17,7 +17,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
         <ul className="flex w-max gap-4">
           {people.map((person) => (
             <li
-              className="flex w-52 shrink-0 items-center gap-3"
+              className="flex max-w-52 shrink-0 items-center gap-3"
               key={person.name}
             >
               {person.avatar ? (

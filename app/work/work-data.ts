@@ -91,7 +91,12 @@ export const companies = [
   },
 ];
 
-export type Collaborator = { name: string; role: string; href?: string };
+export type Collaborator = {
+  name: string;
+  role: string;
+  href?: string;
+  avatar?: string;
+};
 export type SocialPost = {
   platform?: "instagram";
   name: string;
@@ -154,7 +159,13 @@ export const films: Record<string, Film> = {
   liveblocksOverview: {
     file: "liveblocks-company-introduction",
     slug: "building-liveblocks",
-    collaborators: [{ name: "Guillaume Salles", role: "Co-founder & CTO" }],
+    collaborators: [
+      {
+        name: "Guillaume Salles",
+        avatar: "/work/collaborators/guillaume-salles.jpg",
+        role: "Co-founder & CTO",
+      },
+    ],
     autoLoop: false,
     title: "Liveblocks",
     company: "liveblocks",
@@ -199,7 +210,13 @@ export const films: Record<string, Film> = {
     ],
     context: [],
     contribution: "",
-    collaborators: [{ name: "Marc Bouchenoire", role: "Design & engineering" }],
+    collaborators: [
+      {
+        name: "Marc Bouchenoire",
+        avatar: "/work/collaborators/marc-bouchenoire.jpg",
+        role: "Design & engineering",
+      },
+    ],
     galleryLayout: "stack",
     gallery: [
       {
@@ -392,7 +409,6 @@ export const films: Record<string, Film> = {
         caption: "The film I shared to celebrate the launch. July 8, 2025.",
         source: "https://x.com/stevenfabre/status/1942679545435312456",
       },
-
     ],
   },
   liveblocksBrand: {
@@ -418,6 +434,7 @@ export const films: Record<string, Film> = {
     collaborators: [
       {
         name: "Pierre Le Vaillant",
+        avatar: "/work/collaborators/pierre-levaillant.jpg",
         role: "Brand design & execution",
         href: "https://x.com/levaillantp",
       },
@@ -529,7 +546,11 @@ export const films: Record<string, Film> = {
     slug: "invision-studio",
     collaborators: [
       { name: "Scott Savarie", role: "Product design" },
-      { name: "Tom Giannattasio", role: "Product design" },
+      {
+        name: "Tom Giannattasio",
+        avatar: "/work/collaborators/tom-giannattasio.jpg",
+        role: "Product design",
+      },
       { name: "Andy Orsow", role: "Video production" },
     ],
     title: "InVision Studio",

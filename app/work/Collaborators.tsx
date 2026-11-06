@@ -1,32 +1,60 @@
 import type { Collaborator } from "./work-data";
 import ExternalLink from "./ExternalLink";
+import Image from "next/image";
+import HorizontalScroll from "../../src/components/HorizontalScroll";
 
 export default function Collaborators({ people }: { people: Collaborator[] }) {
   if (!people.length) return null;
   return (
     <section
-      className="mt-8 rounded-xl bg-neutral-100 p-5 text-sm leading-normal dark:bg-neutral-900 sm:p-6"
+      className="mt-8 min-w-0 text-sm leading-normal"
       aria-label="Project collaborators"
     >
       <h2 className="mb-3 text-[13px] font-normal text-[var(--muted)]">
         Collaborators
       </h2>
-      <ul className="flex flex-wrap gap-x-10 gap-y-4">
-        {people.map((person) => (
-          <li className="grid gap-1" key={person.name}>
-            <span className="font-medium text-[var(--ink)]">
-              {person.href ? (
-                <ExternalLink href={person.href} iconSize={13}>
-                  {person.name}
-                </ExternalLink>
+      <HorizontalScroll label="Scroll collaborators">
+        <ul className="flex w-max gap-6">
+          {people.map((person) => (
+            <li
+              className="flex w-60 shrink-0 items-center gap-3"
+              key={person.name}
+            >
+              {person.avatar ? (
+                <Image
+                  src={person.avatar}
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="size-10 shrink-0 rounded-full object-cover"
+                />
               ) : (
-                person.name
+                <span
+                  aria-hidden="true"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-xs font-medium text-[var(--muted)] dark:bg-neutral-800"
+                >
+                  {person.name
+                    .split(" ")
+                    .map((part) => part[0])
+                    .join("")}
+                </span>
               )}
-            </span>
-            <span className="text-[var(--muted)]">{person.role}</span>
-          </li>
-        ))}
-      </ul>
+              <div className="grid gap-1">
+                <span className="font-medium text-[var(--ink)]">
+                  {person.href ? (
+                    <ExternalLink href={person.href} iconSize={13}>
+                      {person.name}
+                    </ExternalLink>
+                  ) : (
+                    person.name
+                  )}
+                </span>
+                <span className="text-[var(--muted)]">{person.role}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </HorizontalScroll>
     </section>
   );
 }

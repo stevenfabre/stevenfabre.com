@@ -57,7 +57,7 @@ export default function ProjectNavigation({
       if (
         event.target instanceof Element &&
         event.target.closest(
-          'input, textarea, select, video, audio, [contenteditable]:not([contenteditable="false"]), [role="slider"], [role="dialog"], dialog[open]'
+          'input, textarea, select, video, audio, [contenteditable]:not([contenteditable="false"]), [role="slider"], [data-no-project-swipe], [role="dialog"], dialog[open]'
         )
       )
         return;

@@ -7,7 +7,7 @@ const responsibilityIcons: Record<string, ComponentProps<typeof Icon>["name"]> =
     Engineering: "engineering",
     "Video production": "film",
     Concept: "concept",
-    "Art direction": "palette",
+    "Art direction": "compass",
     Marketing: "marketing",
     Messaging: "messaging",
     Positioning: "positioning",

@@ -1,7 +1,8 @@
 import type { SVGProps } from "react";
 import {
   PenTool,
-  Code2,
+  Terminal,
+  Compass,
   Clapperboard,
   Lightbulb,
   Palette,
@@ -39,7 +40,8 @@ import {
 
 const icons = {
   design: PenTool,
-  engineering: Code2,
+  engineering: Terminal,
+  compass: Compass,
   film: Clapperboard,
   concept: Lightbulb,
   palette: Palette,

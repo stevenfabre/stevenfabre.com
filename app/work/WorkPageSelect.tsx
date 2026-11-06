@@ -26,6 +26,7 @@ const pages = [
 
 export default function WorkPageSelect() {
   const navigate = useSiteNavigation();
+  const [open, setOpen] = useState(false);
   const selectedHref = useRef<string | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const value = useRef<HTMLSpanElement>(null);
@@ -59,6 +60,7 @@ export default function WorkPageSelect() {
   const [typography, setTypography] = useState<CSSProperties>();
 
   function syncTypography(open: boolean) {
+    setOpen(open);
     if (!open || !trigger.current) return;
     // The portal sits outside the heading's responsive container. Copy its
     // resolved typography rather than duplicating container-query breakpoints.
@@ -81,6 +83,7 @@ export default function WorkPageSelect() {
 
   return (
     <Select.Root
+      open={open}
       value="/work"
       onValueChange={(href) => {
         selectedHref.current = href;
@@ -119,7 +122,7 @@ export default function WorkPageSelect() {
           style={typography}
           className="z-50 outline-none"
         >
-          <MenuSurface>
+          <MenuSurface open={open}>
             <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
               {pages.map(({ label, href }) => (
                 <Select.Item
@@ -140,14 +143,20 @@ export default function WorkPageSelect() {
 
 // Measure a stationary wrapper so neither layer's movement feeds back into
 // pointer coordinates or shifts the initial alignment with the heading.
-function MenuSurface({ children }: { children: ReactNode }) {
+function MenuSurface({
+  children,
+  open,
+}: {
+  children: ReactNode;
+  open: boolean;
+}) {
   const reducedMotion = useReducedMotion();
   const backgroundX = useMotionValue(0);
   const backgroundY = useMotionValue(0);
   const y = useMotionValue(0);
   const reset = () => {
     const transition = { type: "spring" as const, duration: 0.4, bounce: 0.4 };
-    animate(y, 0, transition);
+    animate(y, 0, { ...transition, delay: 0.08 });
     animate(backgroundX, 0, { ...transition, duration: 0.25 });
     animate(backgroundY, 0, { ...transition, duration: 0.25 });
   };
@@ -201,9 +210,12 @@ function MenuSurface({ children }: { children: ReactNode }) {
       <motion.div
         aria-hidden="true"
         className="surface-popover pointer-events-none absolute inset-0"
-        initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.94 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+        initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.9 }}
+        animate={{
+          opacity: open ? 1 : 0,
+          scale: open || reducedMotion ? 1 : 0.9,
+        }}
+        transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
         style={{
           x: reducedMotion ? 0 : backgroundX,
           y: reducedMotion ? 0 : backgroundY,

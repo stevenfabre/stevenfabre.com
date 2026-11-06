@@ -69,7 +69,7 @@ function SkeletonLine({ width = "w-full" }: { width?: string }) {
     <span className="block">
       {"\u200b"}
       <span
-        className={`inline-block h-[1ex] align-baseline rounded-sm bg-current opacity-10 ${width}`}
+        className={`skeleton-shimmer inline-block h-[1ex] align-baseline rounded-sm bg-current opacity-10 ${width}`}
       />
     </span>
   );

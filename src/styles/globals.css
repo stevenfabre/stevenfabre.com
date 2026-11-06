@@ -35,3 +35,34 @@ body {
 @utility surface-popover {
   @apply rounded-2xl bg-white shadow-popover dark:bg-neutral-800;
 }
+
+/* Dearfax's soft lighting sweep, preserving the skeleton's inherited color. */
+@utility skeleton-shimmer {
+  --shimmer-side-opacity: 80%;
+  mask-image: linear-gradient(
+    105deg,
+    rgb(0 0 0 / var(--shimmer-side-opacity)) 40%,
+    #000 48%,
+    #000 52%,
+    rgb(0 0 0 / var(--shimmer-side-opacity)) 60%
+  );
+  mask-mode: alpha;
+  mask-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s linear infinite;
+  @variant dark {
+    --shimmer-side-opacity: 90%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    mask-image: none;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    mask-position: 150% 0;
+  }
+  to {
+    mask-position: -50% 0;
+  }
+}

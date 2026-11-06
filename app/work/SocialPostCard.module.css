@@ -39,8 +39,8 @@
   color: var(--muted);
 }
 .author:focus-visible {
-  outline: 2px solid #9f8dfc;
-  outline-offset: 4px;
+  outline: 2px solid #737373;
+  outline-offset: 2px;
 }
 .copy {
   margin: 16px 0;

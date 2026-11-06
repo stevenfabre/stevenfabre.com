@@ -38,7 +38,7 @@ export default function WorkPageSelect() {
       <Select.Trigger
         ref={trigger}
         aria-label="Page: Work"
-        className="group inline-flex cursor-pointer items-center gap-2 rounded-sm text-left outline-offset-4 focus-visible:outline-2"
+        className="group inline-flex cursor-pointer items-center gap-2 rounded-sm text-left outline-offset-2 focus-visible:outline-2 focus-visible:outline-neutral-500"
       >
         <Select.Value>Work</Select.Value>
         <Select.Icon asChild>

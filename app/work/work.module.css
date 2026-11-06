@@ -17,8 +17,8 @@
   -webkit-tap-highlight-color: transparent;
 }
 .video:has(a:focus-visible) {
-  outline: 2px solid #9f8dfc;
-  outline-offset: 5px;
+  outline: 2px solid #737373;
+  outline-offset: 2px;
 }
 .role,
 .years {

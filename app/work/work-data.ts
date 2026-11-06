@@ -161,6 +161,38 @@ export type Film = ProjectVisual & {
 
 export const films: Record<string, Film> = {
   liveblocksOverview: {
+    galleryLayout: "stack",
+    gallery: [
+      {
+        kind: "image",
+        file: "liveblocks-punta-cana",
+        imageExtension: "jpg",
+        title: "The team together in Punta Cana, 2025.",
+        imageAlt:
+          "Liveblocks team posing together during the Punta Cana retreat",
+        aspectRatio: "1600 / 1066",
+        caption: "The team together in Punta Cana, 2025.",
+      },
+      {
+        kind: "image",
+        file: "liveblocks-ericeira",
+        imageExtension: "jpg",
+        title: "Our team offsite in Ericeira, Portugal, 2024.",
+        imageAlt: "The Liveblocks team gathered in Ericeira",
+        aspectRatio: "1600 / 1066",
+        caption: "Our team offsite in Ericeira, Portugal, 2024.",
+      },
+      {
+        kind: "image",
+        file: "liveblocks-team-icebreaker",
+        imageExtension: "jpg",
+        title: "Making time to connect. An icebreaker at our Ericeira offsite.",
+        imageAlt: "Nimesh leading a team icebreaker in Ericeira",
+        aspectRatio: "1600 / 1067",
+        caption:
+          "Making time to connect. An icebreaker at our Ericeira offsite.",
+      },
+    ],
     youtube: {
       id: "SG8eG7SYEko",
       title: "The story behind Liveblocks 3.0",

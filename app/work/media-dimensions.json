@@ -186,5 +186,17 @@
   "meta-messenger-chat-builder": {
     "height": 1080,
     "width": 1920
+  },
+  "liveblocks-punta-cana": {
+    "width": 1600,
+    "height": 1066
+  },
+  "liveblocks-ericeira": {
+    "width": 1600,
+    "height": 1066
+  },
+  "liveblocks-team-icebreaker": {
+    "width": 1600,
+    "height": 1067
   }
 }

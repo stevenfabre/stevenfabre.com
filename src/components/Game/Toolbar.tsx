@@ -3,7 +3,6 @@ import * as Select from "@radix-ui/react-select";
 import { ColorSwatch } from "./ColorSwatch";
 import { COLORS } from "./constants";
 import { iconControl } from "../buttonStyles";
-import { Tooltip } from "../Tooltip";
 import { SelectMenuSurface, type MenuMotion } from "../SelectMenuSurface";
 import { useTouchSelect } from "../../hooks/useTouchSelect";
 
@@ -45,17 +44,15 @@ export default function Toolbar({
       open={open}
       onOpenChange={setOpen}
     >
-      <Tooltip content="Change color" open={open ? false : undefined}>
-        <Select.Trigger
-          aria-label="Change drawing color"
-          className={`${iconControl} touch-none select-none [-webkit-touch-callout:none]`}
-          onPointerDown={startTouchSelection}
-        >
-          <Select.Value>
-            <ColorSwatch color={currentColor} />
-          </Select.Value>
-        </Select.Trigger>
-      </Tooltip>
+      <Select.Trigger
+        aria-label="Change drawing color"
+        className={`${iconControl} touch-none select-none [-webkit-touch-callout:none]`}
+        onPointerDown={startTouchSelection}
+      >
+        <Select.Value>
+          <ColorSwatch color={currentColor} />
+        </Select.Value>
+      </Select.Trigger>
       <Select.Portal>
         <Select.Content
           ref={content}
@@ -69,7 +66,10 @@ export default function Toolbar({
             backgroundRef={background}
             motionRef={menuMotion}
           >
-            <Select.Viewport className="p-1 [&:not(:has([data-highlighted]))_[data-state=checked]]:bg-neutral-100 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:bg-neutral-700">
+            <Select.Viewport
+              style={{ overflow: "visible" }}
+              className="p-1 [&:not(:has([data-highlighted]))_[data-state=checked]]:bg-neutral-100 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:bg-neutral-700"
+            >
               {Object.entries(COLORS).map(([name, color]) => {
                 const label = name.charAt(0) + name.slice(1).toLowerCase();
                 return (
@@ -80,7 +80,7 @@ export default function Toolbar({
                     aria-label={label}
                     data-menu-item
                     data-select-value={color}
-                    className="flex size-10 cursor-pointer select-none items-center justify-center rounded-xl outline-none data-[highlighted]:bg-neutral-100 dark:data-[highlighted]:bg-neutral-700 sm:size-8"
+                    className="flex size-10 cursor-pointer select-none items-center justify-center rounded-md outline-none data-[highlighted]:bg-neutral-100 dark:data-[highlighted]:bg-neutral-700 sm:size-8"
                   >
                     <Select.ItemText>
                       <span

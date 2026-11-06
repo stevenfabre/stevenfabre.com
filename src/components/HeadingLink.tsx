@@ -26,7 +26,7 @@ export default function HeadingLink({
       {...props}
       className={cx(
         headingControl,
-        "inline-flex items-center gap-1.5 no-underline",
+        "inline-flex items-center gap-1 no-underline",
         styles.link,
         className
       )}

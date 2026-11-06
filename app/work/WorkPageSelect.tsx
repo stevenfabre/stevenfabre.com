@@ -166,9 +166,9 @@ function MenuSurface({ children }: { children: ReactNode }) {
       backgroundY.stop();
     };
   }, [y, backgroundX, backgroundY]);
-  // As displacement increases, resistance grows smoothly toward a 10px limit.
+  // As displacement increases, resistance grows smoothly toward a 12px limit.
   const resist = (distance: number) =>
-    (distance * 10) / (100 + Math.abs(distance));
+    (distance * 12) / (100 + Math.abs(distance));
 
   return (
     <div
@@ -192,8 +192,8 @@ function MenuSurface({ children }: { children: ReactNode }) {
         animate(y, offsetY, transition);
         // The surface responds sooner and travels a little farther than the text.
         const surfaceTransition = { ...transition, duration: 0.2 };
-        animate(backgroundX, offsetX * 1.35, surfaceTransition);
-        animate(backgroundY, offsetY * 1.35, surfaceTransition);
+        animate(backgroundX, offsetX * 1.75, surfaceTransition);
+        animate(backgroundY, offsetY * 1.75, surfaceTransition);
       }}
       onPointerLeave={reset}
       onPointerCancel={reset}
@@ -201,9 +201,13 @@ function MenuSurface({ children }: { children: ReactNode }) {
       <motion.div
         aria-hidden="true"
         className="surface-popover pointer-events-none absolute inset-0"
+        initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.94 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
         style={{
           x: reducedMotion ? 0 : backgroundX,
           y: reducedMotion ? 0 : backgroundY,
+          transformOrigin: "50% 75%",
         }}
       />
       <motion.div className="relative" style={{ y: reducedMotion ? 0 : y }}>

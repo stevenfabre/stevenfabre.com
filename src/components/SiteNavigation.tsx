@@ -11,6 +11,7 @@ import {
   prepareProjectImages,
 } from "../utils/transitionImages";
 import { captureProjectTransition } from "../utils/projectTransition";
+import { holdSwipeVisual } from "../utils/swipeVisual";
 import { usePathname, useRouter } from "next/navigation";
 import {
   createContext,
@@ -40,6 +41,7 @@ type Navigate = (
     source?: HTMLElement | null;
     animate?: boolean;
     scrollToContent?: boolean;
+    swipeVisual?: HTMLElement | null;
   }
 ) => boolean;
 const Navigation = createContext<{
@@ -98,6 +100,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
   const active = useRef<Transition | null>(null);
   const images = useRef<ReturnType<typeof prepareProjectImages> | null>(null);
   const sequence = useRef(0);
+  const swipeVisual = useRef<(() => void) | null>(null);
   const fallback = useRef<ReturnType<typeof captureProjectTransition> | null>(
     null
   );
@@ -173,8 +176,18 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       restoreContentScroll();
       images.current?.selectDestination();
       fallback.current?.prepareDestination();
-      if (images.current || fallback.current) await decodeVisibleImages();
+      if (images.current || fallback.current || swipeVisual.current)
+        await decodeVisibleImages();
       if (pending.current !== navigation) return;
+      if (swipeVisual.current) {
+        // Leave one painted destination frame beneath the retained poster.
+        await new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+        );
+        if (pending.current !== navigation) return;
+        swipeVisual.current?.();
+        swipeVisual.current = null;
+      }
       navigation.finish();
       pending.current = null;
     },
@@ -188,12 +201,21 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       active.current?.skipTransition();
       fallback.current?.cancel();
       images.current?.cancel();
+      swipeVisual.current?.();
     },
     []
   );
 
   const navigate = useCallback<Navigate>(
-    (href, { source, animate = true, scrollToContent = false } = {}) => {
+    (
+      href,
+      {
+        source,
+        animate = true,
+        scrollToContent = false,
+        swipeVisual: incomingVisual,
+      } = {}
+    ) => {
       const doc = document as TransitionDocument;
       const destination = new URL(href, location.href);
       if (destination.origin !== location.origin) return false;
@@ -207,6 +229,8 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       fallback.current = null;
       images.current?.cancel();
       images.current = null;
+      swipeVisual.current?.();
+      swipeVisual.current = null;
       if (pathname.startsWith("/work/") && destination.pathname === "/work") {
         const video = document.querySelector<HTMLVideoElement>(
           "[data-project-slug] [data-work-visual] video"
@@ -218,6 +242,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
         router.push(href);
         return true;
       }
+      if (incomingVisual) swipeVisual.current = holdSwipeVisual(incomingVisual);
       const shouldAnimate =
         animate &&
         !(pathname === "/" && destination.pathname === "/work") &&
@@ -256,6 +281,8 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
               fallback.current = null;
               images.current?.cancel();
               images.current = null;
+              swipeVisual.current?.();
+              swipeVisual.current = null;
             }
             resolve();
           }, 8000);

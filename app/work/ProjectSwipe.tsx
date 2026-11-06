@@ -250,7 +250,12 @@ export default function ProjectSwipe({
     const request = ++sequence.current;
     const complete = () => {
       if (sequence.current !== request) return;
-      navigate(href, { animate: false });
+      const incoming = track.current?.querySelector<HTMLElement>(
+        `[data-swipe-preview="${
+          direction === 1 ? "next" : "previous"
+        }"] [data-work-visual]`
+      );
+      navigate(href, { animate: false, swipeVisual: incoming });
       // Restore an operable current page if navigation never commits.
       recovery.current = setTimeout(reset, 5000);
     };
@@ -298,7 +303,7 @@ export default function ProjectSwipe({
             aria-hidden="true"
             {...{ inert: true }}
             style={{ left: -neighbors.width, top: neighbors.top }}
-            data-swipe-preview
+            data-swipe-preview="previous"
           >
             {previous}
           </div>
@@ -310,7 +315,7 @@ export default function ProjectSwipe({
             aria-hidden="true"
             {...{ inert: true }}
             style={{ left: neighbors.width, top: neighbors.top }}
-            data-swipe-preview
+            data-swipe-preview="next"
           >
             {next}
           </div>

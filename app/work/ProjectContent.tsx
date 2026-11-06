@@ -103,7 +103,11 @@ export default function ProjectContent({
             >
               <div className="min-w-0 grid gap-1">
                 <p className="flex items-center font-medium text-[var(--ink)]">
-                  <ExternalLink href={company.url} iconSize={13}>
+                  <ExternalLink
+                    href={company.url}
+                    iconSize={13}
+                    className="gap-1"
+                  >
                     {company.name}
                   </ExternalLink>
                 </p>
@@ -116,7 +120,10 @@ export default function ProjectContent({
                   aria-label="My contributions"
                 >
                   {film.contributions.map((contribution) => (
-                    <li key={contribution} className="flex items-center gap-1.5">
+                    <li
+                      key={contribution}
+                      className="flex items-center gap-1.5"
+                    >
                       <ResponsibilityIcon name={contribution} />
                       <span>{contribution}</span>
                     </li>

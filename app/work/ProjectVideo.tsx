@@ -14,6 +14,9 @@ import {
   clearVideoPlayback,
 } from "../../src/utils/videoPlayback";
 
+const nativeControlsQuery =
+  "(max-width: 767px), (hover: none), (pointer: coarse)";
+
 export default function ProjectVideo({
   film,
   preload = "metadata",
@@ -25,6 +28,14 @@ export default function ProjectVideo({
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const posterRef = useRef<HTMLImageElement>(null);
+  const [nativeControls, setNativeControls] = useState(false);
+  useLayoutEffect(() => {
+    const query = window.matchMedia(nativeControlsQuery);
+    const update = () => setNativeControls(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
   useLayoutEffect(() => {
     const frame = readVideoFrame(film.file);
     if (frame && posterRef.current) posterRef.current.src = frame;
@@ -63,7 +74,7 @@ export default function ProjectVideo({
     if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
     else if (video.requestFullscreen)
       void video.requestFullscreen().catch(() => {
-        video.controls = false;
+        video.controls = window.matchMedia(nativeControlsQuery).matches;
       });
     else {
       void video.play().catch(() => {});
@@ -118,7 +129,7 @@ export default function ProjectVideo({
       cancelAnimationFrame(frame);
       events.forEach((event) => video.removeEventListener(event, sync));
     };
-  }, [film.file]);
+  }, [film.file, nativeControls]);
   const { width, height } = getMediaDimensions(film);
   useEffect(() => {
     const video = ref.current;
@@ -147,15 +158,37 @@ export default function ProjectVideo({
     }
     let visible = false;
     let playPending = false;
+    let automaticPauses = 0;
+    const onNativePlay = () => {
+      if (video.controls && !playPending) {
+        userRequestedPlayback.current = true;
+        manuallyPaused.current = false;
+      }
+    };
+    const onNativePause = () => {
+      if (automaticPauses > 0) automaticPauses--;
+      else if (video.controls && !video.ended) manuallyPaused.current = true;
+    };
+    video.addEventListener("play", onNativePlay);
+    video.addEventListener("pause", onNativePause);
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const syncPlayback = () => {
+      const fullscreen =
+        document.fullscreenElement === video ||
+        (video as HTMLVideoElement & { webkitDisplayingFullscreen?: boolean })
+          .webkitDisplayingFullscreen;
       if (
-        !visible ||
+        (!visible && !fullscreen) ||
         document.hidden ||
         (motion.matches && !userRequestedPlayback.current) ||
         document.documentElement.hasAttribute("data-project-transition")
       ) {
-        video.pause();
+        // Native pause/seeking must not be undone by the visibility observer.
+        // Track our own pauses separately from the browser's controls.
+        if (!video.paused) {
+          automaticPauses++;
+          video.pause();
+        }
       } else if (
         !manuallyPaused.current &&
         !video.ended &&
@@ -211,7 +244,8 @@ export default function ProjectVideo({
     observer?.observe(video);
     const pauseWhenHidden = syncPlayback;
     const exitFullscreen = () => {
-      if (!document.fullscreenElement) video.controls = false;
+      if (!document.fullscreenElement)
+        video.controls = window.matchMedia(nativeControlsQuery).matches;
     };
     document.addEventListener("fullscreenchange", exitFullscreen);
     video.addEventListener("webkitendfullscreen", exitFullscreen);
@@ -222,6 +256,8 @@ export default function ProjectVideo({
       transitionObserver.disconnect();
       video.removeEventListener("canplay", syncPlayback);
       video.removeEventListener("seeked", syncPlayback);
+      video.removeEventListener("play", onNativePlay);
+      video.removeEventListener("pause", onNativePause);
       motion.removeEventListener("change", syncPlayback);
       document.removeEventListener("fullscreenchange", exitFullscreen);
       video.removeEventListener("webkitendfullscreen", exitFullscreen);
@@ -234,6 +270,7 @@ export default function ProjectVideo({
   return (
     <div
       className={playerStyles.player}
+      data-native-controls={nativeControls || undefined}
       data-frame-ready={frameReady || undefined}
       data-controls-visible={controlsVisible || !playing || undefined}
     >
@@ -258,69 +295,72 @@ export default function ProjectVideo({
         height={height}
         loop={autoLoop}
         muted={muted}
+        controls={nativeControls}
         onVolumeChange={(event) => {
           const nextMuted = event.currentTarget.muted;
           setMuted(nextMuted);
         }}
-        onClick={() => {
-          if (window.matchMedia("(hover: none), (pointer: coarse)").matches)
-            setControlsVisible((visible) => !visible);
-          else togglePlay();
-        }}
+        onClick={nativeControls ? undefined : togglePlay}
         tabIndex={0}
-        onKeyDown={(event) => {
-          if (event.key === " " || event.key === "Enter") {
-            event.preventDefault();
-            togglePlay();
-          }
-        }}
+        onKeyDown={
+          nativeControls
+            ? undefined
+            : (event) => {
+                if (event.key === " " || event.key === "Enter") {
+                  event.preventDefault();
+                  togglePlay();
+                }
+              }
+        }
         playsInline
         preload={preload === "none" ? "none" : "auto"}
         aria-label={film.title}
         onError={() => setFailed(true)}
       />
-      <div
-        className={playerStyles.controls}
-        role="group"
-        aria-label="Video controls"
-      >
-        <button
-          type="button"
-          onClick={togglePlay}
-          aria-label={playing ? "Pause" : "Play"}
+      {!nativeControls && (
+        <div
+          className={playerStyles.controls}
+          role="group"
+          aria-label="Video controls"
         >
-          <WorkIcon name={playing ? "pause" : "play"} size={18} />
-        </button>
-        <span className="shrink-0 text-[11px] tabular-nums">
-          {formatTime(time)} /{" "}
-          {formatTime(Number.isFinite(duration) ? duration : 0)}
-        </span>
-        <input
-          ref={progressRef}
-          aria-label="Video progress"
-          type="range"
-          min={0}
-          step={0.01}
-          defaultValue={0}
-          className={`${playerStyles.progress} min-w-0 flex-1 cursor-pointer`}
-          onChange={(event) => {
-            if (ref.current)
-              ref.current.currentTime = Number(event.target.value);
-          }}
-        />
-        <button
-          type="button"
-          aria-label={muted ? "Unmute" : "Mute"}
-          onClick={() => {
-            if (ref.current) ref.current.muted = !ref.current.muted;
-          }}
-        >
-          <WorkIcon name={muted ? "volume-off" : "volume"} size={18} />
-        </button>
-        <button type="button" aria-label="Full screen" onClick={fullscreen}>
-          <WorkIcon name="maximize" size={18} />
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={togglePlay}
+            aria-label={playing ? "Pause" : "Play"}
+          >
+            <WorkIcon name={playing ? "pause" : "play"} size={18} />
+          </button>
+          <span className="shrink-0 text-[11px] tabular-nums">
+            {formatTime(time)} /{" "}
+            {formatTime(Number.isFinite(duration) ? duration : 0)}
+          </span>
+          <input
+            ref={progressRef}
+            aria-label="Video progress"
+            type="range"
+            min={0}
+            step={0.01}
+            defaultValue={0}
+            className={`${playerStyles.progress} min-w-0 flex-1 cursor-pointer`}
+            onChange={(event) => {
+              if (ref.current)
+                ref.current.currentTime = Number(event.target.value);
+            }}
+          />
+          <button
+            type="button"
+            aria-label={muted ? "Unmute" : "Mute"}
+            onClick={() => {
+              if (ref.current) ref.current.muted = !ref.current.muted;
+            }}
+          >
+            <WorkIcon name={muted ? "volume-off" : "volume"} size={18} />
+          </button>
+          <button type="button" aria-label="Full screen" onClick={fullscreen}>
+            <WorkIcon name="maximize" size={18} />
+          </button>
+        </div>
+      )}
       {failed && (
         <p className="absolute inset-x-4 bottom-4 rounded-lg bg-neutral-900/90 p-3 text-xs text-white [&_a]:inline-flex [&_a]:items-center [&_a]:gap-2">
           The video couldn’t load.{" "}

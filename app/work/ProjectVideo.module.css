@@ -12,7 +12,8 @@
 .player [data-video-poster] {
   z-index: 1;
 }
-.player[data-frame-ready="true"] [data-video-poster] {
+.player[data-frame-ready="true"] [data-video-poster],
+.player[data-native-controls="true"] [data-video-poster] {
   visibility: hidden;
 }
 :global(html[data-project-transition]) .player [data-video-poster] {
@@ -68,23 +69,12 @@
   opacity: 1;
   pointer-events: auto;
 }
-@media (hover: none), (pointer: coarse) {
+@media (max-width: 767px), (hover: none), (pointer: coarse) {
   .controls {
-    gap: 8px;
-    padding-inline: 8px;
-  }
-  .controls button {
-    width: 40px;
-    height: 40px;
+    display: none;
   }
 }
 @media (hover: hover) and (pointer: fine) {
-  .controls {
-    display: flex;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 120ms ease-out;
-  }
   .player:hover .controls,
   .player:focus-within .controls {
     opacity: 1;

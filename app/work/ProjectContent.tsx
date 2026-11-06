@@ -77,6 +77,7 @@ export default function ProjectContent({
                   <ButtonLink
                     key={link.href}
                     appearance="raised"
+                    compact
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"

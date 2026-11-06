@@ -34,7 +34,7 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         "data-[keyboard-pressed=true]:bg-neutral-200 data-[keyboard-pressed=true]:text-neutral-900 dark:data-[keyboard-pressed=true]:bg-neutral-800 dark:data-[keyboard-pressed=true]:text-neutral-100 text-neutral-500 hover:bg-neutral-200 focus:bg-neutral-200 hover:text-neutral-900 focus:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 dark:hover:text-neutral-100 dark:focus:text-neutral-100",
       variant === "icon"
         ? squareControlSize
-        : "gap-1 text-sm font-medium [&_svg]:size-4",
+        : "gap-1.5 text-sm font-medium leading-none [&_svg]:size-4 [&_svg]:shrink-0",
       variant === "text" &&
         (iconPosition === "end"
           ? compact

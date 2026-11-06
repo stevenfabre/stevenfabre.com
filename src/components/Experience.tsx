@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Tooltip } from "./Tooltip";
-import { ReactNode } from "react";
+import CompanyLink from "./CompanyLink";
+import { WorkPreviewLink } from "./WorkPreview";
 
 export type ExperienceProps = {
   title: string;
@@ -8,6 +8,7 @@ export type ExperienceProps = {
   company: string;
   tooltip?: string;
   url?: string;
+  preview?: boolean;
 };
 
 export default function Experience({
@@ -16,21 +17,30 @@ export default function Experience({
   tooltip,
   title,
   when,
+  preview,
 }: ExperienceProps) {
+  const link = url ? (
+    <CompanyLink href={url} target="_blank" rel="noopener noreferrer">
+      {company}
+    </CompanyLink>
+  ) : (
+    <span className="text-neutral-900 dark:text-neutral-100">{company}</span>
+  );
+  const companyLink =
+    tooltip && url ? (
+      <Tooltip content={tooltip} delayDuration={200} sideOffset={4} side="left">
+        {link}
+      </Tooltip>
+    ) : (
+      link
+    );
   return (
     <li className="flex flex-col @lg/content:flex-row @lg/content:justify-between @lg/content:items-baseline @lg/content:space-x-2 pl-0 text-base leading-relaxed @xl/content:text-lg @xl/content:leading-relaxed">
       <span>
-        {tooltip ? (
-          <Tooltip
-            content={tooltip}
-            delayDuration={200}
-            sideOffset={4}
-            side="left"
-          >
-            <Company url={url}>{company}</Company>
-          </Tooltip>
+        {preview ? (
+          <WorkPreviewLink company={company}>{companyLink}</WorkPreviewLink>
         ) : (
-          <Company url={url}>{company}</Company>
+          companyLink
         )}
       </span>
       <span className="hidden @lg/content:flex grow border-t border-black/10 dark:border-white/10 min-w-4" />
@@ -41,20 +51,5 @@ export default function Experience({
         </span>
       </span>
     </li>
-  );
-}
-
-function Company({ children, url }: { children: ReactNode; url?: string }) {
-  return url ? (
-    <Link
-      className="shrink-0 underline-offset-4 decoration-2 underline decoration-neutral-300 hover:decoration-neutral-900 focus:decoration-neutral-900 dark:decoration-neutral-700 dark:hover:decoration-neutral-100 dark:focus:decoration-neutral-100 text-neutral-900 dark:text-neutral-100 focus:outline-hidden"
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {children}
-    </Link>
-  ) : (
-    <span className="text-neutral-900 dark:text-neutral-100">{children}</span>
   );
 }

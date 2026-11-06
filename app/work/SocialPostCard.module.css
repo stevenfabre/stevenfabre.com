@@ -1,0 +1,43 @@
+/* Cropped archive avatar with an Instagram gradient ring. */
+.instagramAvatar {
+  display: block;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-size: 388.125px 694.14px;
+  background-position: -9.6px -14.775px;
+}
+
+.instagramAvatar {
+  position: relative;
+  margin: 4px;
+}
+.instagramAvatar::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  padding: 2px;
+  background: conic-gradient(
+    from 210deg,
+    #ffcc54,
+    #ff7244,
+    #e52a7b,
+    #9d37ba,
+    #e52a7b,
+    #ffcc54
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* The archived screenshot includes Instagram chrome; crop to its media. */
+.instagram [data-work-visual] {
+  aspect-ratio: 1125 / 1406;
+}
+.instagram [data-work-visual] img {
+  height: auto;
+  transform: translateY(-8.6%);
+}

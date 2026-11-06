@@ -1,0 +1,134 @@
+.player {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+/* Keep the native video visible to WebKit's media compositor. The separate
+   poster covers it until a decoded frame is ready, without a blank/fade gap. */
+.player video[data-poster-video] {
+  opacity: 1;
+  transition: none;
+}
+.player [data-video-poster] {
+  z-index: 1;
+}
+.player[data-frame-ready="true"] [data-video-poster],
+.player[data-native-controls="true"] [data-video-poster] {
+  visibility: hidden;
+}
+:global(html[data-project-transition]) .player [data-video-poster] {
+  visibility: visible;
+}
+.controls {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease-out;
+  align-items: center;
+  gap: 12px;
+  padding: 28px 12px 10px;
+  color: white;
+  background: linear-gradient(transparent, rgb(0 0 0 / 65%));
+}
+.controls button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 300ms ease-out;
+}
+.controls button:active {
+  background: rgb(255 255 255 / 15%);
+  transition-duration: 0ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .controls button:hover {
+    background: rgb(255 255 255 / 15%);
+  }
+}
+.controls button:focus-visible {
+  outline: none;
+  background: rgb(255 255 255 / 15%);
+}
+.controls input:focus-visible {
+  outline: none;
+}
+.progress:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 30%);
+}
+.progress:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 30%);
+}
+.player[data-controls-visible="true"] .controls {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (max-width: 767px), (hover: none), (pointer: coarse) {
+  .controls {
+    display: none;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .player:hover .controls,
+  .player:focus-within .controls {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .controls {
+    transition: none;
+  }
+}
+
+/* Native range behavior, with a borderless track in WebKit and Firefox. */
+.progress {
+  appearance: none;
+  height: 24px;
+  border: 0;
+  background: transparent;
+}
+.progress::-webkit-slider-runnable-track {
+  height: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    rgb(255 255 255 / 55%) var(--progress),
+    rgb(255 255 255 / 20%) var(--progress)
+  );
+}
+.progress::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  margin-top: -3.5px;
+  border: 0;
+  border-radius: 50%;
+  background: white;
+}
+.progress::-moz-range-track {
+  height: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 20%);
+}
+.progress::-moz-range-progress {
+  height: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 55%);
+}
+.progress::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: white;
+}

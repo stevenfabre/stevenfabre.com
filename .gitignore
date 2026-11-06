@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local portfolio source notes and research; published assets live in public/work/media.
+/private/work/

@@ -1,3 +1,4 @@
+import HeadingLink from "./HeadingLink";
 import Experience, { ExperienceProps } from "./Experience";
 
 const EXPERIENCES: ExperienceProps[] = [
@@ -31,7 +32,7 @@ const EXPERIENCES: ExperienceProps[] = [
     company: "Easee",
     url: "https://thenextweb.com/news/invision-acquires-easee-animation-tool",
     title: "Founder",
-    when: "2016",
+    when: "2015-2016",
   },
   {
     company: "Campaign Monitor",
@@ -66,16 +67,21 @@ const EXPERIENCES: ExperienceProps[] = [
 ];
 
 export default function Work() {
+  const experiences = (
+    <ul className="flex flex-col mt-4 xl:mt-6 gap-3">
+      {EXPERIENCES.map((experience) => (
+        <Experience key={experience.company} {...experience} preview />
+      ))}
+    </ul>
+  );
   return (
     <>
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
-        Work
+        <HeadingLink href="/work" clientNavigation>
+          Work
+        </HeadingLink>
       </h2>
-      <ul className="flex flex-col mt-4 xl:mt-6 gap-3">
-        {EXPERIENCES.map((experience, index) => {
-          return <Experience key={index} {...experience} />;
-        })}
-      </ul>
+      {experiences}
     </>
   );
 }

@@ -1,11 +1,14 @@
 import "../src/styles/globals.css";
+import "../src/styles/transitions.css";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Person, WithContext } from "schema-dts";
+import SiteLayout from "../src/components/SiteLayout";
+import { SiteNavigationProvider } from "../src/components/SiteNavigation";
 
 const font = Inter({ subsets: ["latin"] });
 
@@ -46,6 +49,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 const jsonLd: WithContext<Person> = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -80,18 +89,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={font.className} suppressHydrationWarning>
-      <head>
-        <meta content="initial-scale=1, viewport-fit=cover" name="viewport" />
-      </head>
       <body>
         <ThemeProvider attribute="class">
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <SiteNavigationProvider>
+              <SiteLayout>{children}</SiteLayout>
+            </SiteNavigationProvider>
+          </TooltipProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
         />
       </body>
     </html>

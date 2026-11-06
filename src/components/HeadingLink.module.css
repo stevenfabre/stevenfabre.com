@@ -1,0 +1,64 @@
+/* Hover choreography shared by internal and external heading links. */
+.arrow {
+  display: inline-grid;
+  overflow: hidden;
+  flex-shrink: 0;
+  opacity: var(--link-arrow-opacity, 0.4);
+  transition: opacity 150ms ease;
+}
+
+.arrow svg {
+  grid-area: 1 / 1;
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1), opacity 180ms ease,
+    filter 180ms ease;
+}
+
+.departing {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate(0, 0);
+}
+
+.arriving {
+  opacity: 0;
+  filter: blur(4px);
+  transform: translate(-50%, 75%);
+}
+
+.link:focus-visible .arrow {
+  opacity: 1;
+  transition: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover .arrow {
+    opacity: 1;
+  }
+  .link:hover .departing {
+    transform: translate(75%, -75%);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  .link:hover .arriving {
+    transform: translate(0, 0);
+    opacity: 1;
+    filter: blur(0);
+    transition-duration: 220ms;
+    transition-delay: 60ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow,
+  .arrow svg {
+    transition: none;
+  }
+  .link:hover .departing {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .link:hover .arriving {
+    opacity: 0;
+  }
+}

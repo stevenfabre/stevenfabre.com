@@ -1,0 +1,31 @@
+.digit {
+  --travel: 28px;
+  position: relative;
+  display: inline-grid;
+  width: 1ch;
+  height: 24px;
+  line-height: 16px;
+  align-items: center;
+  text-align: center;
+  mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+  overflow: hidden;
+}
+.digit[data-direction="-1"] { --travel: -28px; }
+.roll {
+  position: relative;
+  display: block;
+  animation: roll 200ms cubic-bezier(.2, 1.15, .35, 1) both;
+}
+.previous {
+  position: absolute;
+  inset: 0;
+  transform: translateY(calc(-1 * var(--travel)));
+}
+@keyframes roll {
+  from { transform: translateY(var(--travel)); }
+  to { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .roll { animation: none; }
+  .previous { display: none; }
+}

@@ -1,0 +1,202 @@
+{
+  "backseat-channel-nine-feature": {
+    "height": 650,
+    "width": 1155
+  },
+  "backseat-ride-request-iphone": {
+    "height": 1024,
+    "width": 1536
+  },
+  "campaign-monitor-email-builder-drag-and-drop": {
+    "width": 2340,
+    "height": 1536
+  },
+  "campaign-monitor-email-builder-landing-page": {
+    "height": 1492,
+    "width": 2340
+  },
+  "campaign-monitor-template-gallery-after": {
+    "width": 1140,
+    "height": 672
+  },
+  "campaign-monitor-template-gallery-before": {
+    "width": 1140,
+    "height": 672
+  },
+  "campaign-monitor-template-gallery-sxsw": {
+    "width": 1755,
+    "height": 900
+  },
+  "campaign-monitor-typography-editor-after": {
+    "width": 1140,
+    "height": 576
+  },
+  "campaign-monitor-typography-editor-before": {
+    "width": 1140,
+    "height": 576
+  },
+  "easee-animation-builder": {
+    "width": 2340,
+    "height": 1654
+  },
+  "easee-animation-builder-css": {
+    "width": 2340,
+    "height": 1654
+  },
+  "easee-animation-library": {
+    "width": 1170,
+    "height": 624
+  },
+  "easee-homepage": {
+    "height": 1344,
+    "width": 2340
+  },
+  "easee-net-magazine-feature": {
+    "height": 1240,
+    "width": 951
+  },
+  "gifmock-auto-crop": {
+    "height": 600,
+    "width": 1012
+  },
+  "gifmock-figma-precision-editing": {
+    "height": 480,
+    "width": 852
+  },
+  "gifmock-macos-big-sur": {
+    "height": 820,
+    "width": 1126
+  },
+  "gifmock-sketch-demo": {
+    "height": 1080,
+    "width": 1920
+  },
+  "invision-studio": {
+    "height": 1080,
+    "width": 1920
+  },
+  "invision-studio-color-picker": {
+    "height": 1080,
+    "width": 1661
+  },
+  "invision-studio-update-window": {
+    "height": 900,
+    "width": 1200
+  },
+  "liveblocks-brand-collaboration-messaging": {
+    "width": 3000,
+    "height": 1875
+  },
+  "liveblocks-brand-collaborative-shapes": {
+    "width": 3000,
+    "height": 1688
+  },
+  "liveblocks-brand-colors-and-shapes": {
+    "width": 1920,
+    "height": 1080
+  },
+  "liveblocks-brand-desktop-website": {
+    "width": 3000,
+    "height": 1875
+  },
+  "liveblocks-brand-identity-card": {
+    "width": 2800,
+    "height": 1750
+  },
+  "liveblocks-brand-mobile-website": {
+    "width": 3000,
+    "height": 1875
+  },
+  "liveblocks-brand-react-brussels-announcement": {
+    "width": 3000,
+    "height": 1875
+  },
+  "liveblocks-brand-station-poster": {
+    "width": 3000,
+    "height": 1875
+  },
+  "liveblocks-brand-wordmark": {
+    "width": 3000,
+    "height": 1688
+  },
+  "liveblocks-company-introduction": {
+    "height": 1080,
+    "width": 1920
+  },
+  "liveblocks-homepage-ai-game": {
+    "height": 2194,
+    "width": 3456
+  },
+  "liveblocks-homepage-redesign": {
+    "height": 1080,
+    "width": 1620
+  },
+  "liveblocks-homepage-reflections": {
+    "height": 2194,
+    "width": 3456
+  },
+  "liveblocks-homepage-svg-playground": {
+    "height": 1694,
+    "width": 2856
+  },
+  "liveblocks-logo-experiment": {
+    "height": 3840,
+    "width": 3840
+  },
+  "liveblocks-louvre-campaign-almonk": {
+    "height": 1920,
+    "width": 1080
+  },
+  "liveblocks-louvre-campaign-complex-post": {
+    "height": 2012,
+    "width": 1125
+  },
+  "liveblocks-louvre-campaign-launch": {
+    "height": 1920,
+    "width": 1080
+  },
+  "liveblocks-louvre-campaign-soleio": {
+    "height": 1920,
+    "width": 1080
+  },
+  "liveblocks-louvre-campaign-sphere": {
+    "height": 1920,
+    "width": 1080
+  },
+  "liveblocks-louvre-campaign-steven-fabre": {
+    "height": 1920,
+    "width": 1080
+  },
+  "liveblocks-nextjs-template-week-introduction": {
+    "height": 1080,
+    "width": 1920
+  },
+  "liveblocks-nextjs-template-week-issue-tracker": {
+    "height": 1080,
+    "width": 1544
+  },
+  "liveblocks-nextjs-template-week-multiplayer": {
+    "height": 1080,
+    "width": 1556
+  },
+  "liveblocks-realtime-infrastructure": {
+    "height": 1080,
+    "width": 1588
+  },
+  "meta-messenger-chat-builder": {
+    "height": 1080,
+    "width": 1920
+  },
+  "liveblocks-punta-cana": {
+    "width": 1600,
+    "height": 1066
+  },
+  "liveblocks-ericeira": {
+    "width": 1600,
+    "height": 1066
+  },
+  "liveblocks-team-icebreaker": {
+    "width": 1600,
+    "height": 1067
+  }
+}

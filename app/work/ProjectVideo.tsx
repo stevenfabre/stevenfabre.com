@@ -31,7 +31,6 @@ export default function ProjectVideo({
   const frameReady = useVideoFrameReady(ref, film.file);
   const progressRef = useRef<HTMLInputElement>(null);
   const manuallyPaused = useRef(false);
-  const soundPreferenceReady = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   const [time, setTime] = useState(0);
@@ -112,13 +111,6 @@ export default function ProjectVideo({
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
-    try {
-      video.muted = sessionStorage.getItem("work-video-muted") !== "false";
-      setMuted(video.muted);
-    } catch {
-      // Keep the default when session storage is unavailable.
-    }
-    soundPreferenceReady.current = true;
     let cancelled = false;
     const playback = readVideoPlayback(film.file);
     if (playback) manuallyPaused.current = !playback.playing;
@@ -240,12 +232,13 @@ export default function ProjectVideo({
         onVolumeChange={(event) => {
           const nextMuted = event.currentTarget.muted;
           setMuted(nextMuted);
-          if (soundPreferenceReady.current) {
-            try {
-              sessionStorage.setItem("work-video-muted", String(nextMuted));
-            } catch {
-              // Playback still works when session storage is unavailable.
-            }
+          if (!nextMuted) {
+            // Also covers sound enabled through native fullscreen controls.
+            document.querySelectorAll("video").forEach((other) => {
+              if (other !== event.currentTarget && !other.muted) {
+                other.muted = true;
+              }
+            });
           }
         }}
         onClick={() => {

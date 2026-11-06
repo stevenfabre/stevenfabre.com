@@ -25,9 +25,12 @@ const pages = [
   { label: "Home", href: "/" },
   { label: "Work", href: "/work" },
 ];
+const selectedPage = "/work";
+const selectedPageIndex = pages.findIndex(({ href }) => href === selectedPage);
 
 export default function WorkPageSelect() {
   const navigate = useSiteNavigation();
+  const reducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
   const [openedFromFocus, setOpenedFromFocus] = useState(false);
@@ -90,7 +93,7 @@ export default function WorkPageSelect() {
   return (
     <Select.Root
       open={open}
-      value="/work"
+      value={selectedPage}
       onValueChange={(href) => {
         selectedHref.current = href;
       }}
@@ -150,14 +153,38 @@ export default function WorkPageSelect() {
             openedFromFocus={openedFromFocus}
           >
             <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
-              {pages.map(({ label, href }) => (
+              {pages.map(({ label, href }, index) => (
                 <Select.Item
                   data-menu-item
                   key={href}
                   value={href}
                   className="flex cursor-pointer select-none items-center px-1.5 py-0.5 leading-[1.1] text-neutral-400 outline-none data-[highlighted]:text-neutral-900 dark:text-neutral-500 dark:data-[highlighted]:text-neutral-100 md:px-3 md:py-1 md:leading-[inherit]"
                 >
-                  <Select.ItemText data-page-label>{label}</Select.ItemText>
+                  <Select.ItemText data-page-label>
+                    {/* Keep entry transforms separate from cursor-driven item motion. */}
+                    <motion.span
+                      className="inline-block origin-left"
+                      initial={
+                        href === selectedPage || reducedMotion
+                          ? false
+                          : { opacity: 0, scale: 0.96 }
+                      }
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        delay: reducedMotion
+                          ? 0
+                          : (index > selectedPageIndex ? index - 1 : index) *
+                            0.02,
+                        scale: { type: "spring", duration: 0.4, bounce: 0.6 },
+                        opacity: {
+                          duration: 0.16,
+                          ease: [0.23, 1, 0.32, 1],
+                        },
+                      }}
+                    >
+                      {label}
+                    </motion.span>
+                  </Select.ItemText>
                 </Select.Item>
               ))}
             </Select.Viewport>

@@ -11,6 +11,8 @@ import {
 import {
   animate,
   motion,
+  stagger,
+  useAnimate,
   useMotionValue,
   useReducedMotion,
 } from "motion/react";
@@ -126,6 +128,7 @@ export default function WorkPageSelect() {
             <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
               {pages.map(({ label, href }) => (
                 <Select.Item
+                  data-menu-item
                   key={href}
                   value={href}
                   className="flex cursor-pointer select-none items-center px-1.5 py-0.5 leading-[1.1] text-neutral-400 outline-none data-[highlighted]:text-neutral-900 dark:text-neutral-500 dark:data-[highlighted]:text-neutral-100 md:px-3 md:py-1 md:leading-[inherit]"
@@ -151,36 +154,42 @@ function MenuSurface({
   open: boolean;
 }) {
   const reducedMotion = useReducedMotion();
+  const [scope, animateItems] = useAnimate<HTMLDivElement>();
   const backgroundX = useMotionValue(0);
   const backgroundY = useMotionValue(0);
-  const y = useMotionValue(0);
   const reset = () => {
     const transition = { type: "spring" as const, duration: 0.4, bounce: 0.4 };
-    animate(y, 0, { ...transition, delay: 0.08 });
+    animateItems(
+      "[data-menu-item]",
+      { y: 0 },
+      reducedMotion
+        ? { duration: 0 }
+        : { ...transition, delay: stagger(0.04, { startDelay: 0.08 }) }
+    );
     animate(backgroundX, 0, { ...transition, duration: 0.25 });
     animate(backgroundY, 0, { ...transition, duration: 0.25 });
   };
   useEffect(() => {
     // Radix can focus the listbox outside this surface before an item.
     const stop = () => {
-      y.jump(0);
+      animateItems("[data-menu-item]", { y: 0 }, { duration: 0 });
       backgroundX.jump(0);
       backgroundY.jump(0);
     };
     document.addEventListener("keydown", stop);
     return () => {
       document.removeEventListener("keydown", stop);
-      y.stop();
       backgroundX.stop();
       backgroundY.stop();
     };
-  }, [y, backgroundX, backgroundY]);
+  }, [animateItems, backgroundX, backgroundY]);
   // As displacement increases, resistance grows smoothly toward a 12px limit.
   const resist = (distance: number) =>
     (distance * 12) / (100 + Math.abs(distance));
 
   return (
     <div
+      ref={scope}
       className="relative isolate"
       onPointerMove={(event) => {
         if (
@@ -198,7 +207,7 @@ function MenuSurface({
           duration: 0.3,
           bounce: 0,
         };
-        animate(y, offsetY, transition);
+        animateItems("[data-menu-item]", { y: offsetY }, transition);
         // The surface responds sooner and travels a little farther than the text.
         const surfaceTransition = { ...transition, duration: 0.2 };
         animate(backgroundX, offsetX * 1.75, surfaceTransition);
@@ -222,9 +231,7 @@ function MenuSurface({
           transformOrigin: "50% 75%",
         }}
       />
-      <motion.div className="relative" style={{ y: reducedMotion ? 0 : y }}>
-        {children}
-      </motion.div>
+      <div className="relative">{children}</div>
     </div>
   );
 }

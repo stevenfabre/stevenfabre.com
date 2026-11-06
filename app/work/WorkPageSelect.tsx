@@ -217,15 +217,20 @@ export default function WorkPageSelect() {
                       initial={
                         href === selectedPage || reducedMotion
                           ? false
-                          : { opacity: 0, scale: 0.96 }
+                          : {
+                              opacity: 0,
+                              scale: 0.96,
+                              y: index < selectedPageIndex ? 8 : -8,
+                            }
                       }
-                      animate={{ opacity: 1, scale: 1 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
                       transition={{
                         delay: reducedMotion
                           ? 0
                           : (index > selectedPageIndex ? index - 1 : index) *
                             0.02,
                         scale: { type: "spring", duration: 0.4, bounce: 0.6 },
+                        y: { type: "spring", duration: 0.4, bounce: 0.2 },
                         opacity: {
                           duration: 0.16,
                           ease: [0.23, 1, 0.32, 1],

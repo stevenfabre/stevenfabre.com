@@ -12,7 +12,7 @@ export default function WorkPortfolio() {
       id="content"
     >
       <div id="top" className="absolute top-0" />
-      <header className="pb-[52px]">
+      <header className="pb-14">
         <h1 className="text-balance text-3xl tracking-tight font-semibold text-neutral-900 @sm/content:text-4xl @sm/content:tracking-tight dark:text-neutral-100 @xl/content:text-6xl @xl/content:tracking-tight">
           <WorkPageSelect />
         </h1>
@@ -27,7 +27,7 @@ export default function WorkPortfolio() {
           id={company.id}
           data-work-company
           key={company.id}
-          className="scroll-mt-6 pb-11 md:pb-16"
+          className="scroll-mt-14 pb-11 md:pb-16"
         >
           <header className="mb-7">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4">

@@ -128,8 +128,8 @@ export function SelectMenuSurface({
         {/* Keep entrance scaling separate from cursor-driven movement. */}
         <motion.div
           ref={backgroundRef}
-          className={`surface-popover absolute inset-0 ${
-            compact ? "rounded-lg" : ""
+          className={`absolute inset-0 bg-white shadow-popover dark:bg-neutral-800 ${
+            compact ? "rounded-lg" : "rounded-2xl"
           }`}
           initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.9 }}
           animate={{

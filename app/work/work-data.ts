@@ -299,7 +299,7 @@ export const films: Record<string, Film> = {
     company: "liveblocks",
     year: "2025",
     aspectRatio: "9 / 16",
-    contributions: ["Concept", "Art direction", "Marketing campaign"],
+    contributions: ["Concept", "Art direction", "Marketing"],
     introduction:
       "RAISE Summit, a major AI conference, was taking place at the Louvre. To celebrate Liveblocks 3.0 and reach that audience, I imagined turning the pyramid into a giant screen. I worked on the concept, art direction, and marketing campaign, with Mike Slater creating the films in 3D and VFX.",
     paragraphs: [
@@ -505,7 +505,7 @@ export const films: Record<string, Film> = {
     year: "2025",
     duration: "0:10",
     aspectRatio: "1 / 1",
-    contributions: ["Concept", "AI video"],
+    contributions: ["Concept", "Video production"],
     introduction:
       "I made this with AI video tools to see what the Liveblocks logo could look like as a physical object. I liked playing with the reflections, light, and material. A small experiment, mostly for the fun of making it.",
     context: [],

@@ -62,7 +62,7 @@ export default function ProjectCounter({
         direction={direction}
         minDigits={2}
       />
-      <span aria-hidden="true" className="ml-1">
+      <span aria-hidden="true" className="ml-1 flex h-6 items-center leading-4">
         / {String(total).padStart(2, "0")}
       </span>
     </span>

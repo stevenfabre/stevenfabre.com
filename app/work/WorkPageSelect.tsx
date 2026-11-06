@@ -16,6 +16,7 @@ const pages = [
 
 export default function WorkPageSelect() {
   const navigate = useSiteNavigation();
+  const selectedHref = useRef<string | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const value = useRef<HTMLSpanElement>(null);
   const closedTextBounds = useRef<DOMRect | null>(null);
@@ -71,7 +72,9 @@ export default function WorkPageSelect() {
   return (
     <Select.Root
       value="/work"
-      onValueChange={(href) => navigate(href, { scrollToContent: true })}
+      onValueChange={(href) => {
+        selectedHref.current = href;
+      }}
       onOpenChange={syncTypography}
     >
       <Select.Trigger
@@ -91,6 +94,18 @@ export default function WorkPageSelect() {
         <Select.Content
           ref={alignContent}
           position="item-aligned"
+          onCloseAutoFocus={(event) => {
+            const href = selectedHref.current;
+            if (!href) return;
+            // Navigation owns focus/scroll now. Returning focus to the trigger
+            // can scroll the outgoing page just before its snapshot is taken.
+            event.preventDefault();
+            selectedHref.current = null;
+            requestAnimationFrame(() => {
+              // Let Radix remove its portal and body scroll lock first.
+              navigate(href, { scrollToContent: true });
+            });
+          }}
           style={typography}
           className={`${popoverSurface} z-50 overflow-hidden`}
         >

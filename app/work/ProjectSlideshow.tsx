@@ -19,7 +19,6 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
   const container = useRef<HTMLElement>(null);
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
   const [paused, setPaused] = useState(false);
   const [explicitPlay, setExplicitPlay] = useState(false);
   const pointerAction = useRef<boolean | null>(null);
@@ -55,7 +54,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
       viewport.scrollTo({ left: right - viewport.clientWidth, behavior: reducedMotion ? "instant" : "smooth" });
   }, [index, reducedMotion]);
 
-  const rotationEnabled = !(thumbnails ? focused : paused) && (!reducedMotion || explicitPlay);
+  const rotationEnabled = !paused && (!reducedMotion || explicitPlay);
 
   useEffect(() => {
     if (
@@ -85,12 +84,8 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
       onFocusCapture={(event) => {
         // Entering with the keyboard stops rotation until explicitly resumed.
         if (!event.currentTarget.contains(event.relatedTarget)) {
-          if (thumbnails) setFocused(true);
-          else setPaused(true);
+          setPaused(true);
         }
-      }}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
       }}
     >
       <div className={`group/gallery relative overflow-hidden rounded-lg ${thumbnails ? "aspect-[3/2]" : "aspect-[65/32]"}`}>
@@ -185,7 +180,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
           ))}
         </div>
         <div className="flex h-lh shrink-0 items-center gap-px">
-          {!thumbnails && <button
+          <button
             type="button"
             className={iconControl}
             aria-label={
@@ -209,7 +204,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
             }}
           >
             <Icon name={rotationEnabled ? "pause" : "play"} />
-          </button>}
+          </button>
           <button
             type="button"
             className={iconControl}

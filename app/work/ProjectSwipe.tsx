@@ -130,12 +130,18 @@ export default function ProjectSwipe({
     moveTo(value);
   }
 
-  function settle(value: number, request: number, complete: () => void) {
+  function settle(
+    value: number,
+    request: number,
+    complete: () => void,
+    committing = false
+  ) {
     if (!track.current) return;
     const controls = animate(
       track.current,
       { transform: `translate3d(${value}px, 0, 0)` },
-      settling
+      // A spring’s invisible settling tail must not delay the next swipe.
+      committing ? { duration: 0.22, ease: [0.22, 1, 0.36, 1] } : settling
     );
     animation.current = controls;
     void controls.then(() => {
@@ -249,7 +255,7 @@ export default function ProjectSwipe({
       recovery.current = setTimeout(reset, 5000);
     };
     if (reducesMotion()) complete();
-    else settle(-direction * innerWidth, request, complete);
+    else settle(-direction * innerWidth, request, complete, true);
   }
 
   return (

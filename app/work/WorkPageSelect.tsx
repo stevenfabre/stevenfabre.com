@@ -21,6 +21,7 @@ import {
 import * as Select from "@radix-ui/react-select";
 import { ChevronsUpDown } from "lucide-react";
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
+import { useTouchSelect } from "../../src/hooks/useTouchSelect";
 
 const pages = [
   { label: "Home", href: "/" },
@@ -44,7 +45,9 @@ export default function WorkPageSelect() {
   const trigger = useRef<HTMLButtonElement>(null);
   const value = useRef<HTMLSpanElement>(null);
   const closedTextBounds = useRef<DOMRect | null>(null);
+  const menuContent = useRef<HTMLDivElement | null>(null);
   const alignContent = useCallback((content: HTMLDivElement | null) => {
+    menuContent.current = content;
     if (!content) return;
     // Radix clamps its item-aligned menu away from the viewport edge. On
     // narrow screens that moves the label; correct it after Radix positions
@@ -139,6 +142,21 @@ export default function WorkPageSelect() {
     });
   }
 
+  const startTouchSelection = useTouchSelect({
+    open,
+    content: menuContent,
+    onOpen: () => syncTypography(true),
+    onSelect: (href) => {
+      if (href === selectedPage) prepareDismissal();
+      else selectedHref.current = href;
+      syncTypography(false);
+    },
+    onDismiss: () => {
+      prepareDismissal();
+      syncTypography(false);
+    },
+  });
+
   return (
     <Select.Root
       open={open}
@@ -151,6 +169,7 @@ export default function WorkPageSelect() {
       <Select.Trigger
         ref={trigger}
         aria-label="Page: Work"
+        onPointerDown={startTouchSelection}
         onFocus={(event) =>
           setFocused(
             returningToTrigger.current ||
@@ -161,7 +180,7 @@ export default function WorkPageSelect() {
           returningToTrigger.current = false;
           setFocused(false);
         }}
-        className="group relative isolate -mx-2 inline-flex cursor-pointer items-center gap-2 rounded-2xl px-2 text-left focus-visible:outline-none"
+        className="group relative isolate -mx-2 inline-flex touch-none select-none cursor-pointer items-center gap-2 rounded-2xl px-2 text-left focus-visible:outline-none [-webkit-touch-callout:none]"
       >
         {focused && !open && (
           <span
@@ -206,6 +225,7 @@ export default function WorkPageSelect() {
               {pages.map(({ label, href }, index) => (
                 <Select.Item
                   data-menu-item
+                  data-page-value={href}
                   key={href}
                   value={href}
                   className="flex cursor-pointer select-none items-center px-1.5 py-0.5 leading-[1.1] text-neutral-400 outline-none data-[highlighted]:text-neutral-900 dark:text-neutral-500 dark:data-[highlighted]:text-neutral-100 md:px-3 md:py-1 md:leading-[inherit]"

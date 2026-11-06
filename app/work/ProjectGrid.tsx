@@ -1,6 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
+import {
+  readVideoFrame,
+  readVideoPlayback,
+  clearVideoPlayback,
+} from "../../src/utils/videoPlayback";
 import type { Film } from "./work-data";
 import styles from "./work.module.css";
 import { useVideoFrameReady } from "../../src/hooks/useVideoFrameReady";
@@ -21,11 +32,20 @@ type Thumbnail = Pick<
 
 function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const poster = useRef<HTMLImageElement>(null);
+  const resume = useRef(true);
+  useLayoutEffect(() => {
+    const frame = readVideoFrame(film.file);
+    if (frame && poster.current) poster.current.src = frame;
+  }, [film.file]);
   const frameReady = useVideoFrameReady(ref, film.file);
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const playback = readVideoPlayback(film.file);
+    let restoring = !!playback;
+    if (playback) resume.current = playback.playing;
     let visible = false;
     const prepare = () => {
       if (video.preload === "none") {
@@ -34,12 +54,47 @@ function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
       }
     };
     const sync = () => {
-      if (visible && !paused && !document.hidden && !motion.matches) {
+      if (
+        visible &&
+        !paused &&
+        !document.hidden &&
+        !motion.matches &&
+        !restoring &&
+        resume.current &&
+        !document.documentElement.hasAttribute("data-project-transition")
+      ) {
         prepare();
-        if (!video.loop && video.ended) return;
+        if (
+          !video.loop &&
+          (video.ended || video.currentTime >= video.duration - 0.02)
+        )
+          return;
         void video.play().catch(() => {});
       } else video.pause();
     };
+    const restore = () => {
+      if (!playback || !restoring) return;
+      video.currentTime = Math.min(
+        playback.time,
+        video.duration || playback.time
+      );
+      clearVideoPlayback();
+      restoring = false;
+      sync();
+    };
+    if (playback) {
+      if (video.readyState >= 1) restore();
+      else {
+        video.addEventListener("loadedmetadata", restore, { once: true });
+        prepare();
+      }
+    }
+    const transition = new MutationObserver(sync);
+    transition.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-project-transition"],
+    });
+    video.addEventListener("seeked", sync);
     const observer = new IntersectionObserver(
       ([entry]) => {
         visible = entry.isIntersecting && entry.intersectionRatio >= 0.25;
@@ -67,6 +122,9 @@ function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
     motion.addEventListener("change", sync);
     return () => {
       observer.disconnect();
+      transition.disconnect();
+      video.removeEventListener("loadedmetadata", restore);
+      video.removeEventListener("seeked", sync);
       nearby.disconnect();
       document.removeEventListener("visibilitychange", sync);
       motion.removeEventListener("change", sync);
@@ -78,6 +136,7 @@ function Video({ film, paused }: { film: Thumbnail; paused: boolean }) {
       {/* An actual image survives video decoding and browser snapshots. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+        ref={poster}
         data-video-poster
         src={`/work/media/${film.file}.jpg`}
         alt=""

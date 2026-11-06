@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { saveVideoPlayback } from "../utils/videoPlayback";
 import {
   isPlainNavigation,
   rememberProjectHref,
@@ -111,9 +112,10 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
     if (pane && window.matchMedia("(max-width: 767px)").matches) {
       const contentTop = window.scrollY + pane.getBoundingClientRect().top;
       // Home preserves any partially visible portrait; Work starts at content.
-      top = navigation.destination.pathname === "/"
-        ? Math.min(navigation.startingScroll ?? 0, contentTop)
-        : contentTop;
+      top =
+        navigation.destination.pathname === "/"
+          ? Math.min(navigation.startingScroll ?? 0, contentTop)
+          : contentTop;
     }
     window.scrollTo({ top, behavior: "instant" });
     return true;
@@ -131,7 +133,9 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
         ) {
           try {
             scrollToAnchor(
-              document.getElementById(decodeURIComponent(location.hash.slice(1)))
+              document.getElementById(
+                decodeURIComponent(location.hash.slice(1))
+              )
             );
           } catch {
             /* Ignore malformed fragments. */
@@ -203,6 +207,12 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       fallback.current = null;
       images.current?.cancel();
       images.current = null;
+      if (pathname.startsWith("/work/") && destination.pathname === "/work") {
+        const video = document.querySelector<HTMLVideoElement>(
+          "[data-project-slug] [data-work-visual] video"
+        );
+        if (video) saveVideoPlayback(video);
+      }
       rememberProjectHref(href);
       if (destination.pathname === pathname) {
         router.push(href);
@@ -252,7 +262,9 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
             destination,
             scrollToContent:
               scrollToContent ||
-              (pathname === "/" && destination.pathname === "/work" && !destination.hash),
+              (pathname === "/" &&
+                destination.pathname === "/work" &&
+                !destination.hash),
             startingScroll,
             scroll,
             finish: () => {

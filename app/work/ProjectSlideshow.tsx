@@ -173,7 +173,8 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
             <p
               key={image.src}
               aria-hidden={slide !== index}
-              className={`col-start-1 row-start-1 transition-[opacity,filter] duration-1000 ease-in-out motion-reduce:transition-none ${slide === index ? "opacity-70 blur-none" : "pointer-events-none opacity-0 blur-xs"}`}
+              title={image.caption ?? caption}
+              className={`truncate col-start-1 row-start-1 transition-[opacity,filter] duration-1000 ease-in-out motion-reduce:transition-none ${slide === index ? "opacity-70 blur-none" : "pointer-events-none opacity-0 blur-xs"}`}
             >
               {image.caption ?? caption}
             </p>

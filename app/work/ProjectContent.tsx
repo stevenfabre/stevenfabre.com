@@ -16,7 +16,7 @@ import { getMediaDimensions } from "./media";
 import Collaborators from "./Collaborators";
 import Footer from "./../../src/components/Footer";
 import styles from "./detail.module.css";
-import type { CSSProperties } from "react";
+import { Fragment, type CSSProperties } from "react";
 
 export default function ProjectContent({
   film,
@@ -67,10 +67,13 @@ export default function ProjectContent({
                 {film.title}
               </h1>
               <p>{renderProjectText(film.introduction)}</p>
-              {film.paragraphs?.map((paragraph) => (
-                <p key={paragraph} className="mt-6">
-                  {renderProjectText(paragraph)}
-                </p>
+              {film.paragraphs?.map((paragraph, index) => (
+                <Fragment key={paragraph}>
+                  <p className="mt-6">{renderProjectText(paragraph)}</p>
+                  {film.slideshow && film.slideshowAfterParagraph === index + 2 && (
+                    <ProjectSlideshow {...film.slideshow} />
+                  )}
+                </Fragment>
               ))}
               {film.contribution && <p className="mt-6">{film.contribution}</p>}
               <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 empty:hidden">
@@ -103,7 +106,7 @@ export default function ProjectContent({
                   {renderProjectText(paragraph)}
                 </p>
               ))}
-              {film.slideshow && <ProjectSlideshow {...film.slideshow} />}
+              {film.slideshow && film.slideshowAfterParagraph == null && <ProjectSlideshow {...film.slideshow} />}
               {film.youtube && (
                 <figure className="mt-8">
                   {preview ? (

@@ -166,6 +166,10 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
           </HorizontalScroll>
         </div>
       )}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-20 rounded-[inherit] border border-[var(--media-border)]"
+        />
       </div>
       <figcaption className="mt-3 flex items-start justify-between gap-4 text-sm leading-relaxed text-[var(--muted)]">
         <div className="grid min-w-0 flex-1">

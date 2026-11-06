@@ -2,6 +2,7 @@
 
 import { forwardRef, type AnchorHTMLAttributes } from "react";
 import cx from "../utils/cx";
+import { squareControlSize } from "./buttonStyles";
 import { SiteLink } from "./SiteNavigation";
 
 type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -32,7 +33,7 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       appearance === "ghost" &&
         "data-[keyboard-pressed=true]:bg-neutral-200 data-[keyboard-pressed=true]:text-neutral-900 dark:data-[keyboard-pressed=true]:bg-neutral-800 dark:data-[keyboard-pressed=true]:text-neutral-100 text-neutral-500 hover:bg-neutral-200 focus:bg-neutral-200 hover:text-neutral-900 focus:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 dark:hover:text-neutral-100 dark:focus:text-neutral-100",
       variant === "icon"
-        ? "w-10 sm:w-8 [&_svg]:size-6 sm:[&_svg]:size-5"
+        ? squareControlSize
         : "gap-1 text-sm font-medium [&_svg]:size-4",
       variant === "text" &&
         (iconPosition === "end"

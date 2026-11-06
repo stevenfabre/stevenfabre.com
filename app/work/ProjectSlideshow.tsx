@@ -96,7 +96,7 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
               setIndex((index + images.length - 1) % images.length)
             }
           >
-            <Icon name="chevron-left" size={16} />
+            <Icon name="chevron-left" />
           </button>
           <button
             type="button"
@@ -104,7 +104,7 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
             aria-label="Next image"
             onClick={() => setIndex((index + 1) % images.length)}
           >
-            <Icon name="chevron-right" size={16} />
+            <Icon name="chevron-right" />
           </button>
         </div>
       </figcaption>

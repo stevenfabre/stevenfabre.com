@@ -118,7 +118,7 @@ export default function ProjectContent({
                   <figcaption className="mt-3 text-sm text-[var(--muted)]">
                     <HeadingLink
                       iconSize={12}
-                      className="opacity-70 transition-colors hover:text-neutral-950 hover:opacity-100 focus-visible:text-neutral-950 focus-visible:opacity-100 dark:hover:text-neutral-50 dark:focus-visible:text-neutral-50"
+                      className="[--link-arrow-opacity:1] opacity-70 transition-colors hover:text-neutral-950 hover:opacity-100 focus-visible:text-neutral-950 focus-visible:opacity-100 dark:hover:text-neutral-50 dark:focus-visible:text-neutral-50"
                       href={`https://www.youtube.com/watch?v=${film.youtube.id}`}
                       target="_blank"
                       rel="noopener noreferrer"

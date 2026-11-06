@@ -3,7 +3,7 @@
   display: inline-grid;
   overflow: hidden;
   flex-shrink: 0;
-  opacity: 0.4;
+  opacity: var(--link-arrow-opacity, 0.4);
   transition: opacity 150ms ease;
 }
 

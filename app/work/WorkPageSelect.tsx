@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useState, type CSSProperties } from "react";
+import styles from "./WorkPageSelect.module.css";
 import heading from "../../src/components/HeadingControl.module.css";
 import * as Select from "@radix-ui/react-select";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
 
 const pages = [
@@ -39,7 +40,7 @@ export default function WorkPageSelect() {
       <Select.Trigger
         ref={trigger}
         aria-label="Page: Work"
-        className={`${heading.control} group inline-flex cursor-pointer items-center gap-2 text-left`}
+        className={`${heading.control} ${styles.trigger} group inline-flex cursor-pointer items-center gap-2 text-left`}
       >
         <Select.Value>Work</Select.Value>
         <Select.Icon asChild>
@@ -53,19 +54,18 @@ export default function WorkPageSelect() {
         <Select.Content
           position="item-aligned"
           style={typography}
-          className="z-50 overflow-hidden rounded-xl bg-neutral-50 ring-1 ring-inset ring-neutral-200 text-neutral-900 shadow-lg dark:ring-neutral-800 dark:bg-neutral-950 dark:text-neutral-100"
+          className={styles.content}
         >
-          <Select.Viewport className="p-1">
+          <Select.Viewport className={styles.viewport}>
             {pages.map(({ label, href }) => (
               <Select.Item
                 key={href}
                 value={href}
-                className="relative flex cursor-default select-none items-center rounded-lg py-1 pl-3 pr-[calc(0.55em+20px)] outline-none data-[highlighted]:bg-neutral-200 dark:data-[highlighted]:bg-neutral-800"
+                className={styles.item}
               >
-                <Select.ItemText>{label}</Select.ItemText>
-                <Select.ItemIndicator className="absolute right-3 flex items-center">
-                  <Check aria-hidden="true" className="size-[0.55em]" />
-                </Select.ItemIndicator>
+                <Select.ItemText>
+                  <span className={styles.label}>{label}</span>
+                </Select.ItemText>
               </Select.Item>
             ))}
           </Select.Viewport>

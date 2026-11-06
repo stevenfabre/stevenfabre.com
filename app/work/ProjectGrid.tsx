@@ -243,7 +243,10 @@ function ProjectPreview({
 export default function ProjectGrid({ films }: { films: Thumbnail[] }) {
   const [hovered, setHovered] = useState<string | null>(null);
   return (
-    <div className={styles.projectList} onPointerLeave={() => setHovered(null)}>
+    <div
+      className={`${styles.projectList} grid grid-cols-2 gap-3`}
+      onPointerLeave={() => setHovered(null)}
+    >
       {films.map((film) => (
         <ProjectPreview
           key={film.slug}

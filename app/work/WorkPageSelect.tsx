@@ -8,7 +8,12 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { motion, useReducedMotion, useSpring } from "motion/react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+} from "motion/react";
 import { headingControl } from "../../src/components/HeadingLink";
 import * as Select from "@radix-ui/react-select";
 import { ChevronsUpDown } from "lucide-react";
@@ -138,11 +143,12 @@ export default function WorkPageSelect() {
 // pointer coordinates or shift the initial alignment with the heading.
 function MenuSurface({ children }: { children: ReactNode }) {
   const reducedMotion = useReducedMotion();
-  const x = useSpring(0, { duration: 0.3, bounce: 0 });
-  const y = useSpring(0, { duration: 0.3, bounce: 0 });
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
   const reset = () => {
-    x.set(0);
-    y.set(0);
+    const transition = { type: "spring" as const, duration: 0.5, bounce: 0.2 };
+    animate(x, 0, transition);
+    animate(y, 0, transition);
   };
   useEffect(() => {
     // Radix can focus the listbox outside this surface before an item.
@@ -151,11 +157,15 @@ function MenuSurface({ children }: { children: ReactNode }) {
       y.jump(0);
     };
     document.addEventListener("keydown", stop);
-    return () => document.removeEventListener("keydown", stop);
+    return () => {
+      document.removeEventListener("keydown", stop);
+      x.stop();
+      y.stop();
+    };
   }, [x, y]);
-  // As displacement increases, resistance grows smoothly toward a 5px limit.
+  // As displacement increases, resistance grows smoothly toward a 10px limit.
   const resist = (distance: number) =>
-    (distance * 5) / (100 + Math.abs(distance));
+    (distance * 10) / (100 + Math.abs(distance));
 
   return (
     <div
@@ -168,8 +178,21 @@ function MenuSurface({ children }: { children: ReactNode }) {
         )
           return;
         const bounds = event.currentTarget.getBoundingClientRect();
-        x.set(resist(event.clientX - bounds.left - bounds.width / 2));
-        y.set(resist(event.clientY - bounds.top - bounds.height / 2));
+        const transition = {
+          type: "spring" as const,
+          duration: 0.3,
+          bounce: 0,
+        };
+        animate(
+          x,
+          resist(event.clientX - bounds.left - bounds.width / 2),
+          transition
+        );
+        animate(
+          y,
+          resist(event.clientY - bounds.top - bounds.height / 2),
+          transition
+        );
       }}
       onPointerLeave={reset}
       onPointerCancel={reset}

@@ -20,11 +20,6 @@
   outline: 2px solid #737373;
   outline-offset: 2px;
 }
-.projectList {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-}
 .project:first-child {
   grid-column: 1 / -1;
 }
@@ -103,9 +98,6 @@
 }
 
 @media (max-width: 767px) {
-  .projectList {
-    gap: 16px;
-  }
   .video {
     view-transition-class: project;
     border-radius: 8px;

@@ -1,4 +1,8 @@
+import { animate } from "motion/mini";
+import { spring } from "motion";
 import { objectPositionOffsets } from "./objectPosition";
+
+const mediaTransition = { type: spring, duration: 0.4, bounce: 0.4 };
 
 // Keep a painted outgoing page during route streaming. Safari can discard native
 // full-page snapshots when its browser chrome changes the viewport during a route.
@@ -12,7 +16,7 @@ export function captureProjectTransition(source?: HTMLElement | null) {
   let overlay: HTMLDivElement | undefined;
   let snapshot: HTMLImageElement | undefined;
   let border: HTMLDivElement | undefined;
-  const animations: Animation[] = [];
+  const animations: { cancel(): void; finished: Promise<unknown> }[] = [];
   let page: HTMLElement | null = null;
   let pageOpacity = "";
   let target: HTMLElement | undefined;
@@ -216,29 +220,45 @@ export function captureProjectTransition(source?: HTMLElement | null) {
             }
           });
         if (border && sourceBorder) {
+          const destinationBorder = borderFrame(target, to);
           animations.push(
-            border.animate([sourceBorder, borderFrame(target, to)], options)
+            animate(
+              border,
+              {
+                left: [sourceBorder.left, destinationBorder.left],
+                top: [sourceBorder.top, destinationBorder.top],
+                width: [sourceBorder.width, destinationBorder.width],
+                height: [sourceBorder.height, destinationBorder.height],
+                borderRadius: [
+                  sourceBorder.borderRadius,
+                  destinationBorder.borderRadius,
+                ],
+                borderColor: [
+                  sourceBorder.borderColor,
+                  destinationBorder.borderColor,
+                ],
+              },
+              mediaTransition
+            )
           );
         }
         animations.push(
-          snapshot.animate(
-            [
-              { transform: snapshot.style.transform },
-              { transform: fit(to, targetImage) },
-            ],
-            options
+          animate(
+            snapshot,
+            { transform: [snapshot.style.transform, fit(to, targetImage)] },
+            mediaTransition
           )
         );
         animations.push(
-          overlay.animate(
-            [
-              { clipPath: overlay.style.clipPath, opacity: 1 },
-              {
-                clipPath: clip(to, getComputedStyle(target).borderRadius),
-                opacity: 1,
-              },
-            ],
-            options
+          animate(
+            overlay,
+            {
+              clipPath: [
+                overlay.style.clipPath,
+                clip(to, getComputedStyle(target).borderRadius),
+              ],
+            },
+            mediaTransition
           )
         );
       }

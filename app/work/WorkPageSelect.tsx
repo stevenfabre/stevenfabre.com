@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type CSSProperties } from "react";
+import { useCallback, useRef, useState, type CSSProperties } from "react";
 import surface from "../../src/components/PopoverSurface.module.css";
 import styles from "./WorkPageSelect.module.css";
 import heading from "../../src/components/HeadingControl.module.css";
@@ -16,6 +16,25 @@ const pages = [
 export default function WorkPageSelect() {
   const navigate = useSiteNavigation();
   const trigger = useRef<HTMLButtonElement>(null);
+  const value = useRef<HTMLSpanElement>(null);
+  const alignContent = useCallback((content: HTMLDivElement | null) => {
+    if (!content) return;
+    // Radix clamps its item-aligned menu away from the viewport edge. On
+    // narrow screens that moves the label; correct it after Radix positions
+    // the menu, before paint, without changing either element's layout.
+    queueMicrotask(() => {
+      if (!content.isConnected || !value.current) return;
+      const label = content.querySelector<HTMLElement>(
+        '[data-state="checked"] [data-page-label]'
+      );
+      if (!label) return;
+      content.style.transform = "";
+      const offset =
+        value.current.getBoundingClientRect().left -
+        label.getBoundingClientRect().left;
+      content.style.transform = `translateX(${offset}px)`;
+    });
+  }, []);
   const [typography, setTypography] = useState<CSSProperties>();
 
   function syncTypography(open: boolean) {
@@ -43,7 +62,7 @@ export default function WorkPageSelect() {
         aria-label="Page: Work"
         className={`${heading.control} group inline-flex cursor-pointer items-center gap-2 text-left`}
       >
-        <Select.Value>Work</Select.Value>
+        <Select.Value ref={value}>Work</Select.Value>
         <Select.Icon asChild>
           <ChevronsUpDown
             aria-hidden="true"
@@ -53,18 +72,15 @@ export default function WorkPageSelect() {
       </Select.Trigger>
       <Select.Portal>
         <Select.Content
+          ref={alignContent}
           position="item-aligned"
           style={typography}
           className={`${surface.surface} ${styles.content}`}
         >
           <Select.Viewport className={styles.viewport}>
             {pages.map(({ label, href }) => (
-              <Select.Item
-                key={href}
-                value={href}
-                className={styles.item}
-              >
-                <Select.ItemText>{label}</Select.ItemText>
+              <Select.Item key={href} value={href} className={styles.item}>
+                <Select.ItemText data-page-label>{label}</Select.ItemText>
               </Select.Item>
             ))}
           </Select.Viewport>

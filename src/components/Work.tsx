@@ -77,7 +77,7 @@ export default function Work() {
   return (
     <>
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
-        <HeadingLink href="/work" clientNavigation>
+        <HeadingLink href="/work" clientNavigation className="gap-1">
           Work
         </HeadingLink>
       </h2>

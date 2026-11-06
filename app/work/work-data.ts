@@ -241,7 +241,7 @@ export const films: Record<string, Film> = {
     file: "liveblocks-realtime-infrastructure",
     slug: "liveblocks-realtime-infrastructure",
     thumbnailPosition: "left center",
-    title: "Making realtime infrastructure easier to understand",
+    title: "Liveblocks infrastructure page",
     company: "liveblocks",
     year: "2026",
     aspectRatio: "1588 / 1080",
@@ -586,7 +586,7 @@ export const films: Record<string, Film> = {
   studioUpdateWindow: {
     file: "invision-studio-update-window",
     slug: "invision-update-window",
-    title: "A more personal update window",
+    title: "InVision Studio update window",
     company: "invision",
     year: "2019",
     aspectRatio: "4 / 3",
@@ -656,7 +656,7 @@ export const films: Record<string, Film> = {
       "The original Easee website, with its visual animation editor and green gradient",
     contributions: ["Design", "Engineering", "Branding", "Marketing"],
     introduction:
-      "Easee started as a prototype for the designers I worked with at Campaign Monitor. I wanted to help them make CSS animations visually, and kept working on it at night and on weekends until it became a product of its own.",
+      "Easee started as a prototype for the designers I worked with at [Campaign Monitor](/work/campaign-monitor). I wanted to help them make CSS animations visually, and kept working on it at night and on weekends until it became a product of its own.",
     paragraphs: [
       "You could bring in layers from Sketch or Photoshop, animate them, and export the CSS to use on the web. I designed and built the editor, created the brand and website, and ran the business.",
       "In November 2015, net magazine featured Easee as its side project of the month. InVision acquired it in April 2016, and I joined the team to work on Studio.",

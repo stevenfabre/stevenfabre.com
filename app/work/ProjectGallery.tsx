@@ -28,7 +28,7 @@ export default function ProjectGallery({
   return (
     <section
       className={cx(
-        "mt-12 grid w-full grid-cols-1 @2xl:grid-cols-2 gap-x-6 gap-y-12 max-[520px]:mt-10 max-[520px]:grid-cols-1 max-[520px]:gap-8",
+        "mt-8 grid w-full grid-cols-1 @2xl:grid-cols-2 gap-x-6 gap-y-8 max-[520px]:grid-cols-1 max-[520px]:gap-8",
         layout === "stack" && "@2xl:grid-cols-1",
         hasPosts && "items-start gap-6"
       )}

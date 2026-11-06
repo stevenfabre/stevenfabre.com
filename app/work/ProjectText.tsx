@@ -6,7 +6,12 @@ import {
 import { allFilms, imagePath } from "./work-data";
 import type { ReactNode } from "react";
 
-const linkedProjects = ["building-liveblocks", "invision-studio", "easee"];
+const linkedProjects = [
+  "building-liveblocks",
+  "invision-studio",
+  "easee",
+  "campaign-monitor",
+];
 
 export function ProjectTextPreviews({ children }: { children: ReactNode }) {
   const previews = Object.fromEntries(

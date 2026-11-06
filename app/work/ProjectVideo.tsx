@@ -154,7 +154,7 @@ export default function ProjectVideo({
       ) {
         video.pause();
       } else if (
-        video.readyState >= 4 &&
+        video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA &&
         !manuallyPaused.current &&
         !video.ended
       ) {
@@ -169,7 +169,7 @@ export default function ProjectVideo({
       { threshold: [0, 0.25] }
     );
     visibilityObserver.observe(video);
-    video.addEventListener("canplaythrough", syncPlayback);
+    video.addEventListener("canplay", syncPlayback);
     video.addEventListener("seeked", syncPlayback);
     // Resume only after the moving frame has handed over to the real player.
     const transitionObserver = new MutationObserver(syncPlayback);
@@ -205,7 +205,7 @@ export default function ProjectVideo({
       cancelled = true;
       visibilityObserver.disconnect();
       transitionObserver.disconnect();
-      video.removeEventListener("canplaythrough", syncPlayback);
+      video.removeEventListener("canplay", syncPlayback);
       video.removeEventListener("seeked", syncPlayback);
       motion.removeEventListener("change", syncPlayback);
       document.removeEventListener("fullscreenchange", exitFullscreen);

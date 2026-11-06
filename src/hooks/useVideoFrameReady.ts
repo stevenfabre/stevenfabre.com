@@ -44,6 +44,12 @@ export function useVideoFrameReady(
       clear();
       setReady(false);
     };
+    // A time update confirms playback advanced even if the browser missed a
+    // frame callback during a seek or a background/foreground transition.
+    const onTimeUpdate = () => {
+      if (video.currentTime > 0) show();
+    };
+    video.addEventListener("timeupdate", onTimeUpdate);
     const readyEvents = ["loadeddata", "playing", "seeked"];
     const resetEvents = ["emptied", "seeking", "error"];
     readyEvents.forEach((event) => video.addEventListener(event, check));
@@ -53,6 +59,7 @@ export function useVideoFrameReady(
     return () => {
       cancelled = true;
       clear();
+      video.removeEventListener("timeupdate", onTimeUpdate);
       readyEvents.forEach((event) => video.removeEventListener(event, check));
       resetEvents.forEach((event) => video.removeEventListener(event, hide));
     };

@@ -50,7 +50,13 @@ export default function Toolbar({
         onPointerDown={startTouchSelection}
       >
         <Select.Value>
-          <ColorSwatch color={currentColor} />
+          <span className="relative block rounded-full">
+            <ColorSwatch color={currentColor} />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 rounded-full border border-black/20 dark:border-white/40"
+            />
+          </span>
         </Select.Value>
       </Select.Trigger>
       <Select.Portal>

@@ -1,3 +1,4 @@
+import ProjectYouTube from "./ProjectYouTube";
 import ProjectSlideshow from "./ProjectSlideshow";
 import ResponsibilityIcon from "./ResponsibilityIcon";
 import BeforeAfter from "./BeforeAfter";
@@ -104,17 +105,21 @@ export default function ProjectContent({
               {film.slideshow && <ProjectSlideshow {...film.slideshow} />}
               {film.youtube && (
                 <figure className="mt-8">
-                  <iframe
-                    className="aspect-video w-full rounded-lg border-0"
-                    src={`https://www.youtube-nocookie.com/embed/${film.youtube.id}`}
-                    title={film.youtube.title}
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    referrerPolicy="strict-origin-when-cross-origin"
-                  />
+                  {preview ? (
+                    // Swipe neighbors are inert visual copies, never active players.
+                    <div className="aspect-video w-full" />
+                  ) : (
+                    <ProjectYouTube {...film.youtube} />
+                  )}
                   <figcaption className="mt-3 text-sm text-[var(--muted)]">
-                    <span className="opacity-70">{film.youtube.title}</span>
+                    <a
+                      className="opacity-70 hover:opacity-100 underline underline-offset-4"
+                      href={`https://www.youtube.com/watch?v=${film.youtube.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {film.youtube.title}
+                    </a>
                   </figcaption>
                 </figure>
               )}

@@ -14,7 +14,9 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
   const container = useRef<HTMLElement>(null);
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [explicitPlay, setExplicitPlay] = useState(false);
+  const pointerAction = useRef<boolean | null>(null);
   const [visible, setVisible] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(true);
   const [loaded, setLoaded] = useState<string[]>([]);
@@ -34,12 +36,14 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
     };
   }, []);
 
+  const rotationEnabled = !paused && (!reducedMotion || explicitPlay);
+
   useEffect(() => {
     if (
       hovered ||
-      focused ||
+      !rotationEnabled ||
       !visible ||
-      reducedMotion ||
+      images.length < 2 ||
       loaded.length < images.length
     )
       return;
@@ -48,7 +52,7 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
         setIndex((current) => (current + 1) % images.length);
     }, 1000);
     return () => clearInterval(timer);
-  }, [hovered, focused, visible, reducedMotion, loaded.length, images.length]);
+  }, [hovered, rotationEnabled, visible, loaded.length, images.length]);
 
   return (
     <figure
@@ -58,10 +62,9 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
       data-no-project-swipe
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onFocusCapture={() => setFocused(true)}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget))
-          setFocused(false);
+      onFocusCapture={(event) => {
+        // Entering with the keyboard stops rotation until explicitly resumed.
+        if (!event.currentTarget.contains(event.relatedTarget)) setPaused(true);
       }}
     >
       <div className="relative aspect-[65/32] overflow-hidden rounded-lg">
@@ -88,6 +91,31 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
       <figcaption className="mt-3 flex items-start justify-between gap-4 text-sm leading-relaxed text-[var(--muted)]">
         <p className="opacity-70">{caption}</p>
         <div className="flex h-lh shrink-0 items-center">
+          <button
+            type="button"
+            className={iconControl}
+            aria-label={
+              rotationEnabled ? "Pause slideshow" : "Resume slideshow"
+            }
+            onPointerDown={() => {
+              // Remember intent before focusing the button pauses rotation.
+              pointerAction.current = rotationEnabled;
+            }}
+            onPointerCancel={() => {
+              pointerAction.current = null;
+            }}
+            onClick={(event) => {
+              const pause =
+                event.detail !== 0
+                  ? pointerAction.current ?? rotationEnabled
+                  : rotationEnabled;
+              pointerAction.current = null;
+              setPaused(pause);
+              if (!pause) setExplicitPlay(true);
+            }}
+          >
+            <Icon name={rotationEnabled ? "pause" : "play"} />
+          </button>
           <button
             type="button"
             className={iconControl}

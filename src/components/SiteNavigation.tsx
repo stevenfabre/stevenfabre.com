@@ -174,22 +174,40 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
         window.scrollTo({ top: 0, behavior: "instant" });
       }
       restoreContentScroll();
-      images.current?.selectDestination();
-      fallback.current?.prepareDestination();
-      if (images.current || fallback.current || swipeVisual.current)
-        await decodeVisibleImages();
-      if (pending.current !== navigation) return;
-      if (swipeVisual.current) {
-        // Leave one painted destination frame beneath the retained poster.
-        await new Promise<void>((resolve) =>
-          requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
-        );
+      try {
+        images.current?.selectDestination();
+        fallback.current?.prepareDestination();
+        if (images.current || fallback.current || swipeVisual.current)
+          await decodeVisibleImages();
         if (pending.current !== navigation) return;
-        swipeVisual.current?.();
-        swipeVisual.current = null;
+        if (swipeVisual.current) {
+          // Leave one painted destination frame beneath the retained poster.
+          await new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+          );
+          if (pending.current !== navigation) return;
+          swipeVisual.current?.();
+          swipeVisual.current = null;
+        }
+      } catch (error) {
+        console.warn(
+          "Transition handoff unavailable; showing the destination.",
+          error
+        );
+        if (pending.current === navigation) {
+          fallback.current?.cancel();
+          fallback.current = null;
+          images.current?.cancel();
+          images.current = null;
+          swipeVisual.current?.();
+          swipeVisual.current = null;
+        }
+      } finally {
+        if (pending.current === navigation) {
+          navigation.finish();
+          pending.current = null;
+        }
       }
-      navigation.finish();
-      pending.current = null;
     },
     [restoreContentScroll]
   );
@@ -242,7 +260,16 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
         router.push(href);
         return true;
       }
-      if (incomingVisual) swipeVisual.current = holdSwipeVisual(incomingVisual);
+      if (incomingVisual) {
+        try {
+          swipeVisual.current = holdSwipeVisual(incomingVisual);
+        } catch (error) {
+          console.warn(
+            "Swipe snapshot unavailable; continuing navigation.",
+            error
+          );
+        }
+      }
       const shouldAnimate =
         animate &&
         !(pathname === "/" && destination.pathname === "/work") &&
@@ -265,8 +292,9 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
               window: Math.max(0, savedScroll.window),
             }
           : undefined;
+      let updatePromise: Promise<void> | undefined;
       const update = () =>
-        new Promise<void>((resolve) => {
+        (updatePromise ??= new Promise<void>((resolve) => {
           if (request !== sequence.current) {
             resolve();
             return;
@@ -301,7 +329,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
             },
           };
           router.push(href, { scroll: false });
-        });
+        }));
       if (!shouldAnimate) {
         void update();
         return true;
@@ -311,35 +339,49 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
         ((pathname.startsWith("/work/") && destination.pathname === "/work") ||
           (pathname === "/work" && destination.pathname.startsWith("/work/")));
       const run = async () => {
-        if (projectChange) await decodeVisibleImages();
-        if (request !== sequence.current) return;
-        const prepared = projectChange ? prepareProjectImages(source!) : null;
-        images.current = prepared;
+        let prepared: ReturnType<typeof prepareProjectImages> | null = null;
+        let animation: ReturnType<typeof captureProjectTransition> | null =
+          null;
+        let transition: Transition | null = null;
         const release = () => {
+          animation?.cancel();
+          if (fallback.current === animation) fallback.current = null;
+          if (active.current === transition) active.current = null;
+          // An interrupted task must never clear a newer task's image selection.
           if (images.current === prepared) {
             prepared?.cancel();
             images.current = null;
           }
         };
-        if (projectChange || !doc.startViewTransition) {
-          const animation = captureProjectTransition(source);
-          fallback.current = animation;
-          await update();
-          if (fallback.current === animation) await animation.play();
-          if (fallback.current === animation) fallback.current = null;
+        try {
+          if (projectChange) await decodeVisibleImages();
+          if (request !== sequence.current) return;
+          prepared = projectChange ? prepareProjectImages(source!) : null;
+          images.current = prepared;
+          if (projectChange || !doc.startViewTransition) {
+            animation = captureProjectTransition(source);
+            fallback.current = animation;
+            await update();
+            if (fallback.current === animation) await animation.play();
+          } else {
+            transition = doc.startViewTransition(update);
+            active.current = transition;
+            void transition.ready.catch(() => {});
+            void transition.updateCallbackDone.catch(() => {});
+            await transition.finished;
+          }
+        } catch (error) {
+          console.warn(
+            "Page transition unavailable; continuing navigation.",
+            error
+          );
+          transition?.skipTransition();
           release();
-          return;
+          // Animation is progressive enhancement. Even setup failures must navigate.
+          if (request === sequence.current) await update();
+        } finally {
+          release();
         }
-        const transition = doc.startViewTransition(update);
-        active.current = transition;
-        void transition.ready.catch(() => {});
-        void transition.updateCallbackDone.catch(() => {});
-        void transition.finished
-          .catch(() => {})
-          .then(() => {
-            if (active.current === transition) active.current = null;
-            release();
-          });
       };
       void run();
       return true;

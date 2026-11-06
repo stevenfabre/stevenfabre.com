@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 /** Native touch scrolling with mouse dragging; links remain clickable until a drag begins. */
 export default function HorizontalScroll({
@@ -13,6 +13,7 @@ export default function HorizontalScroll({
   const drag = useRef<{ x: number; scroll: number; moved: boolean } | null>(
     null
   );
+  const [overflow, setOverflow] = useState(false);
   const suppressClick = useRef(false);
   const viewport = useRef<HTMLDivElement>(null);
 
@@ -20,10 +21,9 @@ export default function HorizontalScroll({
     const element = viewport.current;
     if (!element) return;
     const updateEdges = () => {
-      element.toggleAttribute(
-        "data-overflow",
-        element.scrollWidth > element.clientWidth + 1
-      );
+      const hasOverflow = element.scrollWidth > element.clientWidth + 1;
+      setOverflow(hasOverflow);
+      element.toggleAttribute("data-overflow", hasOverflow);
       element.style.setProperty(
         "--fade-left",
         element.scrollLeft > 1 ? "24px" : "0px"
@@ -49,8 +49,8 @@ export default function HorizontalScroll({
   return (
     <div
       ref={viewport}
-      className="data-[overflow]:cursor-grab data-[overflow]:active:cursor-grabbing data-[overflow]:active:[&_a]:cursor-grabbing outline-none select-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,transparent,black_var(--fade-left,0px),black_calc(100%_-_var(--fade-right,0px)),transparent)]"
-      tabIndex={0}
+      className="data-[overflow]:cursor-grab data-[overflow]:active:cursor-grabbing data-[overflow]:active:[&_a]:cursor-grabbing outline-none focus-visible:bg-black/5 dark:focus-visible:bg-white/5 select-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,transparent,black_var(--fade-left,0px),black_calc(100%_-_var(--fade-right,0px)),transparent)]"
+      tabIndex={overflow ? 0 : -1}
       role="region"
       aria-label={label}
       data-no-project-swipe
@@ -60,7 +60,8 @@ export default function HorizontalScroll({
       }}
       onDragStart={(event) => event.preventDefault()}
       onPointerDown={(event) => {
-        if (event.pointerType !== "mouse" || event.button !== 0) return;
+        if (!overflow || event.pointerType !== "mouse" || event.button !== 0)
+          return;
         suppressClick.current = false;
         drag.current = {
           x: event.clientX,

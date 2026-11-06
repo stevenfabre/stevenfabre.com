@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useVideoFrameReady } from "../../src/hooks/useVideoFrameReady";
+import { registerNativeAudio } from "../../src/utils/mediaAudio";
 import WorkIcon from "./WorkIcon";
 import type { ProjectVisual } from "./work-data";
 import { getMediaDimensions } from "./media";
@@ -31,6 +32,12 @@ export default function ProjectVideo({
   const frameReady = useVideoFrameReady(ref, film.file);
   const progressRef = useRef<HTMLInputElement>(null);
   const manuallyPaused = useRef(false);
+  const userRequestedPlayback = useRef(false);
+  useEffect(() => {
+    userRequestedPlayback.current = false;
+    const video = ref.current;
+    if (video) return registerNativeAudio(video);
+  }, [film.file]);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   const [time, setTime] = useState(0);
@@ -38,6 +45,7 @@ export default function ProjectVideo({
   const togglePlay = () => {
     const video = ref.current;
     if (!video) return;
+    userRequestedPlayback.current = true;
     manuallyPaused.current = !video.paused;
     if (video.paused) void video.play().catch(() => {});
     else video.pause();
@@ -47,6 +55,8 @@ export default function ProjectVideo({
       | (HTMLVideoElement & { webkitEnterFullscreen?: () => void })
       | null;
     if (!video) return;
+    userRequestedPlayback.current = true;
+    manuallyPaused.current = false;
     video.controls = true;
     if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
     else if (video.requestFullscreen)
@@ -139,7 +149,7 @@ export default function ProjectVideo({
       if (
         !visible ||
         document.hidden ||
-        motion.matches ||
+        (motion.matches && !userRequestedPlayback.current) ||
         document.documentElement.hasAttribute("data-project-transition")
       ) {
         video.pause();
@@ -232,14 +242,6 @@ export default function ProjectVideo({
         onVolumeChange={(event) => {
           const nextMuted = event.currentTarget.muted;
           setMuted(nextMuted);
-          if (!nextMuted) {
-            // Also covers sound enabled through native fullscreen controls.
-            document.querySelectorAll("video").forEach((other) => {
-              if (other !== event.currentTarget && !other.muted) {
-                other.muted = true;
-              }
-            });
-          }
         }}
         onClick={() => {
           if (window.matchMedia("(hover: none), (pointer: coarse)").matches)

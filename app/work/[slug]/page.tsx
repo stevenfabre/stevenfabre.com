@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { allFilms, projectRedirects } from "../work-data";
+import { allFilms, imagePath, projectRedirects } from "../work-data";
 import ProjectViewer from "../ProjectViewer";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -9,9 +9,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const canonicalSlug = projectRedirects[slug]?.split("#")[0] || slug;
   const film = allFilms.find((film) => film.slug === canonicalSlug);
+  if (!film) return { title: "Steven Fabre • Work" };
+  const title = `Steven Fabre • ${film.title}`;
+  const url = `/work/${film.slug}`;
+  const images = [{ url: imagePath(film), alt: film.imageAlt || film.title }];
   return {
-    title: film ? `Steven Fabre • ${film.title}` : "Steven Fabre • Work",
-    description: film?.introduction,
+    title,
+    description: film.description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      title,
+      description: film.description,
+      url,
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: film.description,
+      images,
+    },
   };
 }
 

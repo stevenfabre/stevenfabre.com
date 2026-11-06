@@ -145,6 +145,7 @@ export type Film = ProjectVisual & {
   year: string;
   duration?: string;
   contributions: string[];
+  description: string;
   introduction: string;
   context: string[];
   paragraphs?: string[];
@@ -166,6 +167,8 @@ export const films: Record<string, Film> = {
     },
     file: "liveblocks-company-introduction",
     slug: "building-liveblocks",
+    description:
+      "Building Liveblocks: collaborative infrastructure, a multidisciplinary team, and a culture of quality. A company and product journey by Steven Fabre.",
     collaborators: [
       {
         name: "Guillaume Salles",
@@ -198,6 +201,8 @@ export const films: Record<string, Film> = {
   hero: {
     file: "liveblocks-homepage-redesign",
     slug: "liveblocks-art-direction",
+    description:
+      "Art direction for the Liveblocks homepage, featuring a playable 3D multiplayer experience with people and AI agents.",
     title: "Liveblocks homepage redesign",
     company: "liveblocks",
     year: "2026",
@@ -246,6 +251,8 @@ export const films: Record<string, Film> = {
   infrastructure: {
     file: "liveblocks-realtime-infrastructure",
     slug: "liveblocks-realtime-infrastructure",
+    description:
+      "Designing and engineering a marketing page that makes the realtime infrastructure behind Liveblocks tangible.",
     thumbnailPosition: "left center",
     title: "Liveblocks infrastructure page",
     company: "liveblocks",
@@ -264,6 +271,8 @@ export const films: Record<string, Film> = {
   template: {
     file: "liveblocks-nextjs-template-week-multiplayer",
     slug: "nextjs-template-week",
+    description:
+      "Design, engineering, and video production for a multiplayer launch of three collaborative Next.js templates.",
     thumbnailPosition: "left center",
     title: "Next.js Template Week",
     company: "liveblocks",
@@ -302,6 +311,8 @@ export const films: Record<string, Film> = {
   louvre: {
     file: "liveblocks-louvre-campaign-launch",
     slug: "liveblocks-louvre-campaign",
+    description:
+      "A Liveblocks launch campaign that reimagined the Louvre pyramid as a giant screen during a major AI conference.",
     title: "Viral marketing campaign",
     company: "liveblocks",
     year: "2025",
@@ -416,6 +427,8 @@ export const films: Record<string, Film> = {
     imageAlt: "Liveblocks website displayed on a laptop",
     aspectRatio: "3000 / 1875",
     slug: "liveblocks-brand",
+    description:
+      "Art direction, messaging, and positioning for the Liveblocks brand: collaborative experiences in days, not months.",
     company: "liveblocks",
     year: "2023",
     contributions: ["Art direction", "Messaging", "Positioning"],
@@ -507,6 +520,8 @@ export const films: Record<string, Film> = {
   logo: {
     file: "liveblocks-logo-experiment",
     slug: "liveblocks-logo-experiment",
+    description:
+      "An AI video experiment exploring the Liveblocks logo as a physical object through reflections, light, and material.",
     title: "Liveblocks logo experiment",
     company: "liveblocks",
     year: "2025",
@@ -522,6 +537,8 @@ export const films: Record<string, Film> = {
   messenger: {
     file: "meta-messenger-chat-builder",
     slug: "messenger-chat-builder",
+    description:
+      "Designing and building a Figma plugin that generates realistic Messenger conversations across devices and breakpoints.",
     title: "Chat Builder for Messenger",
     company: "messenger",
     year: "2020",
@@ -540,6 +557,8 @@ export const films: Record<string, Film> = {
   studioOverview: {
     file: "invision-studio",
     slug: "invision-studio",
+    description:
+      "Design and engineering for InVision Studio, from its inception through general availability, with a focus on prototyping and motion.",
     collaborators: [
       {
         name: "Scott Savarie",
@@ -575,6 +594,8 @@ export const films: Record<string, Film> = {
   colorpicker: {
     file: "invision-studio-color-picker",
     slug: "invision-color-picker",
+    description:
+      "Designing and engineering the InVision Studio color picker to make working with color feel intuitive.",
     title: "InVision Studio color picker",
     company: "invision",
     year: "2020",
@@ -592,6 +613,8 @@ export const films: Record<string, Film> = {
   studioUpdateWindow: {
     file: "invision-studio-update-window",
     slug: "invision-update-window",
+    description:
+      "Designing and engineering an InVision Studio update window that introduces users to the people behind each release.",
     title: "InVision Studio update window",
     company: "invision",
     year: "2019",
@@ -608,6 +631,8 @@ export const films: Record<string, Film> = {
   gifmock: {
     file: "gifmock-sketch-demo",
     slug: "gifmock",
+    description:
+      "Designing, building, and growing Gifmock, a tool that helps designers create high-quality GIFs.",
     title: "Gifmock for Sketch",
     company: "gifmock",
     year: "2018",
@@ -654,6 +679,8 @@ export const films: Record<string, Film> = {
     kind: "image",
     file: "easee-homepage",
     slug: "easee",
+    description:
+      "Designing and building Easee, a visual CSS animation tool for designers, from an early prototype through its acquisition by InVision.",
     title: "Easee",
     company: "easee",
     year: "2015",
@@ -716,6 +743,8 @@ export const films: Record<string, Film> = {
     kind: "image",
     file: "campaign-monitor-email-builder-drag-and-drop",
     slug: "campaign-monitor-email-builder",
+    description:
+      "Design, engineering, and research for Campaign Monitor’s email builder, including responsive typography controls.",
     title: "Campaign Monitor email builder",
     company: "campaign-monitor",
     year: "2014-2016",
@@ -759,6 +788,8 @@ export const films: Record<string, Film> = {
     file: "campaign-monitor-email-builder-landing-page",
     thumbnailPosition: "21% center",
     slug: "campaign-monitor",
+    description:
+      "Designing an animated landing page to introduce Campaign Monitor’s email builder and show what it could do.",
     title: "Email builder landing page",
     company: "campaign-monitor",
     year: "2015",
@@ -786,6 +817,8 @@ export const films: Record<string, Film> = {
     file: "campaign-monitor-template-gallery-sxsw",
     imageExtension: "jpg",
     slug: "campaign-monitor-template-gallery",
+    description:
+      "Redesigning Campaign Monitor’s template gallery to improve discovery and browsing, increasing email builder adoption by 50%.",
     title: "A new template gallery",
     company: "campaign-monitor",
     year: "2014-2016",
@@ -850,6 +883,8 @@ export const films: Record<string, Film> = {
     kind: "image",
     file: "backseat-ride-request-iphone",
     slug: "backseat",
+    description:
+      "Co-founding Backseat and designing and engineering its app, website, and product experience.",
     title: "Getting Backseat on the road",
     company: "backseat",
     year: "2014",

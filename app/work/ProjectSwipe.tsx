@@ -30,6 +30,11 @@ type Gesture = {
   horizontal: boolean;
 };
 
+// Set the DOM property: React 18 and Next's bundled renderer differ on inert attributes.
+function makePreviewInert(element: HTMLDivElement | null) {
+  if (element) element.inert = true;
+}
+
 export default function ProjectSwipe({
   children,
   previous,
@@ -301,7 +306,7 @@ export default function ProjectSwipe({
           <div
             className={neighborClass}
             aria-hidden="true"
-            {...{ inert: true }}
+            ref={makePreviewInert}
             style={{ left: -neighbors.width, top: neighbors.top }}
             data-swipe-preview="previous"
           >
@@ -313,7 +318,7 @@ export default function ProjectSwipe({
           <div
             className={neighborClass}
             aria-hidden="true"
-            {...{ inert: true }}
+            ref={makePreviewInert}
             style={{ left: neighbors.width, top: neighbors.top }}
             data-swipe-preview="next"
           >

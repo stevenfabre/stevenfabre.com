@@ -5,7 +5,7 @@ export const companyDetails: Record<
   liveblocks: {
     role: "Co-founder & CEO",
     description:
-      "I co-founded Liveblocks to help teams build collaborative software and grew the business from zero to multiple millions in annual recurring revenue. Along the way, I raised over $10M and built the team, systems, and culture to grow without compromising on quality.",
+      "I founded Liveblocks to help developers build world-class collaborative products that feel like Figma or Google Docs. I raised capital and built the team, culture, and system to grow without compromising on quality.",
   },
   messenger: {
     role: "Product Design",

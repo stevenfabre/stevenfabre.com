@@ -143,26 +143,22 @@ export default function WorkPageSelect() {
 // pointer coordinates or shift the initial alignment with the heading.
 function MenuSurface({ children }: { children: ReactNode }) {
   const reducedMotion = useReducedMotion();
-  const x = useMotionValue(0);
   const y = useMotionValue(0);
   const reset = () => {
     const transition = { type: "spring" as const, duration: 0.3, bounce: 0.3 };
-    animate(x, 0, transition);
     animate(y, 0, transition);
   };
   useEffect(() => {
     // Radix can focus the listbox outside this surface before an item.
     const stop = () => {
-      x.jump(0);
       y.jump(0);
     };
     document.addEventListener("keydown", stop);
     return () => {
       document.removeEventListener("keydown", stop);
-      x.stop();
       y.stop();
     };
-  }, [x, y]);
+  }, [y]);
   // As displacement increases, resistance grows smoothly toward a 10px limit.
   const resist = (distance: number) =>
     (distance * 10) / (100 + Math.abs(distance));
@@ -184,11 +180,6 @@ function MenuSurface({ children }: { children: ReactNode }) {
           bounce: 0,
         };
         animate(
-          x,
-          resist(event.clientX - bounds.left - bounds.width / 2),
-          transition
-        );
-        animate(
           y,
           resist(event.clientY - bounds.top - bounds.height / 2),
           transition
@@ -199,7 +190,7 @@ function MenuSurface({ children }: { children: ReactNode }) {
     >
       <motion.div
         className="surface-popover overflow-hidden"
-        style={{ x: reducedMotion ? 0 : x, y: reducedMotion ? 0 : y }}
+        style={{ y: reducedMotion ? 0 : y }}
       >
         {children}
       </motion.div>

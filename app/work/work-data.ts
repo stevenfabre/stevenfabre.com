@@ -250,7 +250,7 @@ export const films: Record<string, Film> = {
     company: "liveblocks",
     year: "2026",
     aspectRatio: "1588 / 1080",
-    contributions: ["Web design", "Development"],
+    contributions: ["Web design", "Engineering"],
     introduction:
       "I designed and built this page to explain the real-time infrastructure behind Liveblocks. It’s an abstract product, so I wanted to give people a way to see how the pieces fit together.",
     paragraphs: [
@@ -271,7 +271,7 @@ export const films: Record<string, Film> = {
     aspectRatio: "1556 / 1080",
     contributions: [
       "Web design",
-      "Development",
+      "Engineering",
       "Film design",
       "Video production",
     ],
@@ -531,7 +531,7 @@ export const films: Record<string, Film> = {
     year: "2020",
     duration: "1:15",
     aspectRatio: "16 / 9",
-    contributions: ["Product design", "Development", "Launch film"],
+    contributions: ["Product design", "Engineering", "Launch film"],
     introduction:
       "Making realistic conversation mockups at Messenger took a lot of work. Designers needed to show the same conversation on different devices and from different senders’ perspectives. Long messages and busy group chats made it even harder to test how a design would hold up.",
     paragraphs: [
@@ -584,7 +584,7 @@ export const films: Record<string, Film> = {
     year: "2020",
     duration: "1:32",
     aspectRatio: "1440 / 936",
-    contributions: ["Interaction design", "Development"],
+    contributions: ["Interaction design", "Engineering"],
     introduction:
       "Picking one color is fairly straightforward. Putting together a consistent palette of colors that work well together is harder. I wanted to explore how a color picker could help with that inside InVision Studio.",
     paragraphs: [
@@ -600,7 +600,7 @@ export const films: Record<string, Film> = {
     company: "invision",
     year: "2019",
     aspectRatio: "4 / 3",
-    contributions: ["Interaction design", "Development"],
+    contributions: ["Interaction design", "Engineering"],
     introduction:
       "Release notes tell you what changed, but rarely give you a sense of the people doing the work. I wanted updates in InVision Studio to feel more personal and create a connection between our users and the team.",
     paragraphs: [
@@ -617,7 +617,7 @@ export const films: Record<string, Film> = {
     year: "2018",
     duration: "0:48",
     aspectRatio: "16 / 9",
-    contributions: ["Product design", "Development", "Running the business"],
+    contributions: ["Product design", "Engineering", "Running the business"],
     introduction:
       "Gifmock started with a problem I had myself. I often found that a GIF was the simplest way to explain a concept, and I wanted an easy way to make one from the static layers I was already designing.",
     paragraphs: [
@@ -666,7 +666,7 @@ export const films: Record<string, Film> = {
       "The original Easee website, with its visual animation editor and green gradient",
     contributions: [
       "Product design",
-      "Development",
+      "Engineering",
       "Brand",
       "Running the business",
     ],
@@ -774,7 +774,7 @@ export const films: Record<string, Film> = {
     aspectRatio: "2340 / 1492",
     imageAlt:
       "Campaign Monitor’s Build beautiful emails landing page, with an illustrated email builder",
-    contributions: ["Storyboarding", "Animation", "Development"],
+    contributions: ["Storyboarding", "Animation", "Engineering"],
     introduction:
       "Bradley Rodgers and I made this landing page during a 24-hour Ship It day at Campaign Monitor. We wanted to show the email builder in action by animating someone putting an email together.",
     paragraphs: [
@@ -845,7 +845,7 @@ export const films: Record<string, Film> = {
     contributions: [
       "Co-founding",
       "Product design",
-      "Development",
+      "Engineering",
       "Brand & marketing",
     ],
     introduction:

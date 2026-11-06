@@ -40,9 +40,16 @@
   flex-shrink: 0;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 300ms ease-out;
 }
-.controls button:hover {
+.controls button:active {
   background: rgb(255 255 255 / 15%);
+  transition-duration: 0ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .controls button:hover {
+    background: rgb(255 255 255 / 15%);
+  }
 }
 .controls button:focus-visible {
   outline: none;

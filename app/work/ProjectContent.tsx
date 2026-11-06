@@ -45,7 +45,7 @@ export default function ProjectContent({
             } as CSSProperties
           }
         >
-          <div className="grid h-[var(--visual-height)] items-center justify-items-center">
+          <div className="mx-auto grid h-[var(--visual-height)] w-full items-center justify-items-center max-md:max-w-[var(--caption-width)] max-[520px]:w-[calc(100%-8px)]">
             <div
               className={styles.visual}
               data-work-visual

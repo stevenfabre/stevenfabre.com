@@ -158,13 +158,30 @@ function MenuSurface({
   const backgroundX = useMotionValue(0);
   const backgroundY = useMotionValue(0);
   const reset = () => {
+    // Read the current displacement, including interrupted animations, so the
+    // leading edge returns first: bottom-to-top downwards, top-to-bottom upwards.
+    const items =
+      scope.current.querySelectorAll<HTMLElement>("[data-menu-item]");
+    const displacement = Array.from(items).reduce((total, item) => {
+      const transform = getComputedStyle(item).transform;
+      return (
+        total +
+        (transform === "none" ? 0 : new DOMMatrixReadOnly(transform).m42)
+      );
+    }, 0);
     const transition = { type: "spring" as const, duration: 0.4, bounce: 0.4 };
     animateItems(
       "[data-menu-item]",
       { y: 0 },
       reducedMotion
         ? { duration: 0 }
-        : { ...transition, delay: stagger(0.04, { startDelay: 0.08 }) }
+        : {
+            ...transition,
+            delay: stagger(0.02, {
+              startDelay: 0.08,
+              from: displacement < 0 ? "last" : "first",
+            }),
+          }
     );
     animate(backgroundX, 0, { ...transition, duration: 0.25 });
     animate(backgroundY, 0, { ...transition, duration: 0.25 });
@@ -224,7 +241,10 @@ function MenuSurface({
           opacity: open ? 1 : 0,
           scale: open || reducedMotion ? 1 : 0.9,
         }}
-        transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+        transition={{
+          scale: { type: "spring", duration: 0.4, bounce: 0.6 },
+          opacity: { duration: 0.16, ease: [0.23, 1, 0.32, 1] },
+        }}
         style={{
           x: reducedMotion ? 0 : backgroundX,
           y: reducedMotion ? 0 : backgroundY,

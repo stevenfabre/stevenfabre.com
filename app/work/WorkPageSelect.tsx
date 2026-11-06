@@ -39,7 +39,7 @@ export default function WorkPageSelect() {
   );
   const [focusSurface, animateFocusSurface] = useAnimate<HTMLSpanElement>();
   const menuBackground = useRef<HTMLDivElement>(null);
-  const dismissedOutside = useRef(false);
+  const returningToTrigger = useRef(false);
   const selectedHref = useRef<string | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const value = useRef<HTMLSpanElement>(null);
@@ -90,7 +90,7 @@ export default function WorkPageSelect() {
         // Compensate for scaling so the corners stay round during the return.
         borderRadius: [`${16 / scaleX}px / ${16 / scaleY}px`, "16px"],
       },
-      { type: "spring", duration: reducedMotion ? 0 : 0.4, bounce: 0.2 }
+      { type: "spring", duration: reducedMotion ? 0 : 0.4, bounce: 0.3 }
     );
     return () => {
       animation.stop();
@@ -105,9 +105,17 @@ export default function WorkPageSelect() {
     animateFocusSurface,
   ]);
 
+  function prepareDismissal() {
+    returningToTrigger.current = true;
+    setFocused(true);
+    setDismissedSurface(
+      menuBackground.current?.getBoundingClientRect() ?? null
+    );
+  }
+
   function syncTypography(open: boolean) {
     if (open) {
-      dismissedOutside.current = false;
+      returningToTrigger.current = false;
       setDismissedSurface(null);
     }
     setOpen(open);
@@ -145,12 +153,12 @@ export default function WorkPageSelect() {
         aria-label="Page: Work"
         onFocus={(event) =>
           setFocused(
-            dismissedOutside.current ||
+            returningToTrigger.current ||
               event.currentTarget.matches(":focus-visible")
           )
         }
         onBlur={() => {
-          dismissedOutside.current = false;
+          returningToTrigger.current = false;
           setFocused(false);
         }}
         className="group relative isolate -mx-2 inline-flex cursor-pointer items-center gap-2 rounded-2xl px-2 text-left focus-visible:outline-none"
@@ -176,13 +184,8 @@ export default function WorkPageSelect() {
         <Select.Content
           ref={alignContent}
           position="item-aligned"
-          onPointerDownOutside={() => {
-            dismissedOutside.current = true;
-            setFocused(true);
-            setDismissedSurface(
-              menuBackground.current?.getBoundingClientRect() ?? null
-            );
-          }}
+          onPointerDownOutside={prepareDismissal}
+          onEscapeKeyDown={prepareDismissal}
           onCloseAutoFocus={(event) => {
             const href = selectedHref.current;
             if (!href) return;

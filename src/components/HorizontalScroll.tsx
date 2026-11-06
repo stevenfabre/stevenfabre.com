@@ -20,6 +20,10 @@ export default function HorizontalScroll({
     const element = viewport.current;
     if (!element) return;
     const updateEdges = () => {
+      element.toggleAttribute(
+        "data-overflow",
+        element.scrollWidth > element.clientWidth + 1
+      );
       element.style.setProperty(
         "--fade-left",
         element.scrollLeft > 1 ? "24px" : "0px"
@@ -45,7 +49,7 @@ export default function HorizontalScroll({
   return (
     <div
       ref={viewport}
-      className="outline-none select-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,transparent,black_var(--fade-left,0px),black_calc(100%_-_var(--fade-right,0px)),transparent)]"
+      className="data-[overflow]:cursor-grab data-[overflow]:active:cursor-grabbing data-[overflow]:active:[&_a]:cursor-grabbing outline-none select-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,transparent,black_var(--fade-left,0px),black_calc(100%_-_var(--fade-right,0px)),transparent)]"
       tabIndex={0}
       role="region"
       aria-label={label}

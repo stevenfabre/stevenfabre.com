@@ -87,7 +87,7 @@ export default function ProjectSlideshow({ images, caption }: Slideshow) {
       </div>
       <figcaption className="mt-3 flex items-start justify-between gap-4 text-sm leading-relaxed text-[var(--muted)]">
         <p className="opacity-70">{caption}</p>
-        <div className="flex shrink-0 gap-1">
+        <div className="flex h-lh shrink-0 items-center">
           <button
             type="button"
             className={iconControl}

@@ -90,7 +90,7 @@ export default function WorkPageSelect() {
         // Compensate for scaling so the corners stay round during the return.
         borderRadius: [`${16 / scaleX}px / ${16 / scaleY}px`, "16px"],
       },
-      { type: "spring", duration: reducedMotion ? 0 : 0.4, bounce: 0.3 }
+      { type: "spring", duration: reducedMotion ? 0 : 0.2, bounce: 0.3 }
     );
     return () => {
       animation.stop();

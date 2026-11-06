@@ -1,5 +1,17 @@
 import type { SVGProps } from "react";
 import {
+  PenTool,
+  Code2,
+  Clapperboard,
+  Lightbulb,
+  Palette,
+  Megaphone,
+  MessageSquare,
+  Target,
+  Sparkles,
+  ScanSearch,
+  WandSparkles,
+  Tag,
   ArrowDown,
   ArrowLeft,
   ArrowRight,
@@ -26,6 +38,18 @@ import {
 } from "lucide-react";
 
 const icons = {
+  design: PenTool,
+  engineering: Code2,
+  film: Clapperboard,
+  concept: Lightbulb,
+  palette: Palette,
+  marketing: Megaphone,
+  messaging: MessageSquare,
+  positioning: Target,
+  sparkles: Sparkles,
+  research: ScanSearch,
+  animation: WandSparkles,
+  branding: Tag,
   "arrow-down": ArrowDown,
   "arrow-left": ArrowLeft,
   "arrow-right": ArrowRight,
@@ -55,7 +79,10 @@ export default function Icon({
   name,
   size = 20,
   ...props
-}: Omit<SVGProps<SVGSVGElement>, "ref"> & { name: keyof typeof icons; size?: number }) {
+}: Omit<SVGProps<SVGSVGElement>, "ref"> & {
+  name: keyof typeof icons;
+  size?: number;
+}) {
   const Component = icons[name];
   return (
     <Component

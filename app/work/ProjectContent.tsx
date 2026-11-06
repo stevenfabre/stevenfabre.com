@@ -1,3 +1,4 @@
+import ResponsibilityIcon from "./ResponsibilityIcon";
 import BeforeAfter from "./BeforeAfter";
 import { ProjectTextPreviews, renderProjectText } from "./ProjectText";
 import { type Film, companies, companyDetails } from "./work-data";
@@ -115,7 +116,10 @@ export default function ProjectContent({
                   aria-label="My contributions"
                 >
                   {film.contributions.map((contribution) => (
-                    <li key={contribution}>{contribution}</li>
+                    <li key={contribution} className="flex items-start gap-2">
+                      <ResponsibilityIcon name={contribution} />
+                      <span>{contribution}</span>
+                    </li>
                   ))}
                 </ul>
               )}

@@ -81,6 +81,7 @@ export default function ProjectContent({
                     target="_blank"
                     rel="noopener noreferrer"
                     iconPosition="end"
+                    className="[&_svg]:size-3.5"
                   >
                     {link.label}
                     <WorkIcon name="arrow-up-right" />
@@ -100,6 +101,22 @@ export default function ProjectContent({
                 </p>
               ))}
               {film.slideshow && <ProjectSlideshow {...film.slideshow} />}
+              {film.youtube && (
+                <figure className="mt-8">
+                  <iframe
+                    className="aspect-video w-full rounded-lg border-0"
+                    src={`https://www.youtube-nocookie.com/embed/${film.youtube.id}`}
+                    title={film.youtube.title}
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                  />
+                  <figcaption className="mt-3 text-sm text-[var(--muted)]">
+                    <span className="opacity-70">{film.youtube.title}</span>
+                  </figcaption>
+                </figure>
+              )}
               {film.collaborators && (
                 <Collaborators people={film.collaborators} />
               )}

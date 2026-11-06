@@ -150,6 +150,7 @@ export type Film = ProjectVisual & {
   paragraphs?: string[];
   afterGalleryParagraphs?: string[];
   slideshow?: { images: { src: string; alt: string }[]; caption: string };
+  youtube?: { id: string; title: string };
   contribution: string;
   gallery?: ProjectVisual[];
   galleryLayout?: "grid" | "stack";
@@ -159,6 +160,10 @@ export type Film = ProjectVisual & {
 
 export const films: Record<string, Film> = {
   liveblocksOverview: {
+    youtube: {
+      id: "SG8eG7SYEko",
+      title: "The story behind Liveblocks 3.0",
+    },
     file: "liveblocks-company-introduction",
     slug: "building-liveblocks",
     collaborators: [

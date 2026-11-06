@@ -116,7 +116,7 @@ export default function ProjectContent({
                   aria-label="My contributions"
                 >
                   {film.contributions.map((contribution) => (
-                    <li key={contribution} className="flex items-center gap-2">
+                    <li key={contribution} className="flex items-center gap-1.5">
                       <ResponsibilityIcon name={contribution} />
                       <span>{contribution}</span>
                     </li>

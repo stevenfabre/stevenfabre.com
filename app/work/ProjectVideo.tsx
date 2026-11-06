@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useVideoFrameReady } from "../../src/hooks/useVideoFrameReady";
 import WorkIcon from "./WorkIcon";
 import type { ProjectVisual } from "./work-data";
@@ -9,6 +9,7 @@ import playerStyles from "./ProjectVideo.module.css";
 
 import {
   readVideoPlayback,
+  readVideoFrame,
   clearVideoPlayback,
 } from "../../src/utils/videoPlayback";
 
@@ -22,6 +23,11 @@ export default function ProjectVideo({
   autoLoop?: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const posterRef = useRef<HTMLImageElement>(null);
+  useLayoutEffect(() => {
+    const frame = readVideoFrame(film.file);
+    if (frame && posterRef.current) posterRef.current.src = frame;
+  }, [film.file]);
   const frameReady = useVideoFrameReady(ref, film.file);
   const progressRef = useRef<HTMLInputElement>(null);
   const manuallyPaused = useRef(false);
@@ -115,6 +121,7 @@ export default function ProjectVideo({
     soundPreferenceReady.current = true;
     let cancelled = false;
     const playback = readVideoPlayback(film.file);
+    if (playback) manuallyPaused.current = !playback.playing;
     const restore = () => {
       if (!playback || cancelled) return;
       try {
@@ -123,12 +130,6 @@ export default function ProjectVideo({
           playback.time,
           video.duration || playback.time
         );
-        if (
-          playback.playing &&
-          !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
-          !cancelled
-        )
-          void video.play().catch(() => {});
       } catch {
         /* Native playback controls remain available without storage. */
       }
@@ -143,7 +144,12 @@ export default function ProjectVideo({
     let visible = false;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const syncPlayback = () => {
-      if (!visible || document.hidden || motion.matches) {
+      if (
+        !visible ||
+        document.hidden ||
+        motion.matches ||
+        document.documentElement.hasAttribute("data-project-transition")
+      ) {
         video.pause();
       } else if (
         video.readyState >= 4 &&
@@ -162,6 +168,13 @@ export default function ProjectVideo({
     );
     visibilityObserver.observe(video);
     video.addEventListener("canplaythrough", syncPlayback);
+    video.addEventListener("seeked", syncPlayback);
+    // Resume only after the moving frame has handed over to the real player.
+    const transitionObserver = new MutationObserver(syncPlayback);
+    transitionObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-project-transition"],
+    });
     motion.addEventListener("change", syncPlayback);
     const observer =
       preload === "none"
@@ -189,7 +202,9 @@ export default function ProjectVideo({
     return () => {
       cancelled = true;
       visibilityObserver.disconnect();
+      transitionObserver.disconnect();
       video.removeEventListener("canplaythrough", syncPlayback);
+      video.removeEventListener("seeked", syncPlayback);
       motion.removeEventListener("change", syncPlayback);
       document.removeEventListener("fullscreenchange", exitFullscreen);
       video.removeEventListener("webkitendfullscreen", exitFullscreen);
@@ -203,6 +218,7 @@ export default function ProjectVideo({
     <div className={playerStyles.player}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+        ref={posterRef}
         data-video-poster
         src={`/work/media/${film.file}.jpg`}
         alt=""

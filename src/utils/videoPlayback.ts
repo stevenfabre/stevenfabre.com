@@ -1,5 +1,12 @@
 // Shared handoff from homepage/overview previews to the full player.
 const playbackKey = "work-playback";
+let capturedFrame: { file: string; image: string } | null = null;
+
+export function readVideoFrame(file: string) {
+  return capturedFrame?.file === file && readVideoPlayback(file)
+    ? capturedFrame.image
+    : undefined;
+}
 type PreviewPlayback = {
   file: string;
   time: number;
@@ -9,13 +16,37 @@ type PreviewPlayback = {
 
 export function saveVideoPlayback(video: HTMLVideoElement) {
   if (!video.dataset.file) return;
+  const playing = !video.paused && !video.ended;
+  video.pause();
+  capturedFrame = null;
+  // Keep the exact clicked frame through the morph and destination decoding.
+  // Retain only one frame in memory; never put image data in session storage.
+  if (video.readyState >= 2 && video.videoWidth) {
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext("2d");
+      if (context) {
+        context.drawImage(video, 0, 0);
+        const image = canvas.toDataURL("image/jpeg", 0.95);
+        capturedFrame = { file: video.dataset.file, image };
+        const poster = video.parentElement?.querySelector<HTMLImageElement>(
+          "[data-video-poster]"
+        );
+        if (poster) poster.src = image;
+      }
+    } catch {
+      // Fall back to the ordinary poster if frame capture is unavailable.
+    }
+  }
   try {
     sessionStorage.setItem(
       playbackKey,
       JSON.stringify({
         file: video.dataset.file,
         time: video.currentTime,
-        playing: !video.paused,
+        playing,
         savedAt: Date.now(),
       } satisfies PreviewPlayback)
     );

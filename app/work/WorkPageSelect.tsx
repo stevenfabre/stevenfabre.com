@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useId,
   useRef,
   useState,
   type CSSProperties,
@@ -16,7 +17,6 @@ import {
   useMotionValue,
   useReducedMotion,
 } from "motion/react";
-import { headingControl } from "../../src/components/HeadingLink";
 import * as Select from "@radix-ui/react-select";
 import { ChevronsUpDown } from "lucide-react";
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
@@ -29,6 +29,9 @@ const pages = [
 export default function WorkPageSelect() {
   const navigate = useSiteNavigation();
   const [open, setOpen] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [openedFromFocus, setOpenedFromFocus] = useState(false);
+  const surfaceId = useId();
   const selectedHref = useRef<string | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const value = useRef<HTMLSpanElement>(null);
@@ -62,6 +65,7 @@ export default function WorkPageSelect() {
   const [typography, setTypography] = useState<CSSProperties>();
 
   function syncTypography(open: boolean) {
+    if (open) setOpenedFromFocus(focused);
     setOpen(open);
     if (!open || !trigger.current) return;
     // The portal sits outside the heading's responsive container. Copy its
@@ -95,8 +99,22 @@ export default function WorkPageSelect() {
       <Select.Trigger
         ref={trigger}
         aria-label="Page: Work"
-        className={`${headingControl} group inline-flex cursor-pointer items-center gap-2 text-left`}
+        onFocus={(event) =>
+          setFocused(event.currentTarget.matches(":focus-visible"))
+        }
+        onBlur={() => setFocused(false)}
+        className="group relative isolate -mx-2 inline-flex cursor-pointer items-center gap-2 rounded-2xl px-2 text-left focus-visible:outline-none"
       >
+        {focused && !open && (
+          <motion.span
+            aria-hidden="true"
+            layoutId={surfaceId}
+            className="surface-popover pointer-events-none absolute inset-0 -z-10"
+            transition={{
+              layout: { type: "spring", duration: 0.4, bounce: 0.6 },
+            }}
+          />
+        )}
         <Select.Value ref={value}>Work</Select.Value>
         <Select.Icon asChild>
           <ChevronsUpDown
@@ -124,7 +142,11 @@ export default function WorkPageSelect() {
           style={typography}
           className="z-50 outline-none"
         >
-          <MenuSurface open={open}>
+          <MenuSurface
+            open={open}
+            surfaceId={surfaceId}
+            openedFromFocus={openedFromFocus}
+          >
             <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
               {pages.map(({ label, href }) => (
                 <Select.Item
@@ -149,9 +171,13 @@ export default function WorkPageSelect() {
 function MenuSurface({
   children,
   open,
+  surfaceId,
+  openedFromFocus,
 }: {
   children: ReactNode;
   open: boolean;
+  surfaceId: string;
+  openedFromFocus: boolean;
 }) {
   const reducedMotion = useReducedMotion();
   const [scope, animateItems] = useAnimate<HTMLDivElement>();
@@ -235,22 +261,34 @@ function MenuSurface({
     >
       <motion.div
         aria-hidden="true"
-        className="surface-popover pointer-events-none absolute inset-0"
-        initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.9 }}
-        animate={{
-          opacity: open ? 1 : 0,
-          scale: open || reducedMotion ? 1 : 0.9,
-        }}
-        transition={{
-          scale: { type: "spring", duration: 0.4, bounce: 0.6 },
-          opacity: { duration: 0.16, ease: [0.23, 1, 0.32, 1] },
-        }}
+        className="pointer-events-none absolute inset-0"
         style={{
           x: reducedMotion ? 0 : backgroundX,
           y: reducedMotion ? 0 : backgroundY,
-          transformOrigin: "50% 75%",
         }}
-      />
+      >
+        {/* Shared geometry grows the focused trigger surface into the menu;
+            cursor motion stays on the wrapper so the two transforms compose. */}
+        <motion.div
+          layoutId={open && !reducedMotion ? surfaceId : undefined}
+          className="surface-popover absolute inset-0"
+          initial={
+            openedFromFocus
+              ? false
+              : { opacity: 0, scale: reducedMotion ? 1 : 0.9 }
+          }
+          animate={{
+            opacity: open ? 1 : 0,
+            scale: open || reducedMotion ? 1 : 0.9,
+          }}
+          transition={{
+            layout: { type: "spring", duration: 0.4, bounce: 0.6 },
+            scale: { type: "spring", duration: 0.4, bounce: 0.6 },
+            opacity: { duration: 0.16, ease: [0.23, 1, 0.32, 1] },
+          }}
+          style={{ borderRadius: 16, transformOrigin: "50% 75%" }}
+        />
+      </motion.div>
       <div className="relative">{children}</div>
     </div>
   );

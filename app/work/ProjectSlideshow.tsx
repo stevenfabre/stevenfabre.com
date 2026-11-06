@@ -180,7 +180,7 @@ export default function ProjectSlideshow({ images, caption, thumbnails = false }
             </p>
           ))}
         </div>
-        <div className="flex h-lh shrink-0 items-center">
+        <div className="flex h-lh shrink-0 items-center gap-px">
           {!thumbnails && <button
             type="button"
             className={iconControl}

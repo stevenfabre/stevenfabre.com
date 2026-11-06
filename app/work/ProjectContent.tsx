@@ -107,11 +107,13 @@ export default function ProjectContent({
               </p>
               <p>{companyDetails[company.id].role}</p>
               <p className="opacity-70">{film.year}</p>
-              <ul className="mt-5 grid gap-1" aria-label="My contributions">
-                {film.contributions.map((contribution) => (
-                  <li key={contribution}>{contribution}</li>
-                ))}
-              </ul>
+              {film.contributions.length > 0 && (
+                <ul className="mt-5 grid gap-1" aria-label="My contributions">
+                  {film.contributions.map((contribution) => (
+                    <li key={contribution}>{contribution}</li>
+                  ))}
+                </ul>
+              )}
             </aside>
             <Footer className="static mt-20 xl:mt-24 w-full bg-transparent backdrop-blur-none dark:bg-transparent md:col-start-2" />
           </figcaption>

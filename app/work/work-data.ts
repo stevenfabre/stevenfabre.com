@@ -171,13 +171,7 @@ export const films: Record<string, Film> = {
     company: "liveblocks",
     year: "2021-Now",
     aspectRatio: "1920 / 1080",
-    contributions: [
-      "Company building",
-      "Fundraising",
-      "Hiring & management",
-      "Product direction",
-      "Art direction",
-    ],
+    contributions: [],
     introduction:
       "I met my co-founder Guillaume at [InVision](/work/invision-studio), where we shared a love of building creative tools. We started working on a collaborative presentation tool, but kept running into the same problem: the multiplayer infrastructure we needed was difficult to put together.",
     paragraphs: [
@@ -250,7 +244,7 @@ export const films: Record<string, Film> = {
     company: "liveblocks",
     year: "2026",
     aspectRatio: "1588 / 1080",
-    contributions: ["Web design", "Engineering"],
+    contributions: ["Design", "Engineering"],
     introduction:
       "I designed and built this page to explain the real-time infrastructure behind Liveblocks. It’s an abstract product, so I wanted to give people a way to see how the pieces fit together.",
     paragraphs: [
@@ -269,11 +263,7 @@ export const films: Record<string, Film> = {
     year: "2024",
     duration: "0:27",
     aspectRatio: "1556 / 1080",
-    contributions: [
-      "Web design",
-      "Engineering",
-      "Video production",
-    ],
+    contributions: ["Design", "Engineering", "Video production"],
     introduction:
       "For Next.js Template Week, we released three collaborative templates inspired by products people already knew. I created the launch film and designed and built the website for the event.",
     paragraphs: [
@@ -530,7 +520,7 @@ export const films: Record<string, Film> = {
     year: "2020",
     duration: "1:15",
     aspectRatio: "16 / 9",
-    contributions: ["Product design", "Engineering", "Launch film"],
+    contributions: ["Design", "Engineering", "Video production"],
     introduction:
       "Making realistic conversation mockups at Messenger took a lot of work. Designers needed to show the same conversation on different devices and from different senders’ perspectives. Long messages and busy group chats made it even harder to test how a design would hold up.",
     paragraphs: [
@@ -564,7 +554,7 @@ export const films: Record<string, Film> = {
     company: "invision",
     year: "2016-2020",
     aspectRatio: "16 / 9",
-    contributions: ["Design leadership", "Prototyping", "Motion design"],
+    contributions: ["Design", "Engineering"],
     introduction:
       "InVision acquired my animation tool, [Easee](/work/easee), in 2016. I joined the team to help build Studio from the ground up. At the time, designing a product meant moving between tools: Sketch or Photoshop for screens, InVision for prototypes, another tool for animation, then handing it all to a developer.",
     paragraphs: [
@@ -583,7 +573,7 @@ export const films: Record<string, Film> = {
     year: "2020",
     duration: "1:32",
     aspectRatio: "1440 / 936",
-    contributions: ["Interaction design", "Engineering"],
+    contributions: ["Design", "Engineering"],
     introduction:
       "Picking one color is fairly straightforward. Putting together a consistent palette of colors that work well together is harder. I wanted to explore how a color picker could help with that inside InVision Studio.",
     paragraphs: [
@@ -599,7 +589,7 @@ export const films: Record<string, Film> = {
     company: "invision",
     year: "2019",
     aspectRatio: "4 / 3",
-    contributions: ["Interaction design", "Engineering"],
+    contributions: ["Design", "Engineering"],
     introduction:
       "Release notes tell you what changed, but rarely give you a sense of the people doing the work. I wanted updates in InVision Studio to feel more personal and create a connection between our users and the team.",
     paragraphs: [
@@ -616,7 +606,7 @@ export const films: Record<string, Film> = {
     year: "2018",
     duration: "0:48",
     aspectRatio: "16 / 9",
-    contributions: ["Product design", "Engineering", "Running the business"],
+    contributions: ["Design", "Engineering", "Marketing"],
     introduction:
       "Gifmock started with a problem I had myself. I often found that a GIF was the simplest way to explain a concept, and I wanted an easy way to make one from the static layers I was already designing.",
     paragraphs: [
@@ -663,12 +653,7 @@ export const films: Record<string, Film> = {
     aspectRatio: "2340 / 1344",
     imageAlt:
       "The original Easee website, with its visual animation editor and green gradient",
-    contributions: [
-      "Product design",
-      "Engineering",
-      "Brand",
-      "Running the business",
-    ],
+    contributions: ["Design", "Engineering", "Branding", "Marketing"],
     introduction:
       "Easee started as a prototype for the designers I worked with at Campaign Monitor. I wanted to help them make CSS animations visually, and kept working on it at night and on weekends until it became a product of its own.",
     paragraphs: [
@@ -729,7 +714,7 @@ export const films: Record<string, Film> = {
     year: "2014-2016",
     aspectRatio: "2340 / 1536",
     imageAlt: "Dragging a content block into a Campaign Monitor email",
-    contributions: ["Product design", "Customer research"],
+    contributions: ["Design", "Engineering", "Research"],
     introduction:
       "Making a responsive email meant dealing with a lot of technical constraints. The email builder let marketers put one together by dragging in content, without having to write HTML. I led design for the team, building on the original interface designed by Buzz Usborne.",
     paragraphs: [
@@ -773,7 +758,7 @@ export const films: Record<string, Film> = {
     aspectRatio: "2340 / 1492",
     imageAlt:
       "Campaign Monitor’s Build beautiful emails landing page, with an illustrated email builder",
-    contributions: ["Storyboarding", "Animation", "Engineering"],
+    contributions: ["Animation", "Engineering"],
     introduction:
       "Bradley Rodgers and I made this landing page during a 24-hour Ship It day at Campaign Monitor. We wanted to show the email builder in action by animating someone putting an email together.",
     paragraphs: [
@@ -799,7 +784,7 @@ export const films: Record<string, Film> = {
     year: "2014-2016",
     aspectRatio: "1755 / 900",
     imageAlt: "A customer at SXSW choosing a Campaign Monitor email template",
-    contributions: ["Product design", "Customer research"],
+    contributions: ["Design", "Engineering", "Research"],
     introduction:
       "We had an email builder that customers weren’t finding. A survey helped me understand why: the template gallery was hard to get to, and the choice of templates didn’t give people enough reason to try it.",
     paragraphs: [
@@ -841,12 +826,7 @@ export const films: Record<string, Film> = {
     aspectRatio: "3 / 2",
     imageAlt:
       "The original Backseat ride-request interface presented in a silver iPhone 6s mockup",
-    contributions: [
-      "Co-founding",
-      "Product design",
-      "Engineering",
-      "Brand & marketing",
-    ],
+    contributions: ["Design", "Engineering"],
     introduction:
       "I joined Backseat’s founding team in Sydney in early 2014. We were building a ridesharing app, and I worked across the product, website, and brand.",
     paragraphs: [

@@ -5,6 +5,7 @@ export default function ViewOnX({ href }: { href: string }) {
   return (
     <ButtonLink
       appearance="raised"
+      className="pl-3.5 gap-1.5"
       href={href}
       target="_blank"
       rel="noopener noreferrer"

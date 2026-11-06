@@ -3,10 +3,12 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
   type ReactNode,
+  type RefObject,
 } from "react";
 import {
   animate,
@@ -32,6 +34,12 @@ export default function WorkPageSelect() {
   const reducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [dismissedSurface, setDismissedSurface] = useState<DOMRect | null>(
+    null
+  );
+  const [focusSurface, animateFocusSurface] = useAnimate<HTMLSpanElement>();
+  const menuBackground = useRef<HTMLDivElement>(null);
+  const dismissedOutside = useRef(false);
   const selectedHref = useRef<string | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const value = useRef<HTMLSpanElement>(null);
@@ -64,7 +72,44 @@ export default function WorkPageSelect() {
   }, []);
   const [typography, setTypography] = useState<CSSProperties>();
 
+  useLayoutEffect(() => {
+    if (open || !dismissedSurface || !focusSurface.current) return;
+    const surface = focusSurface.current;
+    const target = surface.getBoundingClientRect();
+    const scaleX = dismissedSurface.width / target.width;
+    const scaleY = dismissedSurface.height / target.height;
+    const animation = animateFocusSurface(
+      surface,
+      {
+        transform: [
+          `translate(${dismissedSurface.left - target.left}px, ${
+            dismissedSurface.top - target.top
+          }px) scale(${scaleX}, ${scaleY})`,
+          "translate(0px, 0px) scale(1, 1)",
+        ],
+        // Compensate for scaling so the corners stay round during the return.
+        borderRadius: [`${16 / scaleX}px / ${16 / scaleY}px`, "16px"],
+      },
+      { type: "spring", duration: reducedMotion ? 0 : 0.4, bounce: 0.2 }
+    );
+    return () => {
+      animation.stop();
+      surface.style.transform = "";
+      surface.style.borderRadius = "";
+    };
+  }, [
+    open,
+    dismissedSurface,
+    reducedMotion,
+    focusSurface,
+    animateFocusSurface,
+  ]);
+
   function syncTypography(open: boolean) {
+    if (open) {
+      dismissedOutside.current = false;
+      setDismissedSurface(null);
+    }
     setOpen(open);
     if (!open || !trigger.current) return;
     // The portal sits outside the heading's responsive container. Copy its
@@ -99,17 +144,24 @@ export default function WorkPageSelect() {
         ref={trigger}
         aria-label="Page: Work"
         onFocus={(event) =>
-          setFocused(event.currentTarget.matches(":focus-visible"))
+          setFocused(
+            dismissedOutside.current ||
+              event.currentTarget.matches(":focus-visible")
+          )
         }
-        onBlur={() => setFocused(false)}
+        onBlur={() => {
+          dismissedOutside.current = false;
+          setFocused(false);
+        }}
         className="group relative isolate -mx-2 inline-flex cursor-pointer items-center gap-2 rounded-2xl px-2 text-left focus-visible:outline-none"
       >
         {focused && !open && (
           <span
+            ref={focusSurface}
             aria-hidden="true"
             // Extend only the painted surface to match the menu's padding.
             // The trigger keeps its original dimensions and text baseline.
-            className="surface-popover pointer-events-none absolute -inset-x-0.5 -inset-y-1.5 -z-10 md:-inset-x-2.5 md:-inset-y-2.5"
+            className="surface-popover pointer-events-none absolute -inset-x-0.5 -inset-y-1.5 -z-10 origin-top-left md:-inset-x-2.5 md:-inset-y-2.5"
           />
         )}
         <Select.Value ref={value}>Work</Select.Value>
@@ -124,6 +176,13 @@ export default function WorkPageSelect() {
         <Select.Content
           ref={alignContent}
           position="item-aligned"
+          onPointerDownOutside={() => {
+            dismissedOutside.current = true;
+            setFocused(true);
+            setDismissedSurface(
+              menuBackground.current?.getBoundingClientRect() ?? null
+            );
+          }}
           onCloseAutoFocus={(event) => {
             const href = selectedHref.current;
             if (!href) return;
@@ -139,7 +198,7 @@ export default function WorkPageSelect() {
           style={typography}
           className="z-50 outline-none"
         >
-          <MenuSurface open={open}>
+          <MenuSurface open={open} backgroundRef={menuBackground}>
             <Select.Viewport className="p-1 md:p-1.5 [&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-900 dark:[&:not(:has([data-highlighted]))_[data-state=checked]]:text-neutral-100">
               {pages.map(({ label, href }, index) => (
                 <Select.Item
@@ -188,9 +247,11 @@ export default function WorkPageSelect() {
 function MenuSurface({
   children,
   open,
+  backgroundRef,
 }: {
   children: ReactNode;
   open: boolean;
+  backgroundRef: RefObject<HTMLDivElement>;
 }) {
   const reducedMotion = useReducedMotion();
   const [scope, animateItems] = useAnimate<HTMLDivElement>();
@@ -282,6 +343,7 @@ function MenuSurface({
       >
         {/* Keep entrance scaling separate from cursor-driven movement. */}
         <motion.div
+          ref={backgroundRef}
           className="surface-popover absolute inset-0"
           initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.9 }}
           animate={{

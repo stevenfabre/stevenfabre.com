@@ -133,14 +133,11 @@ export default function Game() {
         })}
       </div>
 
-      <Footer />
+      <Footer>
+        <Toolbar currentColor={me.presence.color} setColor={setColor} />
+      </Footer>
 
       <Cursors />
-
-      <Toolbar
-        currentColor={me.presence.color}
-        setColor={(color) => setColor(color)}
-      />
     </div>
   );
 }

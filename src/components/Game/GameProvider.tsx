@@ -23,10 +23,13 @@ export default function GameProvider() {
     >
       <RoomProvider
         id="game-hello-stevenfabre.com"
-        initialPresence={{
-          cursor: null,
-          color: COLORS.ORANGE,
-          cursorType: null,
+        initialPresence={() => {
+          const colors = Object.values(COLORS);
+          return {
+            cursor: null,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            cursorType: null,
+          };
         }}
         initialStorage={initializeStorage()}
       >

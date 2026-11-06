@@ -1,5 +1,8 @@
+import { useEffect, useId, useRef, useState } from "react";
 import { ColorSwatch } from "./ColorSwatch";
 import { COLORS } from "./constants";
+import { iconControl } from "../buttonStyles";
+import { Tooltip } from "../Tooltip";
 
 export default function Toolbar({
   currentColor,
@@ -8,38 +11,81 @@ export default function Toolbar({
   currentColor: string;
   setColor: (color: string) => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const container = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const id = useId();
+
+  useEffect(() => {
+    if (!open) return;
+    const dismiss = (event: PointerEvent) => {
+      if (
+        event.target instanceof Node &&
+        !container.current?.contains(event.target)
+      )
+        setOpen(false);
+    };
+    document.addEventListener("pointerdown", dismiss);
+    return () => document.removeEventListener("pointerdown", dismiss);
+  }, [open]);
+
   return (
-    <div className="absolute top-4 bg-neutral-50 dark:bg-neutral-950 rounded-lg flex p-1 transform md:-translate-y-16 ease-[cubic-bezier(.2,1.35,.36,1)] group-hover:transform-none transition-transform delay-300 duration-500">
-      <ColorSwatch
-        color={COLORS.ORANGE}
-        label="Orange"
-        onClick={() => setColor(COLORS.ORANGE)}
-        selected={currentColor === COLORS.ORANGE}
-      />
-      <ColorSwatch
-        color={COLORS.PINK}
-        label="Pink"
-        onClick={() => setColor(COLORS.PINK)}
-        selected={currentColor === COLORS.PINK}
-      />
-      <ColorSwatch
-        color={COLORS.RED}
-        label="Red"
-        onClick={() => setColor(COLORS.RED)}
-        selected={currentColor === COLORS.RED}
-      />
-      <ColorSwatch
-        color={COLORS.SKY}
-        label="Sky"
-        onClick={() => setColor(COLORS.SKY)}
-        selected={currentColor === COLORS.SKY}
-      />
-      <ColorSwatch
-        color={COLORS.TEAL}
-        label="Teal"
-        onClick={() => setColor(COLORS.TEAL)}
-        selected={currentColor === COLORS.TEAL}
-      />
+    <div
+      ref={container}
+      className="relative"
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && open) {
+          event.preventDefault();
+          event.stopPropagation();
+          setOpen(false);
+          trigger.current?.focus();
+        }
+      }}
+    >
+      <Tooltip content="Change color" open={open ? false : undefined}>
+        <button
+          ref={trigger}
+          type="button"
+          className={iconControl}
+          aria-label="Change drawing color"
+          aria-expanded={open}
+          aria-controls={open ? id : undefined}
+          onClick={() => setOpen((value) => !value)}
+        >
+          <span
+            aria-hidden="true"
+            className="relative size-3 rounded-full"
+            style={{ backgroundColor: currentColor }}
+          >
+            <span className="absolute inset-0 rounded-full border border-black/15" />
+          </span>
+        </button>
+      </Tooltip>
+      {open && (
+        <div
+          id={id}
+          role="group"
+          aria-label="Drawing colors"
+          className="surface-popover absolute bottom-full right-0 mb-2 flex p-1"
+        >
+          {Object.entries(COLORS).map(([name, color]) => (
+            <ColorSwatch
+              key={name}
+              color={color}
+              label={name.charAt(0) + name.slice(1).toLowerCase()}
+              selected={currentColor === color}
+              onClick={() => {
+                setColor(color);
+                setOpen(false);
+                trigger.current?.focus();
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

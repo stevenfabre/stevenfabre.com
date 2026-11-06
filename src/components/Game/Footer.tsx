@@ -4,8 +4,9 @@ import RollingNumber from "../RollingNumber";
 import Icon from "../Icon";
 import { useOthers } from "@liveblocks/react/suspense";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
-export default function Footer() {
+export default function Footer({ children }: { children: ReactNode }) {
   const countOthers = useOthers((others) => others.length);
 
   return (
@@ -61,10 +62,13 @@ export default function Footer() {
           />
         </svg>
       </Link>
-      <span className="relative z-10 inline-flex items-center gap-2 h-10 mr-2 sm:h-8 text-sm text-neutral-100 dark:text-neutral-900 font-medium tabular-nums">
-        <Icon name="users" size={16} />
-        <RollingNumber value={countOthers + 1} />
-      </span>
+      <div className="relative z-10 flex items-center gap-2 pointer-events-auto">
+        {children}
+        <span className="inline-flex items-center gap-2 h-10 mr-2 sm:h-8 text-sm text-neutral-100 dark:text-neutral-900 font-medium tabular-nums">
+          <Icon name="users" size={16} />
+          <RollingNumber value={countOthers + 1} />
+        </span>
+      </div>
     </div>
   );
 }

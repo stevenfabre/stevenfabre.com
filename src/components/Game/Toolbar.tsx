@@ -68,6 +68,7 @@ export default function Toolbar({
           className="z-50 outline-none motion-safe:[&[data-touching]_[data-highlighted]_[data-swatch]]:scale-110"
         >
           <SelectMenuSurface
+            compact
             open={open}
             backgroundRef={background}
             motionRef={menuMotion}

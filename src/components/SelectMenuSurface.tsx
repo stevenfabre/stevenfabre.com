@@ -27,9 +27,11 @@ export function SelectMenuSurface({
   open,
   backgroundRef,
   motionRef,
+  compact = false,
 }: {
   children: ReactNode;
   open: boolean;
+  compact?: boolean;
   backgroundRef: RefObject<HTMLDivElement>;
   motionRef: RefObject<MenuMotion>;
 }) {
@@ -126,7 +128,9 @@ export function SelectMenuSurface({
         {/* Keep entrance scaling separate from cursor-driven movement. */}
         <motion.div
           ref={backgroundRef}
-          className="surface-popover absolute inset-0"
+          className={`surface-popover absolute inset-0 ${
+            compact ? "rounded-lg" : ""
+          }`}
           initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.9 }}
           animate={{
             opacity: open ? 1 : 0,

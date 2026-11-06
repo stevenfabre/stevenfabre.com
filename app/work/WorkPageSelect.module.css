@@ -1,5 +1,7 @@
 .trigger[data-state="open"] {
-  visibility: hidden;
+  /* Keep Radix’s trigger focusable while the menu takes focus on hover.
+     visibility:hidden removes it from focus handling and can dismiss the menu. */
+  opacity: 0;
 }
 .content {
   z-index: 50;

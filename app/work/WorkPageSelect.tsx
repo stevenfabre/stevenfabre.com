@@ -46,7 +46,7 @@ export default function WorkPageSelect() {
         <Select.Icon asChild>
           <ChevronsUpDown
             aria-hidden="true"
-            className="size-[0.55em] text-neutral-400 transition-colors duration-150 group-hover:text-neutral-900 dark:text-neutral-500 dark:group-hover:text-neutral-100"
+            className="size-[0.55em] translate-y-[0.08em] text-neutral-400 transition-colors duration-150 group-hover:text-neutral-900 dark:text-neutral-500 dark:group-hover:text-neutral-100"
           />
         </Select.Icon>
       </Select.Trigger>

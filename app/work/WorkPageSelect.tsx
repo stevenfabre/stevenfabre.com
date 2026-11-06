@@ -103,7 +103,9 @@ export default function WorkPageSelect() {
           setFocused(event.currentTarget.matches(":focus-visible"))
         }
         onBlur={() => setFocused(false)}
-        className="group relative isolate -mx-2 inline-flex cursor-pointer items-center gap-2 rounded-2xl px-2 text-left focus-visible:outline-none"
+        // Match the viewport + item padding, with negative margins keeping
+        // the heading in place as the focus surface gains breathing room.
+        className="group relative isolate -mx-2.5 -my-1.5 inline-flex cursor-pointer items-center gap-2 rounded-2xl px-2.5 py-1.5 text-left focus-visible:outline-none md:-mx-4.5 md:-my-2.5 md:px-4.5 md:py-2.5"
       >
         {focused && !open && (
           <motion.span

@@ -13,7 +13,7 @@ import {
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
 import { swipeDestination } from "./swipe";
 const neighborClass =
-  "pointer-events-none absolute h-[calc(100svh-var(--bar-height))] w-full overflow-hidden max-md:px-[var(--page-padding)] [&_[data-work-visual]]:[view-transition-name:none!important] [&_[data-site-footer]]:[view-transition-name:none!important]";
+  "pointer-events-none absolute w-full max-md:px-[var(--page-padding)] [&_[data-work-visual]]:[view-transition-name:none!important] [&_[data-site-footer]]:[view-transition-name:none!important]";
 
 const mobileQuery = "(max-width: 767px)";
 const settling = { type: spring, duration: 0.5, bounce: 0.2 };

@@ -81,7 +81,8 @@ export function captureProjectTransition(
     overlay?.remove();
     outgoing.remove();
     footerLayer.remove();
-    if (destinationFooter) destinationFooter.style.visibility = footerVisibility;
+    if (destinationFooter)
+      destinationFooter.style.visibility = footerVisibility;
     if (target) target.style.visibility = targetVisibility;
     if (page) page.style.opacity = pageOpacity;
   };
@@ -115,6 +116,17 @@ export function captureProjectTransition(
       outgoingFooter = captureFooter(currentPage);
       const rect = currentPage.getBoundingClientRect();
       const frozen = currentPage.cloneNode(true) as HTMLElement;
+      // Clones cannot retain :hover. Freeze the displayed thumbnail opacity
+      // before the outgoing layer replaces the interactive overview.
+      const thumbnails = currentPage.querySelectorAll<HTMLElement>(
+        "[data-project-thumbnail]"
+      );
+      frozen
+        .querySelectorAll<HTMLElement>("[data-project-thumbnail]")
+        .forEach((thumbnail, index) => {
+          thumbnail.style.opacity = getComputedStyle(thumbnails[index]).opacity;
+          thumbnail.style.transition = "none";
+        });
       // Frozen content is purely visual: no duplicate IDs or active media players.
       frozen
         .querySelectorAll("video, audio, iframe, script")
@@ -136,7 +148,8 @@ export function captureProjectTransition(
         margin: "0",
       });
       outgoing.append(frozen);
-      const frozenFooter = frozen.querySelector<HTMLElement>("[data-site-footer]");
+      const frozenFooter =
+        frozen.querySelector<HTMLElement>("[data-site-footer]");
       if (frozenFooter) frozenFooter.style.visibility = "hidden";
       document.body.append(outgoing);
       const originalPane = currentPage.querySelector<HTMLElement>(
@@ -331,18 +344,54 @@ export function captureProjectTransition(
             easing,
             fill: "both",
           };
+          if (
+            !closing &&
+            page &&
+            !matchMedia("(prefers-reduced-motion: reduce)").matches
+          ) {
+            ["info", "title", "body"].forEach((part, index) => {
+              const element = page?.querySelector<HTMLElement>(
+                `[data-project-caption="${part}"]`
+              );
+              if (element)
+                animations.push(
+                  element.animate(
+                    [
+                      {
+                        opacity: 0,
+                        filter: "blur(4px)",
+                        transform: "translateY(8px)",
+                      },
+                      {
+                        opacity: 1,
+                        filter: "blur(0px)",
+                        transform: "translateY(0)",
+                      },
+                    ],
+                    {
+                      duration: 300,
+                      delay: index * 20,
+                      easing: "cubic-bezier(0.22, 1, 0.36, 1.12)",
+                      fill: "both",
+                    }
+                  )
+                );
+            });
+          }
           if (page) {
             const incomingFooter = captureFooter(page);
-            destinationFooter = page.querySelector<HTMLElement>(
-              "[data-site-footer]"
-            );
+            destinationFooter =
+              page.querySelector<HTMLElement>("[data-site-footer]");
             if (destinationFooter) {
               footerVisibility = destinationFooter.style.visibility;
               destinationFooter.style.visibility = "hidden";
             }
             if (incomingFooter)
               animations.push(
-                incomingFooter.animate([{ opacity: 0 }, { opacity: 1 }], options)
+                incomingFooter.animate(
+                  [{ opacity: 0 }, { opacity: 1 }],
+                  options
+                )
               );
           }
           if (outgoingFooter)

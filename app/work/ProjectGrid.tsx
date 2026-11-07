@@ -201,6 +201,7 @@ function ProjectPreview({
   return (
     <figure
       ref={figure}
+      data-project-thumbnail
       data-thumbnail-loading={loading || undefined}
       id={`project-${film.slug}`}
       className={styles.project}

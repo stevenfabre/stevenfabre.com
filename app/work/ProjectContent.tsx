@@ -52,86 +52,94 @@ export default function ProjectContent({
 
           <figcaption className="mx-auto mt-16 w-full max-w-lg md:max-w-2xl xl:max-w-4xl leading-relaxed md:grid md:grid-cols-4 md:items-start md:gap-x-8">
             <div className="@container text-lg text-neutral-500 dark:text-neutral-400 text-pretty md:col-span-3 md:col-start-2 md:row-start-1">
-              <h1 className="mb-4 text-lg font-semibold leading-relaxed text-neutral-900 dark:text-neutral-100 xl:text-xl">
+              <h1
+                data-project-caption="title"
+                className="mb-4 text-lg font-semibold leading-relaxed text-neutral-900 dark:text-neutral-100 xl:text-xl"
+              >
                 {film.title}
               </h1>
-              <p>{renderProjectText(film.introduction)}</p>
-              {film.paragraphs?.map((paragraph, index) => (
-                <Fragment key={paragraph}>
-                  {film.youtube &&
-                    index === (film.paragraphs?.length ?? 0) - 1 && (
-                      <figure className="mt-8">
-                        {preview ? (
-                          // Swipe neighbors are inert visual copies, never active players.
-                          <div className="aspect-video w-full" />
-                        ) : (
-                          <ProjectYouTube {...film.youtube} />
-                        )}
-                        <figcaption className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
-                          <HeadingLink
-                            iconSize={12}
-                            className="[--link-arrow-opacity:1] opacity-70 transition-colors hover:text-neutral-950 hover:opacity-100 focus-visible:text-neutral-950 focus-visible:opacity-100 dark:hover:text-neutral-50 dark:focus-visible:text-neutral-50"
-                            href={`https://www.youtube.com/watch?v=${film.youtube.id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {film.youtube.title}
-                          </HeadingLink>
-                        </figcaption>
-                      </figure>
-                    )}
-                  <p className="mt-6">{renderProjectText(paragraph)}</p>
-                  {film.slideshow &&
-                    film.slideshowAfterParagraph === index + 2 && (
-                      <SlideshowContent
-                        slideshow={film.slideshow}
-                        preview={preview}
-                      />
-                    )}
-                </Fragment>
-              ))}
-              {film.contribution && <p className="mt-6">{film.contribution}</p>}
-              <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 empty:hidden">
-                {film.source && <ViewOnX href={film.source} />}
-                {film.links?.map((link) => (
-                  <ButtonLink
-                    key={link.href}
-                    appearance="raised"
-                    compact
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    iconPosition="end"
-                    className="[&_svg]:size-3.5"
-                  >
-                    {link.label}
-                    <Icon name="arrow-up-right" />
-                  </ButtonLink>
+              <div data-project-caption="body">
+                <p>{renderProjectText(film.introduction)}</p>
+                {film.paragraphs?.map((paragraph, index) => (
+                  <Fragment key={paragraph}>
+                    {film.youtube &&
+                      index === (film.paragraphs?.length ?? 0) - 1 && (
+                        <figure className="mt-8">
+                          {preview ? (
+                            // Swipe neighbors are inert visual copies, never active players.
+                            <div className="aspect-video w-full" />
+                          ) : (
+                            <ProjectYouTube {...film.youtube} />
+                          )}
+                          <figcaption className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
+                            <HeadingLink
+                              iconSize={12}
+                              className="[--link-arrow-opacity:1] opacity-70 transition-colors hover:text-neutral-950 hover:opacity-100 focus-visible:text-neutral-950 focus-visible:opacity-100 dark:hover:text-neutral-50 dark:focus-visible:text-neutral-50"
+                              href={`https://www.youtube.com/watch?v=${film.youtube.id}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {film.youtube.title}
+                            </HeadingLink>
+                          </figcaption>
+                        </figure>
+                      )}
+                    <p className="mt-6">{renderProjectText(paragraph)}</p>
+                    {film.slideshow &&
+                      film.slideshowAfterParagraph === index + 2 && (
+                        <SlideshowContent
+                          slideshow={film.slideshow}
+                          preview={preview}
+                        />
+                      )}
+                  </Fragment>
                 ))}
+                {film.contribution && (
+                  <p className="mt-6">{film.contribution}</p>
+                )}
+                <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 empty:hidden">
+                  {film.source && <ViewOnX href={film.source} />}
+                  {film.links?.map((link) => (
+                    <ButtonLink
+                      key={link.href}
+                      appearance="raised"
+                      compact
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      iconPosition="end"
+                      className="[&_svg]:size-3.5"
+                    >
+                      {link.label}
+                      <Icon name="arrow-up-right" />
+                    </ButtonLink>
+                  ))}
+                </div>
+                {film.gallery && (
+                  <ProjectGallery
+                    preview={preview}
+                    visuals={film.gallery}
+                    layout={film.galleryLayout}
+                  />
+                )}
+                {film.afterGalleryParagraphs?.map((paragraph) => (
+                  <p key={paragraph} className="mt-6">
+                    {renderProjectText(paragraph)}
+                  </p>
+                ))}
+                {film.slideshow && film.slideshowAfterParagraph == null && (
+                  <SlideshowContent
+                    slideshow={film.slideshow}
+                    preview={preview}
+                  />
+                )}
+                {film.collaborators && (
+                  <Collaborators people={film.collaborators} />
+                )}
               </div>
-              {film.gallery && (
-                <ProjectGallery
-                  preview={preview}
-                  visuals={film.gallery}
-                  layout={film.galleryLayout}
-                />
-              )}
-              {film.afterGalleryParagraphs?.map((paragraph) => (
-                <p key={paragraph} className="mt-6">
-                  {renderProjectText(paragraph)}
-                </p>
-              ))}
-              {film.slideshow && film.slideshowAfterParagraph == null && (
-                <SlideshowContent
-                  slideshow={film.slideshow}
-                  preview={preview}
-                />
-              )}
-              {film.collaborators && (
-                <Collaborators people={film.collaborators} />
-              )}
             </div>
             <aside
+              data-project-caption="info"
               className="mt-8 grid grid-cols-2 items-start gap-8 border-t border-black/10 pt-5 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400 dark:border-white/10 md:block md:border-0 md:sticky md:top-22 md:self-start md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
               aria-label="Project credits"
             >

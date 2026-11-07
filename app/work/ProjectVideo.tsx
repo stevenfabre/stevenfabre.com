@@ -29,6 +29,12 @@ export default function ProjectVideo({
   const ref = useRef<HTMLVideoElement>(null);
   const posterRef = useRef<HTMLImageElement>(null);
   const [nativeControls, setNativeControls] = useState(false);
+  const [nativeControlsRevealed, setNativeControlsRevealed] = useState(false);
+  const nativeControlsRequested = useRef(false);
+  useLayoutEffect(() => {
+    nativeControlsRequested.current = false;
+    setNativeControlsRevealed(false);
+  }, [film.file]);
   useLayoutEffect(() => {
     const query = window.matchMedia(nativeControlsQuery);
     const update = () => setNativeControls(query.matches);
@@ -74,7 +80,9 @@ export default function ProjectVideo({
     if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
     else if (video.requestFullscreen)
       void video.requestFullscreen().catch(() => {
-        video.controls = window.matchMedia(nativeControlsQuery).matches;
+        video.controls =
+          window.matchMedia(nativeControlsQuery).matches &&
+          nativeControlsRequested.current;
       });
     else {
       void video.play().catch(() => {});
@@ -245,7 +253,9 @@ export default function ProjectVideo({
     const pauseWhenHidden = syncPlayback;
     const exitFullscreen = () => {
       if (!document.fullscreenElement)
-        video.controls = window.matchMedia(nativeControlsQuery).matches;
+        video.controls =
+          window.matchMedia(nativeControlsQuery).matches &&
+          nativeControlsRequested.current;
     };
     document.addEventListener("fullscreenchange", exitFullscreen);
     video.addEventListener("webkitendfullscreen", exitFullscreen);
@@ -270,7 +280,7 @@ export default function ProjectVideo({
   return (
     <div
       className={playerStyles.player}
-      data-native-controls={nativeControls || undefined}
+      data-native-controls={(nativeControls && nativeControlsRevealed) || undefined}
       data-frame-ready={frameReady || undefined}
       data-controls-visible={controlsVisible || !playing || undefined}
     >
@@ -295,13 +305,13 @@ export default function ProjectVideo({
         height={height}
         loop={autoLoop}
         muted={muted}
-        controls={nativeControls}
+        controls={nativeControls && nativeControlsRevealed}
         onVolumeChange={(event) => {
           const nextMuted = event.currentTarget.muted;
           setMuted(nextMuted);
         }}
         onClick={nativeControls ? undefined : togglePlay}
-        tabIndex={0}
+        tabIndex={nativeControls && !nativeControlsRevealed ? -1 : 0}
         onKeyDown={
           nativeControls
             ? undefined
@@ -317,6 +327,21 @@ export default function ProjectVideo({
         aria-label={film.title}
         onError={() => setFailed(true)}
       />
+      {nativeControls && !nativeControlsRevealed && (
+        <button
+          type="button"
+          className="absolute inset-0 z-[2] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+          aria-label={`Show video controls for ${film.title}`}
+          onClick={() => {
+            const video = ref.current;
+            if (!video) return;
+            nativeControlsRequested.current = true;
+            video.controls = true;
+            setNativeControlsRevealed(true);
+            video.focus();
+          }}
+        />
+      )}
       {!nativeControls && (
         <div
           className={playerStyles.controls}

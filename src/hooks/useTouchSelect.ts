@@ -40,8 +40,8 @@ export function useTouchSelect({
   );
 
   return (event: ReactPointerEvent<HTMLElement>) => {
-    if (open || event.pointerType !== "touch" || !event.isPrimary) return;
-    // Prevent Radix's default trigger handling. touch-action on the trigger
+    if (event.pointerType !== "touch" || !event.isPrimary) return;
+    // Prevent Radix's default handling. touch-action on the trigger and menu
     // reserves this gesture before the browser decides to scroll the page.
     event.preventDefault();
     cleanup.current?.();
@@ -92,8 +92,8 @@ export function useTouchSelect({
       const item = itemAt(event.clientX, event.clientY);
       cleanup.current?.();
       suppressReleaseClick();
-      // A tap opens the menu; a drag commits only the option under the finger.
-      if (!moved) return;
+      // A trigger tap opens the menu; an open-menu tap or drag selects.
+      if (!moved && !open) return;
       const value = item?.dataset.selectValue;
       if (value) onSelect(value);
       else onDismiss();
@@ -127,10 +127,13 @@ export function useTouchSelect({
     document.addEventListener("pointerdown", additionalPointer, true);
     window.addEventListener("blur", cancel);
     window.addEventListener("resize", cancel);
-    onOpen();
+    if (!open) onOpen();
     // Wait until the portal has aligned its text before applying touch motion.
-    initialFrame = window.requestAnimationFrame(() =>
-      onPosition?.(startX, startY)
-    );
+    initialFrame = window.requestAnimationFrame(() => {
+      onPosition?.(startX, startY);
+      if (open) {
+        (itemAt(startX, startY) ?? content.current)?.focus({ preventScroll: true });
+      }
+    });
   };
 }

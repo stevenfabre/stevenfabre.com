@@ -62,10 +62,11 @@ export default function Toolbar({
       <Select.Portal>
         <Select.Content
           ref={content}
+          onPointerDown={startTouchSelection}
           position="item-aligned"
           aria-label="Drawing colors"
           data-touching={touching || undefined}
-          className="z-50 outline-none motion-safe:[&[data-touching]_[data-highlighted]_[data-swatch]]:scale-110 motion-safe:[&_[data-menu-item]]:hover:[&_[data-swatch]]:scale-110"
+          className="z-50 touch-none outline-none motion-safe:[&[data-touching]_[data-highlighted]_[data-swatch]]:scale-110 motion-safe:[&_[data-menu-item]]:hover:[&_[data-swatch]]:scale-110"
         >
           <SelectMenuSurface
             compact

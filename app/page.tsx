@@ -74,7 +74,7 @@ export default function Home() {
       <Work />
       <Featured />
       <Investments />
-      <Footer />
+      <Footer fullBleed />
     </>
   );
   return (

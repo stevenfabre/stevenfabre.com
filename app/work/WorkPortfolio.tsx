@@ -74,7 +74,7 @@ export default function WorkPortfolio() {
             />
           </section>
         ))}
-        <Footer />
+        <Footer fullBleed />
       </main>
     </ProjectTextPreviews>
   );

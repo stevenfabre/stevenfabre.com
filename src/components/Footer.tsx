@@ -31,16 +31,21 @@ const defaultSocials: Social[] = [...socials.map(({ name }) => name), "email"];
 
 export default function Footer({
   className,
+  fullBleed = false,
   includedSocials = defaultSocials,
 }: {
   className?: string;
+  fullBleed?: boolean;
   includedSocials?: Social[];
 }) {
   return (
     <footer
       data-site-footer
       className={cx(
-        "sticky bottom-0 z-20 flex flex-row-reverse justify-between items-center py-4 mt-12 xl:mt-16 border-t border-black/10 dark:border-white/10 bg-neutral-50/95 dark:bg-neutral-950/95 backdrop-blur",
+        "sticky bottom-0 z-20 flex flex-row-reverse justify-between items-center py-4 mt-12 xl:mt-16 border-t border-black/10 dark:border-white/10",
+        fullBleed
+          ? "before:pointer-events-none before:absolute before:inset-y-0 before:-inset-x-4 xl:before:-inset-x-8 before:-z-10 before:bg-neutral-50/95 dark:before:bg-neutral-950/95 before:backdrop-blur"
+          : "bg-neutral-50/95 dark:bg-neutral-950/95 backdrop-blur",
         className
       )}
     >

@@ -46,7 +46,7 @@ export default function Toolbar({
     >
       <Select.Trigger
         aria-label="Change drawing color"
-        className={`${iconControl} touch-none select-none [-webkit-touch-callout:none]`}
+        className={`${iconControl} group/color touch-none select-none [-webkit-touch-callout:none]`}
         onPointerDown={startTouchSelection}
       >
         <Select.Value>
@@ -54,7 +54,7 @@ export default function Toolbar({
             <ColorSwatch color={currentColor} />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 rounded-full border border-black/20"
+              className="pointer-events-none absolute inset-0 rounded-full border border-transparent group-hover/color:border-black/20 group-focus/color:border-black/20 dark:border-black/20 dark:group-hover/color:border-transparent dark:group-focus/color:border-transparent"
             />
           </span>
         </Select.Value>

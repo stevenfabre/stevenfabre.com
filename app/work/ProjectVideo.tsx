@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Icon from "@/components/Icon";
 import type { ProjectVisual } from "./work-data";
 import { getMediaDimensions } from "./media";
@@ -39,6 +39,8 @@ export default function ProjectVideo({
     fullscreen,
     revealControls,
   } = useProjectVideo(film.file, preload);
+  const tap = useRef<{ x: number; y: number } | null>(null);
+  const awaitingTap = nativeControls && !nativeControlsRevealed;
   const [failed, setFailed] = useState(false);
   const { width, height } = getMediaDimensions(film);
   return (
@@ -61,6 +63,7 @@ export default function ProjectVideo({
         decoding="async"
       />
       <video
+        data-video-reveal={awaitingTap || undefined}
         data-poster-video
         data-video-ready={frameReady || undefined}
         ref={ref}
@@ -76,32 +79,52 @@ export default function ProjectVideo({
           const nextMuted = event.currentTarget.muted;
           setMuted(nextMuted);
         }}
+        onPointerDown={(event) => {
+          tap.current =
+            awaitingTap && event.isPrimary
+              ? { x: event.clientX, y: event.clientY }
+              : null;
+        }}
+        onPointerMove={(event) => {
+          if (
+            tap.current &&
+            Math.hypot(
+              event.clientX - tap.current.x,
+              event.clientY - tap.current.y
+            ) >= 8
+          )
+            tap.current = null;
+        }}
+        onPointerCancel={() => {
+          tap.current = null;
+        }}
+        onLostPointerCapture={() => {
+          tap.current = null;
+        }}
+        onPointerUp={() => {
+          // Enable controls on the actual video before Safari handles the trusted
+          // click. An overlay consumes that first tap without showing its UI.
+          if (tap.current && awaitingTap) revealControls();
+          tap.current = null;
+        }}
         onClick={nativeControls ? undefined : togglePlay}
-        tabIndex={nativeControls && !nativeControlsRevealed ? -1 : 0}
-        onKeyDown={
-          nativeControls
-            ? undefined
-            : (event) => {
-                if (event.key === " " || event.key === "Enter") {
-                  event.preventDefault();
-                  togglePlay();
-                }
-              }
-        }
+        tabIndex={0}
+        role={awaitingTap ? "button" : undefined}
+        onKeyDown={(event) => {
+          if (nativeControls && !awaitingTap) return;
+          if (event.key === " " || event.key === "Enter") {
+            event.preventDefault();
+            if (awaitingTap) revealControls();
+            else togglePlay();
+          }
+        }}
         playsInline
         preload={preload === "none" ? "none" : "auto"}
-        aria-label={film.title}
+        aria-label={
+          awaitingTap ? `Show video controls for ${film.title}` : film.title
+        }
         onError={() => setFailed(true)}
       />
-      {nativeControls && !nativeControlsRevealed && (
-        <button
-          type="button"
-          className="absolute inset-0 z-[2] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
-          data-video-reveal
-          aria-label={`Show video controls for ${film.title}`}
-          onClick={revealControls}
-        />
-      )}
       {!nativeControls && (
         <div
           className={playerStyles.controls}

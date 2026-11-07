@@ -194,7 +194,7 @@ export default function ProjectSwipe({
       event.clientX > innerWidth - 24 ||
       (event.target instanceof Element &&
         event.target.closest(
-          'a, button:not([data-video-reveal]), input, textarea, select, [contenteditable], [role="slider"], [role="dialog"], [data-no-project-swipe], video[controls]'
+          'a, button, input, textarea, select, [contenteditable], [role="slider"], [role="dialog"], [data-no-project-swipe], video[controls]'
         )) ||
       window.getSelection()?.isCollapsed === false
     )

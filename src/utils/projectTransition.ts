@@ -35,7 +35,8 @@ export function captureProjectTransition(
   let page: HTMLElement | null = null;
   let pageOpacity = "";
   let target: HTMLElement | undefined;
-  let targetVisibility = "";
+  let frozenVisual: HTMLElement | undefined;
+  let targetOpacity = "";
   let cancelled = false;
   let cleaned = false;
   let destinationFooter: HTMLElement | null = null;
@@ -83,7 +84,7 @@ export function captureProjectTransition(
     footerLayer.remove();
     if (destinationFooter)
       destinationFooter.style.visibility = footerVisibility;
-    if (target) target.style.visibility = targetVisibility;
+    if (target) target.style.opacity = targetOpacity;
     if (page) page.style.opacity = pageOpacity;
   };
   try {
@@ -116,6 +117,12 @@ export function captureProjectTransition(
       outgoingFooter = captureFooter(currentPage);
       const rect = currentPage.getBoundingClientRect();
       const frozen = currentPage.cloneNode(true) as HTMLElement;
+      frozenVisual = Array.from(
+        frozen.querySelectorAll<HTMLElement>("[data-work-visual]")
+      ).find(
+        (visual) =>
+          visual.style.getPropertyValue("view-transition-name") === name
+      );
       // Clones cannot retain :hover. Freeze the displayed thumbnail opacity
       // before the outgoing layer replaces the interactive overview.
       const thumbnails = currentPage.querySelectorAll<HTMLElement>(
@@ -271,14 +278,9 @@ export function captureProjectTransition(
       document.body.append(overlay);
     }
     const hideFrozenVisual = () => {
-      outgoing
-        .querySelectorAll<HTMLImageElement>("[data-work-visual] img")
-        .forEach((img) => {
-          if (img.src === media?.src) {
-            const visual = img.closest<HTMLElement>("[data-work-visual]");
-            if (visual) visual.style.visibility = "hidden";
-          }
-        });
+      // A poster's explicit visibility can override a hidden ancestor. Opacity
+      // suppresses the entire visual, including posters and comparison layers.
+      if (frozenVisual) frozenVisual.style.opacity = "0";
     };
     if (closing && overlay && bounds) {
       // Start responding on the tap, even if the return route is still mounting.
@@ -441,8 +443,8 @@ export function captureProjectTransition(
           );
           if (overlay && snapshot && target && targetImage && bounds) {
             const to = target.getBoundingClientRect();
-            targetVisibility = target.style.visibility;
-            target.style.visibility = "hidden";
+            targetOpacity = target.style.opacity;
+            target.style.opacity = "0";
             hideFrozenVisual();
             if (border && sourceBorder) {
               const destinationBorder = borderFrame(target, to);

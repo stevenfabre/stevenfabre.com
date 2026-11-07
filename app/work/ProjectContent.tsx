@@ -50,7 +50,7 @@ export default function ProjectContent({
             />
           </div>
 
-          <figcaption className="mx-auto mt-16 w-full max-w-lg md:max-w-2xl xl:max-w-4xl leading-relaxed md:grid md:grid-cols-4 md:items-start md:gap-x-8">
+          <figcaption className="mx-auto mt-14 w-full max-w-lg md:max-w-2xl xl:max-w-4xl leading-relaxed md:grid md:grid-cols-4 md:items-start md:gap-x-8">
             <div className="@container text-lg text-neutral-500 dark:text-neutral-400 text-pretty md:col-span-3 md:col-start-2 md:row-start-1">
               <h1
                 data-project-caption="title"

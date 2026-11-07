@@ -360,7 +360,7 @@ export function captureProjectTransition(
                       {
                         opacity: 0,
                         filter: "blur(4px)",
-                        transform: "translateY(8px)",
+                        transform: "translateY(16px)",
                       },
                       {
                         opacity: 1,
@@ -370,7 +370,7 @@ export function captureProjectTransition(
                     ],
                     {
                       duration: 300,
-                      delay: index * 20,
+                      delay: 80 + index * 40,
                       easing: "cubic-bezier(0.22, 1, 0.36, 1.12)",
                       fill: "both",
                     }
@@ -380,6 +380,29 @@ export function captureProjectTransition(
           }
           if (page) {
             const incomingFooter = captureFooter(page);
+            if (
+              incomingFooter &&
+              outgoingFooter &&
+              !matchMedia("(prefers-reduced-motion: reduce)").matches
+            ) {
+              const from = outgoingFooter.getBoundingClientRect();
+              const to = incomingFooter.getBoundingClientRect();
+              // Both copies travel together while their appearances crossfade.
+              for (const footer of [outgoingFooter, incomingFooter]) {
+                animations.push(
+                  animate(
+                    footer,
+                    {
+                      left: [`${from.left}px`, `${to.left}px`],
+                      top: [`${from.top}px`, `${to.top}px`],
+                      width: [`${from.width}px`, `${to.width}px`],
+                      height: [`${from.height}px`, `${to.height}px`],
+                    },
+                    mediaTransition
+                  )
+                );
+              }
+            }
             destinationFooter =
               page.querySelector<HTMLElement>("[data-site-footer]");
             if (destinationFooter) {

@@ -2,8 +2,57 @@ import { animate } from "motion/mini";
 import { spring } from "motion";
 import { decodeVisibleImages } from "@/utils/transitionImages";
 import { objectPositionOffsets } from "@/utils/objectPosition";
+import { prepareTransitionSnapshot, rectStyles } from "./transitionSnapshot";
 
 const mediaTransition = { type: spring, duration: 0.4, bounce: 0.2 };
+
+function animateCaptionEntrance(page: HTMLElement) {
+  return ["info", "title", "body"].flatMap((part, index) => {
+    const element = page.querySelector<HTMLElement>(
+      `[data-project-caption="${part}"]`
+    );
+    return element
+      ? [
+          element.animate(
+            [
+              {
+                opacity: 0,
+                filter: "blur(4px)",
+                transform: "translateY(16px)",
+              },
+              { opacity: 1, filter: "blur(0px)", transform: "translateY(0)" },
+            ],
+            {
+              duration: 300,
+              delay: 80 + index * 40,
+              easing: "cubic-bezier(0.22, 1, 0.36, 1.12)",
+              fill: "both",
+            }
+          ),
+        ]
+      : [];
+  });
+}
+
+function animateFooterMovement(outgoing: HTMLElement, incoming: HTMLElement) {
+  const from = rectStyles(outgoing.getBoundingClientRect());
+  const to = rectStyles(incoming.getBoundingClientRect());
+  const fromStyle = getComputedStyle(outgoing);
+  const toStyle = getComputedStyle(incoming);
+  // Both copies travel together while their appearances crossfade. Matching
+  // inner gutters keeps mobile controls still despite the outer width change.
+  const keyframes = {
+    left: [from.left, to.left],
+    top: [from.top, to.top],
+    width: [from.width, to.width],
+    height: [from.height, to.height],
+    paddingLeft: [fromStyle.paddingLeft, toStyle.paddingLeft],
+    paddingRight: [fromStyle.paddingRight, toStyle.paddingRight],
+  };
+  return [outgoing, incoming].map((footer) =>
+    animate(footer, keyframes, mediaTransition)
+  );
+}
 
 // Keep a painted outgoing page during route streaming. Safari can discard native
 // full-page snapshots when its browser chrome changes the viewport during a route.
@@ -48,18 +97,12 @@ export function captureProjectTransition(
     const rect = footer.getBoundingClientRect();
     const copy = footer.cloneNode(true) as HTMLElement;
     copy.removeAttribute("data-site-footer");
-    [copy, ...Array.from(copy.querySelectorAll<HTMLElement>("*"))].forEach(
-      (element) => element.removeAttribute("id")
-    );
+    prepareTransitionSnapshot(copy);
     Object.assign(copy.style, {
       position: "fixed",
-      top: `${rect.top}px`,
-      left: `${rect.left}px`,
+      ...rectStyles(rect),
       bottom: "auto",
-      width: `${rect.width}px`,
-      height: `${rect.height}px`,
       margin: "0",
-      viewTransitionName: "none",
     });
     footerLayer.append(copy);
     return copy;
@@ -134,24 +177,10 @@ export function captureProjectTransition(
           thumbnail.style.opacity = getComputedStyle(thumbnails[index]).opacity;
           thumbnail.style.transition = "none";
         });
-      // Frozen content is purely visual: no duplicate IDs or active media players.
-      frozen
-        .querySelectorAll("video, audio, iframe, script")
-        .forEach((el) => el.remove());
-      [
-        frozen,
-        ...Array.from(frozen.querySelectorAll<HTMLElement>("*")),
-      ].forEach((el) => {
-        el.removeAttribute("id");
-        el.removeAttribute("data-transition-selected");
-        el.style.setProperty("view-transition-name", "none");
-      });
+      prepareTransitionSnapshot(frozen);
       Object.assign(frozen.style, {
         position: "absolute",
-        top: `${rect.top}px`,
-        left: `${rect.left}px`,
-        width: `${rect.width}px`,
-        height: `${rect.height}px`,
+        ...rectStyles(rect),
         margin: "0",
       });
       outgoing.append(frozen);
@@ -172,10 +201,9 @@ export function captureProjectTransition(
         // measured pane position instead of laying out that margin a second time.
         Object.assign(frozenPane.style, {
           position: "absolute",
+          ...rectStyles(paneRect),
           top: `${paneRect.top - rect.top}px`,
           left: `${paneRect.left - rect.left}px`,
-          width: `${paneRect.width}px`,
-          height: `${paneRect.height}px`,
           margin: "0",
         });
         frozenPane.scrollTop = originalPane.scrollTop;
@@ -209,10 +237,7 @@ export function captureProjectTransition(
         ":scope > [data-media-border]"
       );
       return {
-        left: `${rect.left}px`,
-        top: `${rect.top}px`,
-        width: `${rect.width}px`,
-        height: `${rect.height}px`,
+        ...rectStyles(rect),
         borderRadius: getComputedStyle(element).borderRadius,
         // Detail media uses an explicit border; overview thumbnails use ::after.
         // Reading an absent pseudo-element returns currentColor (opaque white in
@@ -331,117 +356,49 @@ export function captureProjectTransition(
             snapshot.style.transform = fit(from, media);
             sourceBorder = {
               ...sourceBorder,
-              left: `${from.left}px`,
-              top: `${from.top}px`,
-              width: `${from.width}px`,
-              height: `${from.height}px`,
+              ...rectStyles(from),
             };
             Object.assign(border.style, sourceBorder);
           }
-          const tokens = getComputedStyle(document.documentElement);
-          const duration = 320;
-          const easing = tokens.getPropertyValue("--ease-out").trim();
+          const reducedMotion = matchMedia(
+            "(prefers-reduced-motion: reduce)"
+          ).matches;
           const options: KeyframeAnimationOptions = {
-            duration,
-            easing,
+            duration: 320,
+            easing: getComputedStyle(document.documentElement)
+              .getPropertyValue("--ease-out")
+              .trim(),
             fill: "both",
           };
-          if (
-            !closing &&
-            page &&
-            !matchMedia("(prefers-reduced-motion: reduce)").matches
-          ) {
-            ["info", "title", "body"].forEach((part, index) => {
-              const element = page?.querySelector<HTMLElement>(
-                `[data-project-caption="${part}"]`
+          const fade = (
+            element: HTMLElement | null | undefined,
+            from: number,
+            to: number
+          ) => {
+            if (element)
+              animations.push(
+                element.animate([{ opacity: from }, { opacity: to }], options)
               );
-              if (element)
-                animations.push(
-                  element.animate(
-                    [
-                      {
-                        opacity: 0,
-                        filter: "blur(4px)",
-                        transform: "translateY(16px)",
-                      },
-                      {
-                        opacity: 1,
-                        filter: "blur(0px)",
-                        transform: "translateY(0)",
-                      },
-                    ],
-                    {
-                      duration: 300,
-                      delay: 80 + index * 40,
-                      easing: "cubic-bezier(0.22, 1, 0.36, 1.12)",
-                      fill: "both",
-                    }
-                  )
-                );
-            });
-          }
+          };
+          if (!closing && page && !reducedMotion)
+            animations.push(...animateCaptionEntrance(page));
           if (page) {
             const incomingFooter = captureFooter(page);
-            if (
-              incomingFooter &&
-              outgoingFooter &&
-              !matchMedia("(prefers-reduced-motion: reduce)").matches
-            ) {
-              const from = outgoingFooter.getBoundingClientRect();
-              const to = incomingFooter.getBoundingClientRect();
-              const paddingLeft = [
-                getComputedStyle(outgoingFooter).paddingLeft,
-                getComputedStyle(incomingFooter).paddingLeft,
-              ];
-              const paddingRight = [
-                getComputedStyle(outgoingFooter).paddingRight,
-                getComputedStyle(incomingFooter).paddingRight,
-              ];
-              // Both copies travel together while their appearances crossfade.
-              // Match their inner gutters too: on mobile, the wider detail
-              // footer adds padding while its controls stay in the same place.
-              for (const footer of [outgoingFooter, incomingFooter]) {
-                animations.push(
-                  animate(
-                    footer,
-                    {
-                      left: [`${from.left}px`, `${to.left}px`],
-                      top: [`${from.top}px`, `${to.top}px`],
-                      width: [`${from.width}px`, `${to.width}px`],
-                      height: [`${from.height}px`, `${to.height}px`],
-                      paddingLeft,
-                      paddingRight,
-                    },
-                    mediaTransition
-                  )
-                );
-              }
-            }
+            if (incomingFooter && outgoingFooter && !reducedMotion)
+              animations.push(
+                ...animateFooterMovement(outgoingFooter, incomingFooter)
+              );
             destinationFooter =
               page.querySelector<HTMLElement>("[data-site-footer]");
             if (destinationFooter) {
               footerVisibility = destinationFooter.style.visibility;
               destinationFooter.style.visibility = "hidden";
             }
-            if (incomingFooter)
-              animations.push(
-                incomingFooter.animate(
-                  [{ opacity: 0 }, { opacity: 1 }],
-                  options
-                )
-              );
+            fade(incomingFooter, 0, 1);
           }
-          if (outgoingFooter)
-            animations.push(
-              outgoingFooter.animate([{ opacity: 1 }, { opacity: 0 }], options)
-            );
-          if (page)
-            animations.push(
-              page.animate([{ opacity: 0 }, { opacity: 1 }], options)
-            );
-          animations.push(
-            outgoing.animate([{ opacity: 1 }, { opacity: 0 }], options)
-          );
+          fade(outgoingFooter, 1, 0);
+          fade(page, 0, 1);
+          fade(outgoing, 1, 0);
           target = Array.from(
             document.querySelectorAll<HTMLElement>("[data-work-visual]")
           ).find(

@@ -19,6 +19,7 @@ import ViewOnX from "./ViewOnX";
 import { getMediaDimensions } from "./media";
 import Collaborators from "./Collaborators";
 import { Fragment, type CSSProperties } from "react";
+import { projectCaptionStyles } from "./projectCaptionStyles";
 
 export default function ProjectContent({
   film,
@@ -50,11 +51,11 @@ export default function ProjectContent({
             />
           </div>
 
-          <figcaption className="mx-auto mt-14 w-full max-w-lg md:max-w-2xl xl:max-w-4xl leading-relaxed md:grid md:grid-cols-4 md:items-start md:gap-x-8">
-            <div className="@container text-lg text-neutral-500 dark:text-neutral-400 text-pretty md:col-span-3 md:col-start-2 md:row-start-1">
+          <figcaption className={projectCaptionStyles.layout}>
+            <div className={projectCaptionStyles.body}>
               <h1
                 data-project-caption="title"
-                className="mb-4 text-lg font-semibold leading-relaxed text-neutral-900 dark:text-neutral-100 xl:text-xl"
+                className={projectCaptionStyles.title}
               >
                 {film.title}
               </h1>
@@ -140,7 +141,7 @@ export default function ProjectContent({
             </div>
             <aside
               data-project-caption="info"
-              className="mt-8 grid grid-cols-2 items-start gap-8 border-t border-black/10 pt-5 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400 dark:border-white/10 md:block md:border-0 md:sticky md:top-22 md:self-start md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
+              className={`${projectCaptionStyles.credits} mt-8 grid grid-cols-2 items-start gap-8 border-t border-black/10 pt-5 dark:border-white/10 md:block md:border-0 md:sticky md:top-22 md:self-start md:mt-0`}
               aria-label="Project credits"
             >
               <div className="min-w-0 grid gap-1">

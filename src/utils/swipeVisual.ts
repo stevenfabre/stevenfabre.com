@@ -1,27 +1,16 @@
+import { prepareTransitionSnapshot, rectStyles } from "./transitionSnapshot";
+
 /** Keep the incoming swipe visual painted while its route mounts a new player. */
 export function holdSwipeVisual(source: HTMLElement) {
   const bounds = source.getBoundingClientRect();
   const style = getComputedStyle(source);
   const overlay = source.cloneNode(true) as HTMLElement;
-  overlay.inert = true;
-  overlay.setAttribute("aria-hidden", "true");
+  prepareTransitionSnapshot(overlay);
   overlay.removeAttribute("data-work-visual");
   overlay.setAttribute("data-swipe-handoff", "");
-  overlay
-    .querySelectorAll("video, audio, iframe, script")
-    .forEach((node) => node.remove());
-  [overlay, ...Array.from(overlay.querySelectorAll<HTMLElement>("*"))].forEach(
-    (node) => {
-      node.removeAttribute("id");
-      node.style.setProperty("view-transition-name", "none");
-    }
-  );
   Object.assign(overlay.style, {
     position: "fixed",
-    left: `${bounds.left}px`,
-    top: `${bounds.top}px`,
-    width: `${bounds.width}px`,
-    height: `${bounds.height}px`,
+    ...rectStyles(bounds),
     margin: "0",
     zIndex: "40",
     pointerEvents: "none",

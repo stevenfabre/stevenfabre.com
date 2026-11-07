@@ -1,110 +1,29 @@
 :global(html):has(.page) {
   scrollbar-gutter: stable;
 }
+/* Shared stage geometry keeps the live project, loading state, and swipe
+   previews aligned. Component appearance and spacing live in Tailwind. */
 .page {
-  --ink: #171717;
-  --muted: #737373;
-  --text-width: 30rem;
-  --caption-width: var(--text-width);
-  --bar-height: 73px;
-  --bar-padding: 16.5px;
-  /* Reserve room for the title and opening copy above the sticky footer. */
+  --bar-height: 4.5rem;
   --visual-height: max(
     0px,
     min(70svh, calc(100svh - var(--bar-height) * 2 - 160px))
   );
-  --bar-background: rgb(250 250 250 / 96%);
-  --page-padding: var(--bar-padding);
-  --media-border: rgb(0 0 0 / 12%);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  padding: 0 var(--page-padding);
-  color: var(--ink);
-}
-:global(.dark) .page {
-  --ink: #f5f5f5;
-  --muted: #a3a3a3;
-  --bar-background: rgb(10 10 10 / 96%);
-  --media-border: rgb(255 255 255 / 12%);
-}
-.visual {
-  position: relative;
-  view-transition-class: project;
-  /* Fit within the viewport without enlarging the original file. */
-  width: min(
-    100%,
-    calc(var(--visual-height) * var(--film-ratio)),
-    var(--media-width)
-  );
-  aspect-ratio: var(--film-ratio);
-  border-radius: 10px;
-  overflow: hidden;
-  background: #050505;
-}
-.visual video,
-.visual img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.visual::after,
-.galleryMedia::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border: 1px solid var(--media-border);
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.galleryMedia {
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  background: rgb(0 0 0 / 3%);
-  aspect-ratio: var(--gallery-ratio);
-}
-.galleryMedia img,
-.galleryMedia video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 @media (min-width: 640px) {
   .page {
-    --bar-height: 65px;
+    --bar-height: 4rem;
   }
 }
 @media (max-width: 767px) {
   .page {
-    /* Caption gap (4rem), title and margin, then two lines of opening copy.
-       Keep this viewport-based so every project reserves the same space. */
+    /* Leave room for the caption below the visual in portrait. */
     --visual-height: max(0px, calc(100svh - var(--bar-height) - 10.5rem));
   }
 }
 @media (orientation: landscape) and (max-height: 500px) {
   .page {
-    /* Short viewports prioritize the visual; the description can scroll.
-       Safari's browser bars must not reduce the media stage to zero. */
+    /* On short screens, prioritize media and let the caption scroll. */
     --visual-height: max(160px, calc(100svh - var(--bar-height) - 24px));
-  }
-}
-@media (min-width: 768px) {
-  .page {
-    --caption-width: calc(180px + 32px + var(--text-width));
-  }
-}
-@media (min-width: 1280px) {
-  .page {
-    --text-width: 44rem;
-  }
-}
-@media (max-width: 520px) {
-  .visual {
-    border-radius: 6px;
   }
 }

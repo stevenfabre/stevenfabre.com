@@ -330,7 +330,7 @@ export default function ProjectVideo({
           >
             <WorkIcon name={playing ? "pause" : "play"} size={18} />
           </button>
-          <span className="shrink-0 text-[11px] tabular-nums">
+          <span className="shrink-0 text-xs tabular-nums">
             {formatTime(time)} /{" "}
             {formatTime(Number.isFinite(duration) ? duration : 0)}
           </span>

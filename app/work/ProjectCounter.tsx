@@ -53,7 +53,7 @@ export default function ProjectCounter({
       : -1;
   return (
     <span
-      className="flex items-center px-1 text-[11px] tabular-nums"
+      className="flex items-center px-1 text-xs tabular-nums"
       aria-label={`Project ${current} of ${total}`}
     >
       <RollingNumber

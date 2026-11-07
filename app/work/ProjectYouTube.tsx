@@ -120,7 +120,7 @@ export default function ProjectYouTube({
       {failed && (
         <p
           role="status"
-          className="absolute inset-0 grid place-content-center p-4 text-center text-sm text-[var(--muted)]"
+          className="absolute inset-0 grid place-content-center p-4 text-center text-sm text-neutral-500 dark:text-neutral-400"
         >
           Video couldn’t load. Use the link below to watch on YouTube.
         </p>

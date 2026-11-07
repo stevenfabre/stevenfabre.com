@@ -6,6 +6,8 @@ preview deployments, and production.
 - `work-data.ts`: project copy, company roles, contribution lists, collaborator credits, and gallery definitions.
 - `WorkPortfolio.tsx`: server-rendered company overview, with interactive thumbnails in `ProjectGrid.tsx`.
 - `ProjectViewer.tsx` and `ProjectContent.tsx`: server-rendered project content, with client navigation and media controls.
+- `ProjectPage.tsx`: shared page shell for loaded projects and loading states.
+- `ProjectMedia.tsx`: shared media frame and image/video/comparison selection for lead visuals and galleries.
 - `ProjectSwipe.tsx`: mobile horizontal gestures, spring settling, and inert neighboring previews. `swipe.ts` defines distance/velocity thresholds.
 - `media-dimensions.json`: original dimensions used to preserve aspect ratios and cap visual sizes.
 - `ProjectVideo.tsx`: video playback controls, visibility-aware playback, and preview playback restoration.

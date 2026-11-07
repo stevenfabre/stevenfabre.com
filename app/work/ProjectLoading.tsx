@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import ProjectNavigation from "./ProjectNavigation";
-import styles from "./detail.module.css";
+import ProjectPage from "./ProjectPage";
 
 type Project = { slug: string; title: string };
 
@@ -13,7 +13,7 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
   const project = projects[index];
 
   return (
-    <div className={styles.page} aria-busy="true">
+    <ProjectPage aria-busy="true">
       {project && (
         <ProjectNavigation
           slug={project.slug}
@@ -25,12 +25,12 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
       )}
       <main className="w-full flex-1">
         <div className="h-[var(--visual-height)]" aria-hidden="true" />
-        <div className="mx-auto mt-16 w-full max-w-[var(--caption-width)] leading-relaxed md:grid md:grid-cols-[180px_minmax(0,1fr)] md:items-start md:gap-x-8 max-[520px]:w-[calc(100%-8px)]">
+        <div className="mx-auto mt-16 w-full max-w-lg md:max-w-2xl xl:max-w-4xl leading-relaxed md:grid md:grid-cols-4 md:items-start md:gap-x-8">
           <div
             aria-hidden="true"
-            className="@container text-lg text-[var(--muted)] md:col-start-2 md:row-start-1"
+            className="@container text-lg text-neutral-500 dark:text-neutral-400 md:col-span-3 md:col-start-2 md:row-start-1"
           >
-            <div className="mb-4 text-lg font-semibold leading-relaxed text-[var(--ink)] xl:text-xl">
+            <div className="mb-4 text-lg font-semibold leading-relaxed text-neutral-900 dark:text-neutral-100 xl:text-xl">
               <SkeletonLine width="w-44" />
             </div>
             <div>
@@ -41,9 +41,9 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
           </div>
           <div
             aria-hidden="true"
-            className="mt-8 text-sm leading-relaxed text-[var(--muted)] [&>p+p]:mt-0.5 md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
+            className="mt-8 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400 [&>p+p]:mt-0.5 md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
           >
-            <p className="font-medium text-[var(--ink)]">
+            <p className="font-medium text-neutral-900 dark:text-neutral-100">
               <SkeletonLine width="w-24" />
             </p>
             <p>
@@ -58,7 +58,7 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
           Loading project…
         </span>
       </main>
-    </div>
+    </ProjectPage>
   );
 }
 

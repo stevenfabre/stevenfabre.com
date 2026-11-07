@@ -395,10 +395,10 @@ export default function ProjectSlideshow({
         )}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-20 rounded-[inherit] border border-[var(--media-border)]"
+          className="pointer-events-none absolute inset-0 z-20 rounded-[inherit] border border-black/10 dark:border-white/10"
         />
       </div>
-      <figcaption className="mt-3 flex items-start justify-between gap-4 text-sm leading-relaxed text-[var(--muted)]">
+      <figcaption className="mt-3 flex items-start justify-between gap-4 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
         <div className="grid min-w-0 flex-1">
           {images.map((image, slide) => (
             <p

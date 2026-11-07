@@ -1,13 +1,10 @@
 import cx from "../../src/utils/cx";
-import BeforeAfter from "./BeforeAfter";
 import type { ProjectVisual } from "./work-data";
 import type { CSSProperties } from "react";
-import ProjectImage from "./ProjectImage";
-import ProjectVideo from "./ProjectVideo";
+import ProjectMedia from "./ProjectMedia";
 import ViewOnX from "./ViewOnX";
 import SocialPostCard from "./SocialPostCard";
 import { getMediaDimensions } from "./media";
-import styles from "./detail.module.css";
 
 export default function ProjectGallery({
   visuals,
@@ -28,7 +25,7 @@ export default function ProjectGallery({
   return (
     <section
       className={cx(
-        "mt-8 grid w-full grid-cols-1 @2xl:grid-cols-2 gap-x-6 gap-y-8 max-[520px]:grid-cols-1 max-[520px]:gap-8",
+        "mt-8 grid w-full grid-cols-1 @2xl:grid-cols-2 gap-x-6 gap-y-8 max-sm:grid-cols-1 max-sm:gap-8",
         layout === "stack" && "@2xl:grid-cols-1",
         hasPosts && "items-start gap-6"
       )}
@@ -42,23 +39,7 @@ export default function ProjectGallery({
           "--gallery-ratio": width / height,
           "--media-width": `${width}px`,
         } as CSSProperties;
-        const media = (
-          <div
-            className={styles.galleryMedia}
-            data-work-visual
-            style={
-              { viewTransitionName: `film-${visual.file}` } as CSSProperties
-            }
-          >
-            {visual.comparison ? (
-              <BeforeAfter visual={visual} />
-            ) : visual.kind || preview ? (
-              <ProjectImage film={visual} loading="lazy" />
-            ) : (
-              <ProjectVideo film={visual} preload="none" />
-            )}
-          </div>
-        );
+        const media = <ProjectMedia visual={visual} preview={preview} />;
         if (visual.post && visual.source) {
           return (
             <SocialPostCard
@@ -81,7 +62,7 @@ export default function ProjectGallery({
             style={dimensions}
           >
             {media}
-            <figcaption className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
+            <figcaption className="mt-3 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
               <p className="opacity-70">{visual.caption || visual.title}</p>
               {visual.source && (
                 <div className="mt-2">

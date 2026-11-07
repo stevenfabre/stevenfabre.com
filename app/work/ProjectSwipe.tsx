@@ -13,7 +13,7 @@ import {
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
 import { swipeDestination } from "./swipe";
 const neighborClass =
-  "pointer-events-none absolute w-full max-md:px-[var(--page-padding)] [&_[data-work-visual]]:[view-transition-name:none!important] [&_[data-site-footer]]:[view-transition-name:none!important]";
+  "pointer-events-none absolute w-full max-md:px-4 [&_[data-work-visual]]:[view-transition-name:none!important] [&_[data-site-footer]]:[view-transition-name:none!important]";
 
 const mobileQuery = "(max-width: 767px)";
 const settling = { type: spring, duration: 0.5, bounce: 0.2 };
@@ -304,7 +304,7 @@ export default function ProjectSwipe({
   return (
     <main
       ref={viewport}
-      className="w-full flex-1 overflow-x-clip max-md:-mx-[var(--page-padding)] max-md:w-auto max-md:touch-pan-y max-md:touch-pinch-zoom"
+      className="w-full flex-1 overflow-x-clip max-md:-mx-4 max-md:w-auto max-md:touch-pan-y max-md:touch-pinch-zoom"
       onPointerDownCapture={start}
       onPointerMove={move}
       onPointerUp={finish}
@@ -332,7 +332,7 @@ export default function ProjectSwipe({
       {/* Clip at the browser edges; page gutters travel with each project. */}
       <div
         ref={track}
-        className="relative max-md:px-[var(--page-padding)]"
+        className="relative max-md:px-4"
         data-project-swipe
       >
         {neighbors && (

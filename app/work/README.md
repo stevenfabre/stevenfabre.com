@@ -41,12 +41,13 @@ only during a gesture; adjacent routes are prefetched for the handoff. Vertical
 scrolling, browser-edge gestures, and nested comparison/media controls keep their
 own behavior. Reduced motion keeps swipe navigation but skips sliding.
 
-Overview/detail transitions decode visible poster images before capturing either
-state. Only the selected visual gets a separate transition layer; other media,
-the portrait, and navigation stay in the page snapshot. Videos retain a real
-poster image until a decoded frame is ready, and remain hidden during snapshots
-to avoid empty hardware-video surfaces on iOS. Closing restores the saved
-overview scroll position before measuring the destination thumbnail.
+Overview/detail transitions capture the presented video frame synchronously and
+decode the landing poster while the snapshot moves. Closing responds immediately,
+then continues into the thumbnail once the return layout has mounted and restored
+its scroll position. The transition reads the visible border element (or the
+overview pseudo-element), preserving its alpha. Videos retain their poster until
+a compositor frame callback and paint have completed; playback time alone must
+not reveal an empty hardware-video surface on iOS.
 
 Use Tailwind for component layout, spacing, colors, and interaction states.
 `HeadingLink` owns heading links and their focus treatment; `buttonStyles.ts`

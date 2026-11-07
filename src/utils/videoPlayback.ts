@@ -21,7 +21,12 @@ export function saveVideoPlayback(video: HTMLVideoElement) {
   capturedFrame = null;
   // Keep the exact clicked frame through the morph and destination decoding.
   // Retain only one frame in memory; never put image data in session storage.
-  if (video.readyState >= 2 && video.videoWidth) {
+  if (
+    video.readyState >= 2 &&
+    video.videoWidth &&
+    (!video.hasAttribute("data-poster-video") ||
+      video.dataset.videoReady === "true")
+  ) {
     try {
       const canvas = document.createElement("canvas");
       canvas.width = video.videoWidth;

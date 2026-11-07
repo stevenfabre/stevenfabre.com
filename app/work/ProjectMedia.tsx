@@ -39,7 +39,10 @@ export default function ProjectMedia({
           autoLoop={autoLoop}
         />
       )}
-      <span className="pointer-events-none absolute inset-0 z-1 rounded-[inherit] border border-black/10 dark:border-white/10" />
+      <span
+        data-media-border
+        className="pointer-events-none absolute inset-0 z-1 rounded-[inherit] border border-black/10 dark:border-white/10"
+      />
     </div>
   );
 }

@@ -177,7 +177,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       try {
         images.current?.selectDestination();
         fallback.current?.prepareDestination();
-        if (images.current || fallback.current || swipeVisual.current)
+        if (!fallback.current && (images.current || swipeVisual.current))
           await decodeVisibleImages();
         if (pending.current !== navigation) return;
         if (swipeVisual.current) {
@@ -354,12 +354,14 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
           }
         };
         try {
-          if (projectChange) await decodeVisibleImages();
           if (request !== sequence.current) return;
           prepared = projectChange ? prepareProjectImages(source!) : null;
           images.current = prepared;
           if (projectChange || !doc.startViewTransition) {
-            animation = captureProjectTransition(source);
+            animation = captureProjectTransition(
+              source,
+              projectChange && pathname.startsWith("/work/")
+            );
             fallback.current = animation;
             await update();
             if (fallback.current === animation) await animation.play();

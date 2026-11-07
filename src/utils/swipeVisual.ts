@@ -6,6 +6,7 @@ export function holdSwipeVisual(source: HTMLElement) {
   overlay.inert = true;
   overlay.setAttribute("aria-hidden", "true");
   overlay.removeAttribute("data-work-visual");
+  overlay.setAttribute("data-swipe-handoff", "");
   overlay
     .querySelectorAll("video, audio, iframe, script")
     .forEach((node) => node.remove());
@@ -27,10 +28,6 @@ export function holdSwipeVisual(source: HTMLElement) {
     borderRadius: style.borderRadius,
     background: style.backgroundColor,
   });
-  overlay.style.setProperty(
-    "--media-border",
-    style.getPropertyValue("--media-border")
-  );
   // The preview is already decoded; don't defer painting the retained copy.
   overlay.querySelectorAll("img").forEach((image) => {
     image.loading = "eager";

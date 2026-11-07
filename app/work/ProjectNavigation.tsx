@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ButtonLink from "@/components/ButtonLink";
 import { Tooltip } from "@/components/Tooltip";
@@ -37,6 +38,10 @@ export default function ProjectNavigation({
   const closeHref = returnView.href.startsWith("/work")
     ? `/work#project-${slug}`
     : returnView.href;
+  const router = useRouter();
+  useEffect(() => {
+    router.prefetch(closeHref);
+  }, [closeHref, router]);
   const [pressed, setPressed] = useState<string | null>(null);
   const previousHref = `/work/${previous.slug}`;
   const nextHref = `/work/${next.slug}`;

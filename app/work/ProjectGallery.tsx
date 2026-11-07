@@ -17,7 +17,7 @@ export default function ProjectGallery({
 }) {
   const hasPosts = visuals.some((visual) => visual.post);
   const itemClass = cx(
-    "m-0 min-w-0 justify-self-center scroll-mt-[calc(var(--bar-height)+24px)]",
+    "m-0 min-w-0 justify-self-center scroll-mt-24 sm:scroll-mt-22",
     hasPosts
       ? "w-full"
       : "w-[min(100%,calc(80svh*var(--gallery-ratio)),var(--media-width))] last:odd:col-span-full"

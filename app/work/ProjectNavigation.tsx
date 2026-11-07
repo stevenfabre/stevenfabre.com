@@ -92,7 +92,7 @@ export default function ProjectNavigation({
 
   return (
     <nav
-      className="sticky top-0 z-30 h-18 sm:h-16 w-auto self-stretch shrink-0 -mx-4 px-4 bg-neutral-50/95 dark:bg-neutral-950/95 text-sm text-neutral-500 dark:text-neutral-400 backdrop-blur-lg backdrop-saturate-50 [view-transition-name:project-navigation] data-[scrolled=true]:shadow-xs dark:data-[scrolled=true]:shadow-white/5 max-sm:text-xs"
+      className="sticky top-0 z-30 h-18 sm:h-16 w-auto self-stretch shrink-0 -mx-4 px-4 border-b border-transparent bg-neutral-50/95 dark:bg-neutral-950/95 text-sm text-neutral-500 dark:text-neutral-400 backdrop-blur-lg backdrop-saturate-50 [view-transition-name:project-navigation] data-[scrolled=true]:border-black/10 dark:data-[scrolled=true]:border-white/10 max-sm:text-xs"
       data-scrolled={scrolled}
       aria-label="Project navigation"
     >

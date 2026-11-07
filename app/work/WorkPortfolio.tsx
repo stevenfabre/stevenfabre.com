@@ -32,17 +32,17 @@ export default function WorkPortfolio() {
             className="scroll-mt-16 pb-16"
           >
             <header className="mb-7">
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4">
-                <h2 className="font-semibold text-lg leading-relaxed @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
-                  <ExternalLink href={company.url}>{company.name}</ExternalLink>
-                </h2>
+              <h2 className="font-semibold text-lg leading-relaxed @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
+                <ExternalLink href={company.url}>{company.name}</ExternalLink>
+              </h2>
+              <div className="mt-0.5 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4">
+                <p className="text-base leading-relaxed @xl/content:text-lg">
+                  {companyDetails[company.id].role}
+                </p>
                 <p className="text-right text-base leading-relaxed whitespace-nowrap tabular-nums text-neutral-400 dark:text-neutral-500 @xl/content:text-lg">
                   {company.years}
                 </p>
               </div>
-              <p className="mt-0.5 text-base leading-relaxed @xl/content:text-lg">
-                {companyDetails[company.id].role}
-              </p>
               <p className="mt-5 text-base leading-[1.65] text-balance @xl/content:text-lg">
                 {renderProjectText(companyDetails[company.id].description)}
               </p>

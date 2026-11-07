@@ -23,7 +23,7 @@ export default function BeforeAfter({ visual }: { visual: ProjectVisual }) {
     const bounds = event.currentTarget.getBoundingClientRect();
     setReturning(false);
     setHandleY(
-      (Math.max(16, Math.min(bounds.height - 16, event.clientY - bounds.top)) /
+      (Math.max(24, Math.min(bounds.height - 24, event.clientY - bounds.top)) /
         bounds.height) *
         100
     );
@@ -121,13 +121,13 @@ export default function BeforeAfter({ visual }: { visual: ProjectVisual }) {
         }}
       >
         <span
-          className="absolute left-1/2 flex [@media(hover:hover)_and_(pointer:fine)]:hidden size-7 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-white text-neutral-800 shadow-sm motion-reduce:!transition-none"
+          className="absolute left-1/2 flex [@media(hover:hover)_and_(pointer:fine)]:hidden size-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-white text-neutral-800 shadow-sm motion-reduce:!transition-none"
           style={{
             top: `${handleY}%`,
             transition: returning ? `top ${transition}` : "none",
           }}
         >
-          <ChevronsLeftRight size={14} aria-hidden="true" />
+          <ChevronsLeftRight className="size-5" aria-hidden="true" />
         </span>
       </div>
     </div>

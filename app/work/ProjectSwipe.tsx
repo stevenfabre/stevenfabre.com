@@ -58,13 +58,13 @@ export default function ProjectSwipe({
       ++sequence.current;
       stopMotion();
       suppressClick.current = false;
-      if (!reducesMotion())
-        setNeighbors({ width: innerWidth, top: window.scrollY });
       return position.current;
     },
-    onMove: (position) => {
+    onMove: (position, firstMove) => {
       suppressClick.current = true;
-      if (!reducesMotion()) moveTo(position);
+      if (reducesMotion()) return;
+      if (firstMove) setNeighbors({ width: innerWidth, top: window.scrollY });
+      moveTo(position);
     },
     onEnd: finish,
     onCancel: reset,
@@ -177,7 +177,7 @@ export default function ProjectSwipe({
     committed.current = false;
     const request = ++sequence.current;
     stopMotion();
-    if (reducesMotion()) {
+    if (reducesMotion() || position.current === 0) {
       moveTo(0);
       setNeighbors(null);
     } else {
@@ -228,7 +228,7 @@ export default function ProjectSwipe({
   return (
     <main
       ref={viewport}
-      className="-mx-4 w-auto flex-1 overflow-x-clip touch-auto"
+      className="-mx-4 w-auto flex-1 overflow-clip touch-auto"
       onPointerDownCapture={swipe.onPointerDown}
       onPointerMove={swipe.onPointerMove}
       onPointerUp={swipe.onPointerUp}
@@ -242,7 +242,7 @@ export default function ProjectSwipe({
         }
       }}
     >
-      {/* Clip at the browser edges; page gutters travel with each project. */}
+      {/* Clip both axes so neighboring previews cannot extend the page's scroll range. */}
       <div ref={track} className="relative px-4" data-project-swipe>
         {neighbors && (
           <div

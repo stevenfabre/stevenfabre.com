@@ -37,9 +37,11 @@ while the header stays fixed. Gesture eligibility uses pointer type, not layout
 breakpoints. Tapping an untouched video reveals its native controls; dragging
 across it navigates projects without revealing controls.
 Neighboring content is server-rendered and mounted as inert, still-image previews
-only during a gesture; adjacent routes are prefetched for the handoff. Vertical
-scrolling, browser-edge gestures, and nested comparison/media controls keep their
-own behavior. Reduced motion keeps swipe navigation but skips sliding.
+only after a horizontal drag begins. Previews are clipped on both axes so they
+cannot extend the page's scroll range. Adjacent routes are prefetched for the
+handoff. Vertical scrolling, browser-edge gestures, and nested comparison/media
+controls keep their own behavior. Reduced motion keeps swipe navigation but skips
+sliding.
 
 Overview/detail transitions capture the presented video frame synchronously and
 decode the landing poster while the snapshot moves. Closing responds immediately,

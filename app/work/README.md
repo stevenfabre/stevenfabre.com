@@ -8,7 +8,7 @@ preview deployments, and production.
 - `ProjectViewer.tsx` and `ProjectContent.tsx`: server-rendered project content, with client navigation and media controls.
 - `ProjectPage.tsx`: shared page shell for loaded projects and loading states.
 - `ProjectMedia.tsx`: shared media frame and image/video/comparison selection for lead visuals and galleries.
-- `ProjectSwipe.tsx`: mobile horizontal gestures, spring settling, and inert neighboring previews. `swipe.ts` defines distance/velocity thresholds.
+- `ProjectSwipe.tsx`: touch horizontal gestures, spring settling, and inert neighboring previews. `swipe.ts` defines distance/velocity thresholds.
 - `media-dimensions.json`: original dimensions used to preserve aspect ratios and cap visual sizes.
 - `ProjectVideo.tsx`: video playback controls, visibility-aware playback, and preview playback restoration.
 - `preview-data.ts`: static homepage preview data passed directly from the server.
@@ -31,7 +31,10 @@ use the same Next.js navigation provider. Event listeners live in effects with
 cleanup; executable inline navigation scripts are unnecessary. The remaining
 JSON-LD script is structured data for search engines.
 
-On mobile, project content follows horizontal drags while the header stays fixed.
+On touch screens, project content follows horizontal drags at any viewport width
+while the header stays fixed. Gesture eligibility uses pointer type, not layout
+breakpoints. Tapping an untouched video reveals its native controls; dragging
+across it navigates projects without revealing controls.
 Neighboring content is server-rendered and mounted as inert, still-image previews
 only during a gesture; adjacent routes are prefetched for the handoff. Vertical
 scrolling, browser-edge gestures, and nested comparison/media controls keep their

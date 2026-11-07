@@ -280,7 +280,9 @@ export default function ProjectVideo({
   return (
     <div
       className={playerStyles.player}
-      data-native-controls={(nativeControls && nativeControlsRevealed) || undefined}
+      data-native-controls={
+        (nativeControls && nativeControlsRevealed) || undefined
+      }
       data-frame-ready={frameReady || undefined}
       data-controls-visible={controlsVisible || !playing || undefined}
     >
@@ -331,6 +333,7 @@ export default function ProjectVideo({
         <button
           type="button"
           className="absolute inset-0 z-[2] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+          data-video-reveal
           aria-label={`Show video controls for ${film.title}`}
           onClick={() => {
             const video = ref.current;

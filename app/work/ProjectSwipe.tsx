@@ -13,9 +13,9 @@ import {
 import { useSiteNavigation } from "../../src/components/SiteNavigation";
 import { swipeDestination } from "./swipe";
 const neighborClass =
-  "pointer-events-none absolute w-full max-md:px-4 [&_[data-work-visual]]:[view-transition-name:none!important] [&_[data-site-footer]]:[view-transition-name:none!important]";
+  "pointer-events-none absolute w-full px-4 [&_[data-work-visual]]:[view-transition-name:none!important] [&_[data-site-footer]]:[view-transition-name:none!important]";
 
-const mobileQuery = "(max-width: 767px)";
+const touchQuery = "(any-pointer: coarse)";
 const settling = { type: spring, duration: 0.5, bounce: 0.2 };
 const reducesMotion = () =>
   matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -65,16 +65,16 @@ export default function ProjectSwipe({
   } | null>(null);
 
   useEffect(() => {
-    const mobile = matchMedia(mobileQuery);
+    const touch = matchMedia(touchQuery);
     const prefetch = () => {
-      if (mobile.matches) {
+      if (touch.matches) {
         router.prefetch(previousHref);
         router.prefetch(nextHref);
       }
     };
     prefetch();
-    mobile.addEventListener("change", prefetch);
-    return () => mobile.removeEventListener("change", prefetch);
+    touch.addEventListener("change", prefetch);
+    return () => touch.removeEventListener("change", prefetch);
   }, [router, previousHref, nextHref]);
 
   useEffect(
@@ -90,6 +90,7 @@ export default function ProjectSwipe({
     const element = viewport.current;
     if (!element) return;
 
+    // Keep touch-action unrestricted so nested native scroll areas still work.
     // Pointer capture alone doesn't stop Safari taking over for page scrolling.
     // Cancel native panning once horizontal intent is established, including
     // the first touchmove, while leaving vertical drags and pinch zoom native.
@@ -212,13 +213,13 @@ export default function ProjectSwipe({
     if (
       committed.current ||
       event.button !== 0 ||
-      !matchMedia(mobileQuery).matches ||
+      event.pointerType !== "touch" ||
       document.fullscreenElement ||
       event.clientX < 24 ||
       event.clientX > innerWidth - 24 ||
       (event.target instanceof Element &&
         event.target.closest(
-          'a, button, input, textarea, select, [contenteditable], [role="slider"], [role="dialog"], [data-no-project-swipe], video[controls]'
+          'a, button:not([data-video-reveal]), input, textarea, select, [contenteditable], [role="slider"], [role="dialog"], [data-no-project-swipe], video[controls]'
         )) ||
       window.getSelection()?.isCollapsed === false
     )
@@ -304,7 +305,7 @@ export default function ProjectSwipe({
   return (
     <main
       ref={viewport}
-      className="w-full flex-1 overflow-x-clip max-md:-mx-4 max-md:w-auto max-md:touch-pan-y max-md:touch-pinch-zoom"
+      className="-mx-4 w-auto flex-1 overflow-x-clip touch-auto"
       onPointerDownCapture={start}
       onPointerMove={move}
       onPointerUp={finish}
@@ -330,11 +331,7 @@ export default function ProjectSwipe({
       }}
     >
       {/* Clip at the browser edges; page gutters travel with each project. */}
-      <div
-        ref={track}
-        className="relative max-md:px-4"
-        data-project-swipe
-      >
+      <div ref={track} className="relative px-4" data-project-swipe>
         {neighbors && (
           <div
             className={neighborClass}

@@ -8,6 +8,7 @@ import { Metadata, Viewport } from "next";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Person, WithContext } from "schema-dts";
 import SiteLayout from "@/components/SiteLayout";
+import BrowserTheme from "@/components/BrowserTheme";
 import { SiteNavigationProvider } from "@/components/SiteNavigation";
 
 const font = Inter({ subsets: ["latin"] });
@@ -53,6 +54,10 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 const jsonLd: WithContext<Person> = {
@@ -91,6 +96,7 @@ export default function RootLayout({
     <html lang="en" className={font.className} suppressHydrationWarning>
       <body>
         <ThemeProvider attribute="class">
+          <BrowserTheme />
           <TooltipProvider>
             <SiteNavigationProvider>
               <SiteLayout>{children}</SiteLayout>

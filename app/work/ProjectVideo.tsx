@@ -15,10 +15,12 @@ const formatTime = (seconds: number) =>
 
 export default function ProjectVideo({
   film,
+  hero = false,
   preload = "metadata",
   autoLoop = true,
 }: {
   film: ProjectVisual;
+  hero?: boolean;
   preload?: "metadata" | "none";
   autoLoop?: boolean;
 }) {
@@ -38,7 +40,7 @@ export default function ProjectVideo({
     togglePlay,
     fullscreen,
     revealControls,
-  } = useProjectVideo(film.file, preload);
+  } = useProjectVideo(film.file, preload, hero);
   const tap = useRef<{ x: number; y: number } | null>(null);
   const awaitingTap = nativeControls && !nativeControlsRevealed;
   const [failed, setFailed] = useState(false);
@@ -75,10 +77,7 @@ export default function ProjectVideo({
         loop={autoLoop}
         muted={muted}
         controls={nativeControls && nativeControlsRevealed}
-        onVolumeChange={(event) => {
-          const nextMuted = event.currentTarget.muted;
-          setMuted(nextMuted);
-        }}
+        onVolumeChange={(event) => setMuted(event.currentTarget.muted)}
         onPointerDown={(event) => {
           tap.current =
             awaitingTap && event.isPrimary

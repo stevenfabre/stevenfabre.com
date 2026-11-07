@@ -18,7 +18,6 @@ import Icon from "@/components/Icon";
 import ViewOnX from "./ViewOnX";
 import { getMediaDimensions } from "./media";
 import Collaborators from "./Collaborators";
-import Footer from "@/components/Footer";
 import { Fragment, type CSSProperties } from "react";
 
 export default function ProjectContent({
@@ -166,7 +165,6 @@ export default function ProjectContent({
                 </ul>
               )}
             </aside>
-            <Footer className="mt-8 sm:static sm:mt-20 xl:mt-24 w-full sm:bg-transparent sm:backdrop-blur-none dark:sm:bg-transparent md:col-span-3 md:col-start-2" />
           </figcaption>
         </figure>
       </div>

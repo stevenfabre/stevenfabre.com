@@ -38,6 +38,32 @@ export function captureProjectTransition(
   let targetVisibility = "";
   let cancelled = false;
   let cleaned = false;
+  let destinationFooter: HTMLElement | null = null;
+  let footerVisibility = "";
+  const footerLayer = document.createElement("div");
+  const captureFooter = (root: HTMLElement) => {
+    const footer = root.querySelector<HTMLElement>("[data-site-footer]");
+    if (!footer) return;
+    const rect = footer.getBoundingClientRect();
+    const copy = footer.cloneNode(true) as HTMLElement;
+    copy.removeAttribute("data-site-footer");
+    [copy, ...Array.from(copy.querySelectorAll<HTMLElement>("*"))].forEach(
+      (element) => element.removeAttribute("id")
+    );
+    Object.assign(copy.style, {
+      position: "fixed",
+      top: `${rect.top}px`,
+      left: `${rect.left}px`,
+      bottom: "auto",
+      width: `${rect.width}px`,
+      height: `${rect.height}px`,
+      margin: "0",
+      viewTransitionName: "none",
+    });
+    footerLayer.append(copy);
+    return copy;
+  };
+  let outgoingFooter: HTMLElement | undefined;
 
   const outgoing = document.createElement("div");
   const cleanup = () => {
@@ -54,10 +80,24 @@ export function captureProjectTransition(
     closingFeedback?.cancel();
     overlay?.remove();
     outgoing.remove();
+    footerLayer.remove();
+    if (destinationFooter) destinationFooter.style.visibility = footerVisibility;
     if (target) target.style.visibility = targetVisibility;
     if (page) page.style.opacity = pageOpacity;
   };
   try {
+    // Page opacity creates a stacking context, so footer copies live above both
+    // page snapshots and the moving visual throughout the route handoff.
+    footerLayer.setAttribute("data-transition-footer", "");
+    footerLayer.setAttribute("aria-hidden", "true");
+    footerLayer.inert = true;
+    Object.assign(footerLayer.style, {
+      position: "fixed",
+      inset: "0",
+      pointerEvents: "none",
+      zIndex: "101",
+    });
+    document.body.append(footerLayer);
     outgoing.setAttribute("aria-hidden", "true");
     outgoing.inert = true;
     Object.assign(outgoing.style, {
@@ -72,6 +112,7 @@ export function captureProjectTransition(
       "[data-project-slug], [data-site-layout]"
     );
     if (currentPage) {
+      outgoingFooter = captureFooter(currentPage);
       const rect = currentPage.getBoundingClientRect();
       const frozen = currentPage.cloneNode(true) as HTMLElement;
       // Frozen content is purely visual: no duplicate IDs or active media players.
@@ -95,6 +136,8 @@ export function captureProjectTransition(
         margin: "0",
       });
       outgoing.append(frozen);
+      const frozenFooter = frozen.querySelector<HTMLElement>("[data-site-footer]");
+      if (frozenFooter) frozenFooter.style.visibility = "hidden";
       document.body.append(outgoing);
       const originalPane = currentPage.querySelector<HTMLElement>(
         "[data-site-content]"
@@ -288,6 +331,24 @@ export function captureProjectTransition(
             easing,
             fill: "both",
           };
+          if (page) {
+            const incomingFooter = captureFooter(page);
+            destinationFooter = page.querySelector<HTMLElement>(
+              "[data-site-footer]"
+            );
+            if (destinationFooter) {
+              footerVisibility = destinationFooter.style.visibility;
+              destinationFooter.style.visibility = "hidden";
+            }
+            if (incomingFooter)
+              animations.push(
+                incomingFooter.animate([{ opacity: 0 }, { opacity: 1 }], options)
+              );
+          }
+          if (outgoingFooter)
+            animations.push(
+              outgoingFooter.animate([{ opacity: 1 }, { opacity: 0 }], options)
+            );
           if (page)
             animations.push(
               page.animate([{ opacity: 0 }, { opacity: 1 }], options)

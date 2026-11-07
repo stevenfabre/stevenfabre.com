@@ -50,7 +50,7 @@ export default function ProjectVideo({
         (nativeControls && nativeControlsRevealed) || undefined
       }
       data-frame-ready={frameReady || undefined}
-      data-controls-visible={controlsVisible || !playing || undefined}
+      data-controls-visible={controlsVisible || undefined}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { flushSync } from "react-dom";
 import ButtonLink from "@/components/ButtonLink";
 import { Tooltip } from "@/components/Tooltip";
 import { initializeProjectReturn } from "@/utils/projectNavigation";
@@ -47,6 +48,7 @@ export default function ProjectNavigation({
   const nextHref = `/work/${next.slug}`;
 
   useEffect(() => {
+    let navigationFrame = 0;
     const handleKey = (event: KeyboardEvent) => {
       if (
         event.defaultPrevented ||
@@ -76,14 +78,21 @@ export default function ProjectNavigation({
           : null;
       if (!shortcut) return;
       event.preventDefault();
-      setPressed(shortcut.direction);
-      navigate(shortcut.href, { animate: false });
+      flushSync(() => setPressed(shortcut.direction));
+      cancelAnimationFrame(navigationFrame);
+      // Paint the pressed button before navigation can replace this view.
+      navigationFrame = requestAnimationFrame(() => {
+        navigationFrame = requestAnimationFrame(() => {
+          navigate(shortcut.href, { animate: false });
+        });
+      });
     };
     const release = () => setPressed(null);
     document.addEventListener("keydown", handleKey);
     document.addEventListener("keyup", release);
     window.addEventListener("blur", release);
     return () => {
+      cancelAnimationFrame(navigationFrame);
       document.removeEventListener("keydown", handleKey);
       document.removeEventListener("keyup", release);
       window.removeEventListener("blur", release);
@@ -101,7 +110,7 @@ export default function ProjectNavigation({
           <Tooltip content="Previous project" side="bottom" delayDuration={200}>
             <ButtonLink
               variant="icon"
-              href={`/work/${previous.slug}`}
+              href={previousHref}
               data-project-direction="previous"
               data-keyboard-pressed={pressed === "previous" || undefined}
               aria-keyshortcuts="ArrowLeft"
@@ -114,7 +123,7 @@ export default function ProjectNavigation({
           <Tooltip content="Next project" side="bottom" delayDuration={200}>
             <ButtonLink
               variant="icon"
-              href={`/work/${next.slug}`}
+              href={nextHref}
               data-project-direction="next"
               data-keyboard-pressed={pressed === "next" || undefined}
               aria-keyshortcuts="ArrowRight"

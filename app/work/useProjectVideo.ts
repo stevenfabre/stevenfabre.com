@@ -12,8 +12,15 @@ import {
 const nativeControlsQuery =
   "(max-width: 767px), (hover: none), (pointer: coarse)";
 
-// ProjectMedia keys the player by file, so every new video starts with fresh state.
-export function useProjectVideo(file: string, preload: "metadata" | "none") {
+// Keep the main video's audio choice across client-side project navigation.
+let mainVideoMuted = true;
+
+// Playback state is per file; only main videos share their mute preference.
+export function useProjectVideo(
+  file: string,
+  preload: "metadata" | "none",
+  hero = false
+) {
   const ref = useRef<HTMLVideoElement>(null);
   const posterRef = useRef<HTMLImageElement>(null);
   const [nativeControls, setNativeControls] = useState(false);
@@ -40,7 +47,16 @@ export function useProjectVideo(file: string, preload: "metadata" | "none") {
   }, [file]);
   const [playing, setPlaying] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMutedState] = useState(true);
+  useLayoutEffect(() => {
+    if (!hero || !ref.current) return;
+    ref.current.muted = mainVideoMuted;
+    setMutedState(mainVideoMuted);
+  }, [file, hero]);
+  const setMuted = (value: boolean) => {
+    if (hero) mainVideoMuted = value;
+    setMutedState(value);
+  };
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const togglePlay = () => {

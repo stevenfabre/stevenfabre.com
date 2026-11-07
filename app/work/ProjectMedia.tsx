@@ -35,6 +35,7 @@ export default function ProjectMedia({
         <ProjectVideo
           key={visual.file}
           film={visual}
+          hero={hero}
           preload={hero ? "metadata" : "none"}
           autoLoop={autoLoop}
         />

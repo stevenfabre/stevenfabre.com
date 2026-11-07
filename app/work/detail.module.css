@@ -5,8 +5,9 @@
    previews aligned. Component appearance and spacing live in Tailwind. */
 .page {
   --bar-height: 4.5rem;
+  /* Keep media readable on short screens; let the caption scroll below it. */
   --visual-height: max(
-    0px,
+    10rem,
     min(70svh, calc(100svh - var(--bar-height) * 2 - 160px))
   );
 }
@@ -18,12 +19,6 @@
 @media (max-width: 767px) {
   .page {
     /* Leave room for the caption below the visual in portrait. */
-    --visual-height: max(0px, calc(100svh - var(--bar-height) - 10.5rem));
-  }
-}
-@media (orientation: landscape) and (max-height: 500px) {
-  .page {
-    /* On short screens, prioritize media and let the caption scroll. */
-    --visual-height: max(160px, calc(100svh - var(--bar-height) - 24px));
+    --visual-height: max(10rem, calc(100svh - var(--bar-height) - 10.5rem));
   }
 }

@@ -389,7 +389,17 @@ export function captureProjectTransition(
             ) {
               const from = outgoingFooter.getBoundingClientRect();
               const to = incomingFooter.getBoundingClientRect();
+              const paddingLeft = [
+                getComputedStyle(outgoingFooter).paddingLeft,
+                getComputedStyle(incomingFooter).paddingLeft,
+              ];
+              const paddingRight = [
+                getComputedStyle(outgoingFooter).paddingRight,
+                getComputedStyle(incomingFooter).paddingRight,
+              ];
               // Both copies travel together while their appearances crossfade.
+              // Match their inner gutters too: on mobile, the wider detail
+              // footer adds padding while its controls stay in the same place.
               for (const footer of [outgoingFooter, incomingFooter]) {
                 animations.push(
                   animate(
@@ -399,6 +409,8 @@ export function captureProjectTransition(
                       top: [`${from.top}px`, `${to.top}px`],
                       width: [`${from.width}px`, `${to.width}px`],
                       height: [`${from.height}px`, `${to.height}px`],
+                      paddingLeft,
+                      paddingRight,
                     },
                     mediaTransition
                   )

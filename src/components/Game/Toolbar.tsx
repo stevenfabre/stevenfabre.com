@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import * as Select from "@radix-ui/react-select";
-import { ColorSwatch } from "./ColorSwatch";
-import { COLORS } from "./constants";
-import { iconControl } from "../buttonStyles";
-import { SelectMenuSurface, type MenuMotion } from "../SelectMenuSurface";
-import { useTouchSelect } from "../../hooks/useTouchSelect";
+import { ColorSwatch } from "@/components/Game/ColorSwatch";
+import { COLORS } from "@/components/Game/constants";
+import { iconControl } from "@/components/buttonStyles";
+import { SelectMenuSurface, type MenuMotion } from "@/components/SelectMenuSurface";
+import { useTouchSelect } from "@/hooks/useTouchSelect";
 
 export default function Toolbar({
   currentColor,

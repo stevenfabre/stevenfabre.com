@@ -1,5 +1,5 @@
-import BrandIcon from "../../src/components/BrandIcon";
-import ButtonLink from "../../src/components/ButtonLink";
+import BrandIcon from "@/components/BrandIcon";
+import ButtonLink from "@/components/ButtonLink";
 
 export default function ViewOnX({ href }: { href: string }) {
   return (

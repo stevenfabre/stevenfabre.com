@@ -1,6 +1,6 @@
-import { Tooltip } from "./Tooltip";
-import CompanyLink from "./CompanyLink";
-import { WorkPreviewLink } from "./WorkPreview";
+import { Tooltip } from "@/components/Tooltip";
+import CompanyLink from "@/components/CompanyLink";
+import { WorkPreviewLink } from "@/components/WorkPreview";
 
 export type ExperienceProps = {
   title: string;

@@ -4,12 +4,12 @@ import Image from "next/image";
 import { animate } from "motion/mini";
 import { spring } from "motion";
 import { flushSync } from "react-dom";
-import { swipeDestination } from "./swipe";
+import { useSwipeGesture } from "@/hooks/useSwipeGesture";
 import { useEffect, useRef, useState } from "react";
-import HorizontalScroll from "../../src/components/HorizontalScroll";
-import { Tooltip } from "../../src/components/Tooltip";
-import Icon from "../../src/components/Icon";
-import { iconControl } from "../../src/components/buttonStyles";
+import HorizontalScroll from "@/components/HorizontalScroll";
+import { Tooltip } from "@/components/Tooltip";
+import Icon from "@/components/Icon";
+import { iconControl } from "@/components/buttonStyles";
 
 import type { Slideshow } from "./work-data";
 
@@ -18,16 +18,7 @@ export default function ProjectSlideshow({
   caption,
   thumbnails = false,
 }: Slideshow) {
-  const swipe = useRef<{
-    id: number;
-    x: number;
-    y: number;
-    origin: number;
-    lastX: number;
-    lastTime: number;
-    velocity: number;
-    horizontal: boolean;
-  } | null>(null);
+  const viewport = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const offset = useRef(0);
   const settling = useRef<ReturnType<typeof animate> | null>(null);
@@ -47,6 +38,33 @@ export default function ProjectSlideshow({
   const [reducedMotion, setReducedMotion] = useState(true);
   const [loaded, setLoaded] = useState<string[]>([]);
 
+  const swipe = useSwipeGesture(viewport, {
+    canStart: () => images.length > 1,
+    onStart: () => {
+      sequence.current++;
+      if (settling.current && track.current) {
+        const position = new DOMMatrixReadOnly(
+          getComputedStyle(track.current).transform
+        ).m41;
+        settling.current.stop();
+        settling.current = null;
+        moveTrack(position);
+      }
+      cancelAnimationFrame(fadeFrame.current);
+      setTouching(true);
+      return offset.current;
+    },
+    onMove: (position, firstMove) => {
+      if (firstMove) {
+        setSwiping(true);
+        setDisableFade(true);
+      }
+      moveTrack(position);
+    },
+    onEnd: settle,
+    onCancel: () => settle(0),
+  });
+
   function moveTrack(value: number) {
     offset.current = value;
     if (track.current) track.current.style.transform = `translateX(${value}px)`;
@@ -56,7 +74,7 @@ export default function ProjectSlideshow({
     sequence.current++;
     settling.current?.stop();
     cancelAnimationFrame(fadeFrame.current);
-    swipe.current = null;
+    swipe.clear();
     moveTrack(0);
     setTouching(false);
     setSwiping(false);
@@ -70,7 +88,7 @@ export default function ProjectSlideshow({
     const target = -direction * element.clientWidth;
     const distance = target - offset.current;
     const request = ++sequence.current;
-    swipe.current = null;
+    swipe.clear();
     settling.current?.stop();
     const animation = animate(
       element,
@@ -115,27 +133,6 @@ export default function ProjectSlideshow({
     },
     []
   );
-
-  // Once horizontal intent wins, Safari must not steal the gesture for page scrolling.
-  useEffect(() => {
-    const element = track.current?.parentElement;
-    if (!element) return;
-    const lockScroll = (event: TouchEvent) => {
-      const gesture = swipe.current;
-      const touch = event.touches[0];
-      if (!gesture || event.touches.length !== 1 || !touch) return;
-      const dx = touch.clientX - gesture.x;
-      const dy = touch.clientY - gesture.y;
-      if (
-        gesture.horizontal ||
-        (Math.abs(dx) >= 8 && Math.abs(dx) > Math.abs(dy))
-      ) {
-        if (event.cancelable) event.preventDefault();
-      }
-    };
-    element.addEventListener("touchmove", lockScroll, { passive: false });
-    return () => element.removeEventListener("touchmove", lockScroll);
-  }, []);
 
   useEffect(() => {
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -236,89 +233,12 @@ export default function ProjectSlideshow({
       >
         <div
           className="absolute inset-0 touch-pan-y touch-pinch-zoom"
-          onPointerDown={(event) => {
-            if (event.pointerType !== "touch" || images.length < 2) return;
-            if (!event.isPrimary) {
-              if (swipe.current) settle(0);
-              return;
-            }
-            sequence.current++;
-            if (settling.current && track.current) {
-              const position = new DOMMatrixReadOnly(
-                getComputedStyle(track.current).transform
-              ).m41;
-              settling.current.stop();
-              settling.current = null;
-              moveTrack(position);
-            }
-            cancelAnimationFrame(fadeFrame.current);
-            swipe.current = {
-              id: event.pointerId,
-              x: event.clientX,
-              y: event.clientY,
-              origin: offset.current,
-              lastX: event.clientX,
-              lastTime: event.timeStamp,
-              velocity: 0,
-              horizontal: false,
-            };
-            setTouching(true);
-          }}
-          onPointerMove={(event) => {
-            const gesture = swipe.current;
-            if (!gesture || gesture.id !== event.pointerId) return;
-            const dx = event.clientX - gesture.x;
-            const dy = event.clientY - gesture.y;
-            if (!gesture.horizontal) {
-              if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
-              if (Math.abs(dy) >= Math.abs(dx)) {
-                settle(0);
-                return;
-              }
-              gesture.horizontal = true;
-              event.currentTarget.setPointerCapture(event.pointerId);
-              setSwiping(true);
-              setDisableFade(true);
-            }
-            const elapsed = event.timeStamp - gesture.lastTime;
-            if (elapsed > 0)
-              gesture.velocity = (event.clientX - gesture.lastX) / elapsed;
-            gesture.lastX = event.clientX;
-            gesture.lastTime = event.timeStamp;
-            const width = event.currentTarget.clientWidth;
-            moveTrack(Math.max(-width, Math.min(width, gesture.origin + dx)));
-          }}
-          onPointerUp={(event) => {
-            const gesture = swipe.current;
-            if (!gesture || gesture.id !== event.pointerId) return;
-            const velocity =
-              event.timeStamp - gesture.lastTime < 100 ? gesture.velocity : 0;
-            settle(
-              gesture.horizontal
-                ? swipeDestination(
-                    // Catching a returning spring must not give a short drag
-                    // a head start toward selecting another photo.
-                    event.clientX - gesture.x,
-                    velocity,
-                    event.currentTarget.clientWidth
-                  )
-                : 0,
-              velocity
-            );
-          }}
-          onPointerCancel={(event) => {
-            if (swipe.current?.id === event.pointerId) settle(0);
-          }}
-          onLostPointerCapture={(event) => {
-            // Touch initially captures the image. Transferring capture to
-            // this viewport bubbles a capture-loss event from that image;
-            // only losing the viewport's own capture cancels the swipe.
-            if (
-              event.target === event.currentTarget &&
-              swipe.current?.id === event.pointerId
-            )
-              settle(0);
-          }}
+          ref={viewport}
+          onPointerDown={swipe.onPointerDown}
+          onPointerMove={swipe.onPointerMove}
+          onPointerUp={swipe.onPointerUp}
+          onPointerCancel={swipe.onPointerCancel}
+          onLostPointerCapture={swipe.onLostPointerCapture}
         >
           <div ref={track} className="absolute inset-0">
             {images.map((image, slide) => {

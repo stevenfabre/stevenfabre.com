@@ -1,15 +1,14 @@
 "use client";
 
 import { forwardRef, type AnchorHTMLAttributes } from "react";
-import { SiteLink } from "./SiteNavigation";
+import AppLink from "./AppLink";
 
 const CompanyLink = forwardRef<
   HTMLAnchorElement,
-  AnchorHTMLAttributes<HTMLAnchorElement> & { clientNavigation?: boolean }
->(function CompanyLink({ className, clientNavigation, href, ...props }, ref) {
-  const Component = clientNavigation && href ? SiteLink : "a";
+  AnchorHTMLAttributes<HTMLAnchorElement>
+>(function CompanyLink({ className, href, ...props }, ref) {
   return (
-    <Component
+    <AppLink
       href={href || "#"}
       {...props}
       ref={ref}

@@ -2,7 +2,7 @@ import { ProjectTextPreviews, renderProjectText } from "./ProjectText";
 import WorkPageSelect from "./WorkPageSelect";
 
 import { companies, companyDetails, allFilms } from "./work-data";
-import Footer from "../../src/components/Footer";
+import Footer from "@/components/Footer";
 import ProjectGrid from "./ProjectGrid";
 import ExternalLink from "./ExternalLink";
 

@@ -1,7 +1,7 @@
 "use client";
 
-import RollingNumber from "../RollingNumber";
-import Icon from "../Icon";
+import RollingNumber from "@/components/RollingNumber";
+import Icon from "@/components/Icon";
 import { useOthers } from "@liveblocks/react/suspense";
 import Link from "next/link";
 import type { ReactNode } from "react";

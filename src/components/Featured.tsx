@@ -1,4 +1,4 @@
-import FeaturedItem, { FeaturedItemProps } from "./FeaturedItem";
+import FeaturedItem, { FeaturedItemProps } from "@/components/FeaturedItem";
 
 const FEATURED: FeaturedItemProps[] = [
   {

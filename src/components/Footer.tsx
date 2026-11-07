@@ -1,11 +1,11 @@
-import BrandIcon from "./BrandIcon";
-import Icon from "./Icon";
+import BrandIcon from "@/components/BrandIcon";
+import Icon from "@/components/Icon";
 import Link from "next/link";
-import EmailLink from "./EmailLink";
-import ThemeSwitcher from "./ThemeSwitcher";
-import { Tooltip } from "./Tooltip";
-import { iconControl } from "./buttonStyles";
-import cx from "../utils/cx";
+import EmailLink from "@/components/EmailLink";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { Tooltip } from "@/components/Tooltip";
+import { iconControl } from "@/components/buttonStyles";
+import cx from "@/utils/cx";
 
 const socials = [
   { name: "x", label: "X", href: "https://x.com/stevenfabre" },

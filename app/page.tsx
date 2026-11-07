@@ -1,15 +1,15 @@
 import { getWorkPreviews } from "./work/preview-data";
-import { RouteReady } from "../src/components/SiteNavigation";
+import { RouteReady } from "@/components/SiteNavigation";
 import Link from "next/link";
-import EmailLink from "../src/components/EmailLink";
-import Footer from "../src/components/Footer";
-import Investments from "../src/components/Investments";
-import Work from "../src/components/Work";
-import Featured from "../src/components/Featured";
+import EmailLink from "@/components/EmailLink";
+import Footer from "@/components/Footer";
+import Investments from "@/components/Investments";
+import Work from "@/components/Work";
+import Featured from "@/components/Featured";
 import {
   WorkPreviewProvider,
   WorkPreviewLink,
-} from "../src/components/WorkPreview";
+} from "@/components/WorkPreview";
 
 export default function Home() {
   const className =

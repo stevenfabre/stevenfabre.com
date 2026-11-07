@@ -8,9 +8,10 @@ preview deployments, and production.
 - `ProjectViewer.tsx` and `ProjectContent.tsx`: server-rendered project content, with client navigation and media controls.
 - `ProjectPage.tsx`: shared page shell for loaded projects and loading states.
 - `ProjectMedia.tsx`: shared media frame and image/video/comparison selection for lead visuals and galleries.
-- `ProjectSwipe.tsx`: touch horizontal gestures, spring settling, and inert neighboring previews. `swipe.ts` defines distance/velocity thresholds.
+- `ProjectSwipe.tsx`: touch horizontal gestures, spring settling, and inert neighboring previews. `src/utils/swipe.ts` defines distance/velocity thresholds.
 - `media-dimensions.json`: original dimensions used to preserve aspect ratios and cap visual sizes.
-- `ProjectVideo.tsx`: video playback controls, visibility-aware playback, and preview playback restoration.
+- `ProjectVideo.tsx`: video controls and poster markup; `useProjectVideo.ts` owns playback synchronization and preview restoration.
+- `src/hooks/useSwipeGesture.ts`: shared touch recognition and pointer capture for project and slideshow navigation.
 - `preview-data.ts`: static homepage preview data passed directly from the server.
 - `public/work/media/`: published images, posters, avatars, and web-optimized videos. Static hosting handles caching and byte ranges.
 - `src/components/SiteNavigation.tsx`: route-ready shared-element transitions and fallback animation.
@@ -54,3 +55,5 @@ shadow tokens in `globals.css` keep floating surfaces consistent. Footer links a
 `videoPlayback.ts` owns the preview-to-player session handoff. Keep CSS modules
 for coordinated keyframes, media geometry/cropping, and browser-specific range
 pseudo-elements rather than duplicating ordinary utility styles.
+
+Use `@/` imports for shared code in `src` and `@/work/` for portfolio code imported from outside that directory. Styled links share `AppLink`, which uses portfolio navigation for local routes and native anchors for external, hash, and mail links.

@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { usePathname } from "next/navigation";
-import RollingNumber from "../../src/components/RollingNumber";
+import RollingNumber from "@/components/RollingNumber";
 
 const CounterHistory = createContext<MutableRefObject<number | null> | null>(
   null

@@ -7,8 +7,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata, Viewport } from "next";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Person, WithContext } from "schema-dts";
-import SiteLayout from "../src/components/SiteLayout";
-import { SiteNavigationProvider } from "../src/components/SiteNavigation";
+import SiteLayout from "@/components/SiteLayout";
+import { SiteNavigationProvider } from "@/components/SiteNavigation";
 
 const font = Inter({ subsets: ["latin"] });
 

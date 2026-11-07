@@ -1,7 +1,7 @@
 import type { Collaborator } from "./work-data";
 import ExternalLink from "./ExternalLink";
 import Image from "next/image";
-import HorizontalScroll from "../../src/components/HorizontalScroll";
+import HorizontalScroll from "@/components/HorizontalScroll";
 
 export default function Collaborators({ people }: { people: Collaborator[] }) {
   if (!people.length) return null;

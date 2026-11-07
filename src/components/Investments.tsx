@@ -1,4 +1,4 @@
-import Investment, { InvestmentProps } from "./Investment";
+import Investment, { InvestmentProps } from "@/components/Investment";
 
 const INVESTMENTS: InvestmentProps[] = [
   {

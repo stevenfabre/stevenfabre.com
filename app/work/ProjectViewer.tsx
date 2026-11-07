@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { RouteReady } from "../../src/components/SiteNavigation";
+import { RouteReady } from "@/components/SiteNavigation";
 import { allFilms, imagePath } from "./work-data";
 import PreloadProjects from "./PreloadProjects";
 import ProjectNavigation from "./ProjectNavigation";

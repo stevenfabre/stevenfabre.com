@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ButtonLink from "../../src/components/ButtonLink";
-import { Tooltip } from "../../src/components/Tooltip";
-import { initializeProjectReturn } from "../../src/utils/projectNavigation";
-import { useSiteNavigation } from "../../src/components/SiteNavigation";
+import ButtonLink from "@/components/ButtonLink";
+import { Tooltip } from "@/components/Tooltip";
+import { initializeProjectReturn } from "@/utils/projectNavigation";
+import { useSiteNavigation } from "@/components/SiteNavigation";
 import ProjectCounter from "./ProjectCounter";
-import WorkIcon from "./WorkIcon";
+import Icon from "@/components/Icon";
 
 type Project = { slug: string; title: string };
 
@@ -100,10 +100,9 @@ export default function ProjectNavigation({
               data-project-direction="previous"
               data-keyboard-pressed={pressed === "previous" || undefined}
               aria-keyshortcuts="ArrowLeft"
-              clientNavigation
               aria-label={`Previous project: ${previous.title}`}
             >
-              <WorkIcon name="chevron-left" />
+              <Icon name="chevron-left" />
             </ButtonLink>
           </Tooltip>
           <ProjectCounter current={index + 1} total={total} />
@@ -114,10 +113,9 @@ export default function ProjectNavigation({
               data-project-direction="next"
               data-keyboard-pressed={pressed === "next" || undefined}
               aria-keyshortcuts="ArrowRight"
-              clientNavigation
               aria-label={`Next project: ${next.title}`}
             >
-              <WorkIcon name="chevron-right" />
+              <Icon name="chevron-right" />
             </ButtonLink>
           </Tooltip>
         </div>
@@ -130,9 +128,8 @@ export default function ProjectNavigation({
             aria-keyshortcuts="Escape"
             data-project-direction="close"
             data-keyboard-pressed={pressed === "close" || undefined}
-            clientNavigation
           >
-            <WorkIcon name="x" />
+            <Icon name="x" />
           </ButtonLink>
         </Tooltip>
       </div>

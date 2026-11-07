@@ -11,10 +11,10 @@ import {
   readVideoFrame,
   readVideoPlayback,
   clearVideoPlayback,
-} from "../../src/utils/videoPlayback";
+} from "@/utils/videoPlayback";
 import type { Film } from "./work-data";
 import styles from "./work.module.css";
-import { useVideoFrameReady } from "../../src/hooks/useVideoFrameReady";
+import { useVideoFrameReady } from "@/hooks/useVideoFrameReady";
 import WorkLink from "./WorkLink";
 import ProjectImage from "./ProjectImage";
 

@@ -7,11 +7,11 @@ import {
   Send,
 } from "lucide-react";
 import type { SocialPost } from "./work-data";
-import ButtonLink from "../../src/components/ButtonLink";
-import BrandIcon from "../../src/components/BrandIcon";
+import ButtonLink from "@/components/ButtonLink";
+import BrandIcon from "@/components/BrandIcon";
 import ViewOnX from "./ViewOnX";
 import styles from "./SocialPostCard.module.css";
-import cx from "../../src/utils/cx";
+import cx from "@/utils/cx";
 
 export default function SocialPostCard({
   post,

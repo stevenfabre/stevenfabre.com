@@ -1,6 +1,6 @@
 "use client";
 
-import { useContentScrollRestoration } from "./SiteNavigation";
+import { useContentScrollRestoration } from "@/components/SiteNavigation";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
@@ -10,7 +10,7 @@ import {
   useRef,
   type ReactNode,
 } from "react";
-import GameProvider from "./Game/GameProvider";
+import GameProvider from "@/components/Game/GameProvider";
 import profilePic from "../../public/steven-fabre.jpg";
 
 // This subtree belongs to the persistent layout, not either page. Memoization

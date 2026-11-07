@@ -1,6 +1,6 @@
 import { animate } from "motion/mini";
 import { spring } from "motion";
-import { objectPositionOffsets } from "./objectPosition";
+import { objectPositionOffsets } from "@/utils/objectPosition";
 
 const mediaTransition = { type: spring, duration: 0.4, bounce: 0.2 };
 

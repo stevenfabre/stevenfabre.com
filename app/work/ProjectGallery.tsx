@@ -1,4 +1,4 @@
-import cx from "../../src/utils/cx";
+import cx from "@/utils/cx";
 import type { ProjectVisual } from "./work-data";
 import type { CSSProperties } from "react";
 import ProjectMedia from "./ProjectMedia";

@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { saveVideoPlayback } from "../utils/videoPlayback";
+import { saveVideoPlayback } from "@/utils/videoPlayback";
 import {
   isPlainNavigation,
   rememberProjectHref,
-} from "../utils/projectNavigation";
+} from "@/utils/projectNavigation";
 import {
   decodeVisibleImages,
   prepareProjectImages,
-} from "../utils/transitionImages";
-import { captureProjectTransition } from "../utils/projectTransition";
-import { holdSwipeVisual } from "../utils/swipeVisual";
+} from "@/utils/transitionImages";
+import { captureProjectTransition } from "@/utils/projectTransition";
+import { holdSwipeVisual } from "@/utils/swipeVisual";
 import { usePathname, useRouter } from "next/navigation";
 import {
   createContext,

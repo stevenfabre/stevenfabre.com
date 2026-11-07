@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import Toolbar from "./Toolbar";
-import { DELAY_TIMEOUT_PIXEL, DENSITY_PIXELS } from "./constants";
-import Cursors from "./Cursors";
+import Toolbar from "@/components/Game/Toolbar";
+import { DELAY_TIMEOUT_PIXEL, DENSITY_PIXELS } from "@/components/Game/constants";
+import Cursors from "@/components/Game/Cursors";
 import { useMutation, useSelf, useStorage } from "@liveblocks/react/suspense";
-import { CursorType, Point } from "./types";
-import Footer from "./Footer";
+import { CursorType, Point } from "@/components/Game/types";
+import Footer from "@/components/Game/Footer";
 
 export default function Game() {
   const me = useSelf();

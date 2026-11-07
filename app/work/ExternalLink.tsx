@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import HeadingLink from "../../src/components/HeadingLink";
+import HeadingLink from "@/components/HeadingLink";
 
 export default function ExternalLink(
   props: ComponentProps<typeof HeadingLink>

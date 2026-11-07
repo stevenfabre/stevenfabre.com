@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { registerAudioPlayer } from "../../src/utils/mediaAudio";
-import { loadYouTubeAPI, type YouTubePlayer } from "../../src/utils/youtube";
+import { registerAudioPlayer } from "@/utils/mediaAudio";
+import { loadYouTubeAPI, type YouTubePlayer } from "@/utils/youtube";
 
 export default function ProjectYouTube({
   id,

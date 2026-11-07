@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import cx from "../../src/utils/cx";
+import cx from "@/utils/cx";
 import BeforeAfter from "./BeforeAfter";
 import ProjectImage from "./ProjectImage";
 import ProjectVideo from "./ProjectVideo";

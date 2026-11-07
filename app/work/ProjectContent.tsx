@@ -1,5 +1,5 @@
 import Image from "next/image";
-import HeadingLink from "../../src/components/HeadingLink";
+import HeadingLink from "@/components/HeadingLink";
 import ProjectYouTube from "./ProjectYouTube";
 import ProjectSlideshow from "./ProjectSlideshow";
 import ResponsibilityIcon from "./ResponsibilityIcon";
@@ -13,12 +13,12 @@ import {
 import ProjectMedia from "./ProjectMedia";
 import ProjectGallery from "./ProjectGallery";
 import ExternalLink from "./ExternalLink";
-import ButtonLink from "./../../src/components/ButtonLink";
-import WorkIcon from "./WorkIcon";
+import ButtonLink from "@/components/ButtonLink";
+import Icon from "@/components/Icon";
 import ViewOnX from "./ViewOnX";
 import { getMediaDimensions } from "./media";
 import Collaborators from "./Collaborators";
-import Footer from "./../../src/components/Footer";
+import Footer from "@/components/Footer";
 import { Fragment, type CSSProperties } from "react";
 
 export default function ProjectContent({
@@ -106,7 +106,7 @@ export default function ProjectContent({
                     className="[&_svg]:size-3.5"
                   >
                     {link.label}
-                    <WorkIcon name="arrow-up-right" />
+                    <Icon name="arrow-up-right" />
                   </ButtonLink>
                 ))}
               </div>

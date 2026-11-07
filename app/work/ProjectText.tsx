@@ -2,7 +2,7 @@ import Link from "next/link";
 import {
   WorkPreviewLink,
   WorkPreviewProvider,
-} from "../../src/components/WorkPreview";
+} from "@/components/WorkPreview";
 import { allFilms, imagePath } from "./work-data";
 import type { ReactNode } from "react";
 

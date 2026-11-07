@@ -1,5 +1,5 @@
-import Icon from "./Icon";
-import styles from "./HeadingLink.module.css";
+import Icon from "@/components/Icon";
+import styles from "@/components/HeadingLink.module.css";
 
 export default function HeadingArrow({ size = 16 }: { size?: number }) {
   return (

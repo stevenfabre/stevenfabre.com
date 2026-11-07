@@ -1,5 +1,5 @@
-import HeadingLink from "./HeadingLink";
-import Experience, { ExperienceProps } from "./Experience";
+import HeadingLink from "@/components/HeadingLink";
+import Experience, { ExperienceProps } from "@/components/Experience";
 
 const EXPERIENCES: ExperienceProps[] = [
   {
@@ -77,7 +77,7 @@ export default function Work() {
   return (
     <>
       <h2 className="font-semibold text-lg leading-relaxed mt-12 xl:mt-16 @xl/content:text-xl @xl/content:leading-relaxed text-neutral-900 dark:text-neutral-100">
-        <HeadingLink href="/work" clientNavigation>
+        <HeadingLink href="/work">
           Work
         </HeadingLink>
       </h2>

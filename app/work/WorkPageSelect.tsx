@@ -10,12 +10,12 @@ import {
 import { motion, useAnimate, useReducedMotion } from "motion/react";
 import * as Select from "@radix-ui/react-select";
 import { ChevronsUpDown } from "lucide-react";
-import { useSiteNavigation } from "../../src/components/SiteNavigation";
-import { useTouchSelect } from "../../src/hooks/useTouchSelect";
+import { useSiteNavigation } from "@/components/SiteNavigation";
+import { useTouchSelect } from "@/hooks/useTouchSelect";
 import {
   SelectMenuSurface,
   type MenuMotion,
-} from "../../src/components/SelectMenuSurface";
+} from "@/components/SelectMenuSurface";
 
 const pages = [
   { label: "Home", href: "/" },

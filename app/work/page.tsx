@@ -1,4 +1,4 @@
-import { RouteReady } from "../../src/components/SiteNavigation";
+import { RouteReady } from "@/components/SiteNavigation";
 import type { Metadata } from "next";
 import WorkPortfolio from "./WorkPortfolio";
 import styles from "./work.module.css";

@@ -1,10 +1,10 @@
 "use client";
 
-import { iconControl } from "./buttonStyles";
-import Icon from "./Icon";
+import { iconControl } from "@/components/buttonStyles";
+import Icon from "@/components/Icon";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "@/components/Tooltip";
 
 export default function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);

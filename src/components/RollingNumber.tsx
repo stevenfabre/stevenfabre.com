@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import styles from "./RollingNumber.module.css";
+import styles from "@/components/RollingNumber.module.css";
 
 function Digit({
   value,

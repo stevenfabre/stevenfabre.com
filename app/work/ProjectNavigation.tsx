@@ -1,12 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import ButtonLink from "../../src/components/ButtonLink";
-import { Tooltip } from "../../src/components/Tooltip";
-import { initializeProjectReturn } from "../../src/utils/projectNavigation";
-import { useSiteNavigation } from "../../src/components/SiteNavigation";
+import ButtonLink from "@/components/ButtonLink";
+import { Tooltip } from "@/components/Tooltip";
+import { initializeProjectReturn } from "@/utils/projectNavigation";
+import { useSiteNavigation } from "@/components/SiteNavigation";
 import ProjectCounter from "./ProjectCounter";
-import WorkIcon from "./WorkIcon";
+import Icon from "@/components/Icon";
 
 type Project = { slug: string; title: string };
 
@@ -37,6 +38,10 @@ export default function ProjectNavigation({
   const closeHref = returnView.href.startsWith("/work")
     ? `/work#project-${slug}`
     : returnView.href;
+  const router = useRouter();
+  useEffect(() => {
+    router.prefetch(closeHref);
+  }, [closeHref, router]);
   const [pressed, setPressed] = useState<string | null>(null);
   const previousHref = `/work/${previous.slug}`;
   const nextHref = `/work/${next.slug}`;
@@ -87,7 +92,7 @@ export default function ProjectNavigation({
 
   return (
     <nav
-      className="sticky top-0 z-30 h-[var(--bar-height)] w-[calc(100%+var(--page-padding)*2)] shrink-0 -mx-[var(--page-padding)] px-[var(--bar-padding)] bg-[var(--bar-background)] text-[13px] text-[var(--muted)] backdrop-blur-lg backdrop-saturate-[0.6] [view-transition-name:project-navigation] data-[scrolled=true]:shadow-[0_1px_0_#0000000f] dark:data-[scrolled=true]:shadow-[0_1px_0_#ffffff0f] max-[520px]:text-xs"
+      className="sticky top-0 z-30 h-18 sm:h-16 w-auto self-stretch shrink-0 -mx-4 px-4 border-b border-transparent bg-neutral-50/95 dark:bg-neutral-950/95 text-sm text-neutral-500 dark:text-neutral-400 backdrop-blur-lg backdrop-saturate-50 [view-transition-name:project-navigation] data-[scrolled=true]:border-black/10 dark:data-[scrolled=true]:border-white/10 max-sm:text-xs"
       data-scrolled={scrolled}
       aria-label="Project navigation"
     >
@@ -100,10 +105,9 @@ export default function ProjectNavigation({
               data-project-direction="previous"
               data-keyboard-pressed={pressed === "previous" || undefined}
               aria-keyshortcuts="ArrowLeft"
-              clientNavigation
               aria-label={`Previous project: ${previous.title}`}
             >
-              <WorkIcon name="chevron-left" />
+              <Icon name="chevron-left" />
             </ButtonLink>
           </Tooltip>
           <ProjectCounter current={index + 1} total={total} />
@@ -114,10 +118,9 @@ export default function ProjectNavigation({
               data-project-direction="next"
               data-keyboard-pressed={pressed === "next" || undefined}
               aria-keyshortcuts="ArrowRight"
-              clientNavigation
               aria-label={`Next project: ${next.title}`}
             >
-              <WorkIcon name="chevron-right" />
+              <Icon name="chevron-right" />
             </ButtonLink>
           </Tooltip>
         </div>
@@ -130,9 +133,8 @@ export default function ProjectNavigation({
             aria-keyshortcuts="Escape"
             data-project-direction="close"
             data-keyboard-pressed={pressed === "close" || undefined}
-            clientNavigation
           >
-            <WorkIcon name="x" />
+            <Icon name="x" />
           </ButtonLink>
         </Tooltip>
       </div>

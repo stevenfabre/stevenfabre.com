@@ -7,11 +7,11 @@ import {
   Send,
 } from "lucide-react";
 import type { SocialPost } from "./work-data";
-import ButtonLink from "../../src/components/ButtonLink";
-import BrandIcon from "../../src/components/BrandIcon";
+import ButtonLink from "@/components/ButtonLink";
+import BrandIcon from "@/components/BrandIcon";
 import ViewOnX from "./ViewOnX";
 import styles from "./SocialPostCard.module.css";
-import cx from "../../src/utils/cx";
+import cx from "@/utils/cx";
 
 export default function SocialPostCard({
   post,
@@ -36,7 +36,7 @@ export default function SocialPostCard({
       id={id}
       className={cx(
         className,
-        "rounded-2xl border border-[var(--media-border)] bg-white p-4 shadow-post dark:bg-[#141414]",
+        "rounded-2xl border border-black/10 dark:border-white/10 bg-white p-4 shadow-post dark:bg-neutral-900",
         instagram && styles.instagram
       )}
       style={style}
@@ -73,10 +73,10 @@ export default function SocialPostCard({
           />
         )}
         <span>
-          <span className="block text-sm font-semibold text-[var(--ink)]">
+          <span className="block text-sm font-semibold text-neutral-900 dark:text-neutral-100">
             {post.name}
           </span>
-          <span className="block text-xs text-[var(--muted)]">
+          <span className="block text-xs text-neutral-500 dark:text-neutral-400">
             @{post.handle}
           </span>
         </span>
@@ -88,7 +88,7 @@ export default function SocialPostCard({
       <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-3">
         {post.publishedAt && (
           <time
-            className="text-xs text-[var(--muted)]"
+            className="text-xs text-neutral-500 dark:text-neutral-400"
             dateTime={post.publishedAt}
             title={date.toUTCString()}
           >
@@ -143,7 +143,7 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
   return (
     <div
       className={`mt-3 flex items-center justify-start gap-5 text-xs tabular-nums ${
-        instagram ? "text-[var(--ink)]" : "text-[var(--muted)]"
+        instagram ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-500 dark:text-neutral-400"
       }`}
       aria-label="Post engagement"
       title="Engagement counts from the archived post; not live."
@@ -157,7 +157,7 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
           aria-label={`${label}${
             count === undefined ? "" : `: ${count.toLocaleString("en-US")}`
           }. Open original post.`}
-          className="inline-flex min-h-8 items-center gap-1 rounded hover:text-[var(--ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="inline-flex min-h-8 items-center gap-1 rounded hover:text-neutral-900 dark:hover:text-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <Icon
             size={instagram || Icon === Repeat2 ? 19 : 15}
@@ -177,7 +177,7 @@ function SocialActions({ post, source }: { post: SocialPost; source: string }) {
 function PostCopy({ text, source }: { text: string; source: string }) {
   return (
     <blockquote
-      className="my-4 whitespace-pre-line text-[15px] leading-[1.55] text-[var(--ink)] [overflow-wrap:anywhere]"
+      className="my-4 whitespace-pre-line text-base leading-relaxed text-neutral-900 dark:text-neutral-100 [overflow-wrap:anywhere]"
       cite={source}
     >
       {text.split(/(@[A-Za-z0-9_]+)/g).map((part, index) =>

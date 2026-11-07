@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
-import { RouteReady } from "../../src/components/SiteNavigation";
+import { RouteReady } from "@/components/SiteNavigation";
 import { allFilms, imagePath } from "./work-data";
 import PreloadProjects from "./PreloadProjects";
 import ProjectNavigation from "./ProjectNavigation";
 import ProjectContent from "./ProjectContent";
 import ProjectSwipe from "./ProjectSwipe";
-import styles from "./detail.module.css";
+import ProjectPage from "./ProjectPage";
+import ProjectFooter from "./ProjectFooter";
 
 export default function ProjectViewer({
   initialSlug,
@@ -19,7 +20,7 @@ export default function ProjectViewer({
   const previous = allFilms[(index - 1 + allFilms.length) % allFilms.length];
   const next = allFilms[(index + 1) % allFilms.length];
   return (
-    <div className={styles.page} data-project-slug={film.slug}>
+    <ProjectPage data-project-slug={film.slug}>
       <RouteReady href={`/work/${slug}`} />
       <PreloadProjects
         assets={[-1, 1, -2, 2].map((offset) => {
@@ -47,6 +48,7 @@ export default function ProjectViewer({
       >
         <ProjectContent film={film} />
       </ProjectSwipe>
-    </div>
+      <ProjectFooter />
+    </ProjectPage>
   );
 }

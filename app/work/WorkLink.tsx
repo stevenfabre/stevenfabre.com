@@ -1,9 +1,9 @@
 "use client";
 
-import { saveVideoPlayback } from "../../src/utils/videoPlayback";
-import { SiteLink } from "../../src/components/SiteNavigation";
+import { saveVideoPlayback } from "@/utils/videoPlayback";
+import { SiteLink } from "@/components/SiteNavigation";
 import { type AnchorHTMLAttributes, type MouseEvent } from "react";
-import { isPlainNavigation } from "../../src/utils/projectNavigation";
+import { isPlainNavigation } from "@/utils/projectNavigation";
 
 // Client navigation keeps the app mounted and can show the route loading state.
 export default function WorkLink({

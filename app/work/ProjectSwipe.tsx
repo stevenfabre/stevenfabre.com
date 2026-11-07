@@ -10,26 +10,15 @@ import {
   type PointerEvent,
   type ReactNode,
 } from "react";
-import { useSiteNavigation } from "../../src/components/SiteNavigation";
-import { swipeDestination } from "./swipe";
+import { useSiteNavigation } from "@/components/SiteNavigation";
+import { useSwipeGesture } from "@/hooks/useSwipeGesture";
 const neighborClass =
-  "pointer-events-none absolute w-full max-md:px-[var(--page-padding)] [&_[data-work-visual]]:[view-transition-name:none!important] [&_[data-site-footer]]:[view-transition-name:none!important]";
+  "pointer-events-none absolute w-full px-4 [&_[data-work-visual]]:[view-transition-name:none!important] [&_[data-site-footer]]:[view-transition-name:none!important]";
 
-const mobileQuery = "(max-width: 767px)";
+const touchQuery = "(any-pointer: coarse)";
 const settling = { type: spring, duration: 0.5, bounce: 0.2 };
 const reducesMotion = () =>
   matchMedia("(prefers-reduced-motion: reduce)").matches;
-type Gesture = {
-  id: number;
-  startX: number;
-  startY: number;
-  origin: number;
-  lastX: number;
-  lastTime: number;
-  velocity: number;
-  horizontal: boolean;
-};
-
 // Set the DOM property: React 18 and Next's bundled renderer differ on inert attributes.
 function makePreviewInert(element: HTMLDivElement | null) {
   if (element) element.inert = true;
@@ -54,7 +43,6 @@ export default function ProjectSwipe({
   const position = useRef(0);
   const animation = useRef<ReturnType<typeof animate> | null>(null);
   const viewport = useRef<HTMLElement>(null);
-  const gesture = useRef<Gesture | null>(null);
   const sequence = useRef(0);
   const committed = useRef(false);
   const suppressClick = useRef(false);
@@ -64,17 +52,37 @@ export default function ProjectSwipe({
     top: number;
   } | null>(null);
 
+  const swipe = useSwipeGesture(viewport, {
+    canStart,
+    onStart: () => {
+      ++sequence.current;
+      stopMotion();
+      suppressClick.current = false;
+      return position.current;
+    },
+    onMove: (position, firstMove) => {
+      suppressClick.current = true;
+      if (reducesMotion()) return;
+      if (firstMove) setNeighbors({ width: innerWidth, top: window.scrollY });
+      moveTo(position);
+    },
+    onEnd: finish,
+    onCancel: reset,
+  });
+
+  const { clear, isActive } = swipe;
+
   useEffect(() => {
-    const mobile = matchMedia(mobileQuery);
+    const touch = matchMedia(touchQuery);
     const prefetch = () => {
-      if (mobile.matches) {
+      if (touch.matches) {
         router.prefetch(previousHref);
         router.prefetch(nextHref);
       }
     };
     prefetch();
-    mobile.addEventListener("change", prefetch);
-    return () => mobile.removeEventListener("change", prefetch);
+    touch.addEventListener("change", prefetch);
+    return () => touch.removeEventListener("change", prefetch);
   }, [router, previousHref, nextHref]);
 
   useEffect(
@@ -87,35 +95,11 @@ export default function ProjectSwipe({
   );
 
   useEffect(() => {
-    const element = viewport.current;
-    if (!element) return;
-
-    // Pointer capture alone doesn't stop Safari taking over for page scrolling.
-    // Cancel native panning once horizontal intent is established, including
-    // the first touchmove, while leaving vertical drags and pinch zoom native.
-    const lockHorizontalSwipe = (event: TouchEvent) => {
-      const current = gesture.current;
-      if (!current || event.touches.length !== 1) return;
-      const touch = event.touches[0];
-      const dx = Math.abs(touch.clientX - current.startX);
-      const dy = Math.abs(touch.clientY - current.startY);
-      if (event.cancelable && (current.horizontal || (dx >= 8 && dx > dy)))
-        event.preventDefault();
-    };
-
-    element.addEventListener("touchmove", lockHorizontalSwipe, {
-      passive: false,
-    });
-    return () => element.removeEventListener("touchmove", lockHorizontalSwipe);
-  }, []);
-
-  useEffect(() => {
     let viewportWidth = window.innerWidth;
     const interrupt = () => {
-      if (!gesture.current && !committed.current && position.current === 0)
-        return;
+      if (!isActive() && !committed.current && position.current === 0) return;
       ++sequence.current;
-      gesture.current = null;
+      clear();
       committed.current = false;
       animation.current?.cancel();
       position.current = 0;
@@ -147,7 +131,7 @@ export default function ProjectSwipe({
       window.removeEventListener("resize", resize);
       window.removeEventListener("blur", interrupt);
     };
-  }, []);
+  }, [clear, isActive]);
 
   function moveTo(value: number) {
     position.current = value;
@@ -189,11 +173,11 @@ export default function ProjectSwipe({
   }
 
   function reset() {
-    gesture.current = null;
+    clear();
     committed.current = false;
     const request = ++sequence.current;
     stopMotion();
-    if (reducesMotion()) {
+    if (reducesMotion() || position.current === 0) {
       moveTo(0);
       setNeighbors(null);
     } else {
@@ -201,18 +185,10 @@ export default function ProjectSwipe({
     }
   }
 
-  function start(event: PointerEvent<HTMLElement>) {
-    // Leave screen-edge swipes to browser history, and nested controls to
-    // their own gestures. A second finger cancels rather than taking over.
-    if (!event.isPrimary) {
-      if (gesture.current) reset();
-      return;
-    }
+  function canStart(event: PointerEvent<HTMLElement>) {
     if (!committed.current) suppressClick.current = false;
     if (
       committed.current ||
-      event.button !== 0 ||
-      !matchMedia(mobileQuery).matches ||
       document.fullscreenElement ||
       event.clientX < 24 ||
       event.clientX > innerWidth - 24 ||
@@ -222,63 +198,11 @@ export default function ProjectSwipe({
         )) ||
       window.getSelection()?.isCollapsed === false
     )
-      return;
-    ++sequence.current;
-    stopMotion();
-    suppressClick.current = false;
-    gesture.current = {
-      id: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-      origin: position.current,
-      lastX: event.clientX,
-      lastTime: event.timeStamp,
-      velocity: 0,
-      horizontal: false,
-    };
-    if (!reducesMotion())
-      setNeighbors({ width: innerWidth, top: window.scrollY });
+      return false;
+    return true;
   }
 
-  function move(event: PointerEvent<HTMLElement>) {
-    const current = gesture.current;
-    if (!current || current.id !== event.pointerId) return;
-    const dx = event.clientX - current.startX;
-    const dy = event.clientY - current.startY;
-    if (!current.horizontal) {
-      if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
-      if (Math.abs(dy) >= Math.abs(dx)) {
-        reset();
-        return;
-      }
-      current.horizontal = true;
-      event.currentTarget.setPointerCapture(event.pointerId);
-      suppressClick.current = true;
-    }
-    const elapsed = event.timeStamp - current.lastTime;
-    if (elapsed > 0)
-      current.velocity = (event.clientX - current.lastX) / elapsed;
-    current.lastX = event.clientX;
-    current.lastTime = event.timeStamp;
-    if (!reducesMotion())
-      moveTo(Math.max(-innerWidth, Math.min(innerWidth, current.origin + dx)));
-  }
-
-  function finish(event: PointerEvent<HTMLElement>) {
-    const current = gesture.current;
-    if (!current || current.id !== event.pointerId) return;
-    gesture.current = null;
-    if (!current.horizontal) {
-      reset();
-      return;
-    }
-    // Judge intent from this gesture alone. Catching a returning spring
-    // should not give a tiny new drag a head start toward navigation.
-    const offset = event.clientX - current.startX;
-    // A held drag should not inherit the velocity of its last movement.
-    const velocity =
-      event.timeStamp - current.lastTime < 100 ? current.velocity : 0;
-    const direction = swipeDestination(offset, velocity, innerWidth);
+  function finish(direction: -1 | 0 | 1) {
     if (!direction) {
       reset();
       return;
@@ -304,23 +228,12 @@ export default function ProjectSwipe({
   return (
     <main
       ref={viewport}
-      className="w-full flex-1 overflow-x-clip max-md:-mx-[var(--page-padding)] max-md:w-auto max-md:touch-pan-y max-md:touch-pinch-zoom"
-      onPointerDownCapture={start}
-      onPointerMove={move}
-      onPointerUp={finish}
-      onPointerCancel={() => {
-        if (gesture.current) reset();
-      }}
-      onLostPointerCapture={(event) => {
-        // Touch implicitly captures the original target (often the video).
-        // Moving capture to this viewport emits a bubbling capture-loss event
-        // from that child; only losing the viewport's own capture cancels us.
-        if (
-          event.target === event.currentTarget &&
-          gesture.current?.id === event.pointerId
-        )
-          reset();
-      }}
+      className="-mx-4 w-auto flex-1 overflow-clip touch-auto"
+      onPointerDownCapture={swipe.onPointerDown}
+      onPointerMove={swipe.onPointerMove}
+      onPointerUp={swipe.onPointerUp}
+      onPointerCancel={swipe.onPointerCancel}
+      onLostPointerCapture={swipe.onLostPointerCapture}
       onClickCapture={(event) => {
         if (suppressClick.current) {
           event.preventDefault();
@@ -329,12 +242,8 @@ export default function ProjectSwipe({
         }
       }}
     >
-      {/* Clip at the browser edges; page gutters travel with each project. */}
-      <div
-        ref={track}
-        className="relative max-md:px-[var(--page-padding)]"
-        data-project-swipe
-      >
+      {/* Clip both axes so neighboring previews cannot extend the page's scroll range. */}
+      <div ref={track} className="relative px-4" data-project-swipe>
         {neighbors && (
           <div
             className={neighborClass}

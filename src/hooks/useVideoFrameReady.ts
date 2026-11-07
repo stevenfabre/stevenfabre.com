@@ -15,40 +15,46 @@ export function useVideoFrameReady(
     let frame = 0;
     let paint = 0;
     let cancelled = false;
+    let presented = false;
     const clear = () => {
       if (frame) video.cancelVideoFrameCallback?.(frame);
       cancelAnimationFrame(paint);
       frame = 0;
     };
     const show = () => {
-      if (!cancelled && video.readyState >= 2 && !video.seeking) setReady(true);
+      frame = 0;
+      if (cancelled || video.readyState < 2 || video.seeking) return;
+      // A frame callback runs before compositing. Keep the poster through that
+      // paint, then reveal the video without an empty WebKit surface underneath.
+      paint = requestAnimationFrame(() => {
+        paint = requestAnimationFrame(() => {
+          paint = 0;
+          if (!cancelled && video.readyState >= 2 && !video.seeking) {
+            presented = true;
+            setReady(true);
+          }
+        });
+      });
     };
     const check = () => {
-      if (
-        video.readyState < 2 ||
-        video.seeking ||
-        (video.paused && video.currentTime === 0)
-      )
+      if (presented || frame || paint || video.readyState < 2 || video.seeking)
         return;
-      clear();
-      if (video.requestVideoFrameCallback && !video.paused) {
+      if (video.requestVideoFrameCallback) {
         frame = video.requestVideoFrameCallback(show);
-      } else {
-        // Paused videos may not schedule another video-frame callback.
-        paint = requestAnimationFrame(() => {
-          paint = requestAnimationFrame(show);
-        });
+      } else if (!video.paused || video.currentTime > 0) {
+        // Browsers without frame callbacks can only use playback readiness.
+        show();
       }
     };
     const hide = () => {
       clear();
+      paint = 0;
+      presented = false;
       setReady(false);
     };
-    // A time update confirms playback advanced even if the browser missed a
-    // frame callback during a seek or a background/foreground transition.
-    const onTimeUpdate = () => {
-      if (video.currentTime > 0) show();
-    };
+    // Playback time can advance before WebKit paints the decoded frame. It may
+    // schedule a readiness check, but must never bypass the frame callback.
+    const onTimeUpdate = check;
     video.addEventListener("timeupdate", onTimeUpdate);
     const readyEvents = ["loadeddata", "playing", "seeked"];
     const resetEvents = ["emptied", "seeking", "error"];

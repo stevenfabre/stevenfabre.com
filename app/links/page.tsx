@@ -1,9 +1,9 @@
-import { RouteReady } from "../../src/components/SiteNavigation";
-import Icon from "../../src/components/Icon";
+import { RouteReady } from "@/components/SiteNavigation";
+import Icon from "@/components/Icon";
 import Image from "next/image";
 import Link from "next/link";
 import profilePic from "../../public/steven-fabre-profile-picture.jpg";
-import Footer from "../../src/components/Footer";
+import Footer from "@/components/Footer";
 
 export default async function Links() {
   return (

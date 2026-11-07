@@ -1,10 +1,20 @@
 import ProjectLoading from "../ProjectLoading";
-import { allFilms } from "../work-data";
+import { allFilms, companies, companyDetails } from "../work-data";
 
 export default function LoadingProject() {
   return (
     <ProjectLoading
-      projects={allFilms.map(({ slug, title }) => ({ slug, title }))}
+      projects={allFilms.map(
+        ({ slug, title, introduction, company, year, contributions }) => ({
+          slug,
+          title,
+          introduction: introduction.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1"),
+          company: companies.find(({ id }) => id === company)!.name,
+          role: companyDetails[company].role,
+          year,
+          contributions,
+        })
+      )}
     />
   );
 }

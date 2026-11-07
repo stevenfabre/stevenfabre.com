@@ -1,9 +1,8 @@
 import Image from "next/image";
-import HeadingLink from "../../src/components/HeadingLink";
+import HeadingLink from "@/components/HeadingLink";
 import ProjectYouTube from "./ProjectYouTube";
 import ProjectSlideshow from "./ProjectSlideshow";
 import ResponsibilityIcon from "./ResponsibilityIcon";
-import BeforeAfter from "./BeforeAfter";
 import { ProjectTextPreviews, renderProjectText } from "./ProjectText";
 import {
   type Film,
@@ -11,18 +10,16 @@ import {
   companies,
   companyDetails,
 } from "./work-data";
-import ProjectVideo from "./ProjectVideo";
-import ProjectImage from "./ProjectImage";
+import ProjectMedia from "./ProjectMedia";
 import ProjectGallery from "./ProjectGallery";
 import ExternalLink from "./ExternalLink";
-import ButtonLink from "./../../src/components/ButtonLink";
-import WorkIcon from "./WorkIcon";
+import ButtonLink from "@/components/ButtonLink";
+import Icon from "@/components/Icon";
 import ViewOnX from "./ViewOnX";
 import { getMediaDimensions } from "./media";
 import Collaborators from "./Collaborators";
-import Footer from "./../../src/components/Footer";
-import styles from "./detail.module.css";
 import { Fragment, type CSSProperties } from "react";
+import { projectCaptionStyles } from "./projectCaptionStyles";
 
 export default function ProjectContent({
   film,
@@ -45,115 +42,110 @@ export default function ProjectContent({
             } as CSSProperties
           }
         >
-          <div className="mx-auto grid h-[var(--visual-height)] w-full items-center justify-items-center max-md:max-w-[var(--caption-width)] max-[520px]:w-[calc(100%-8px)]">
-            <div
-              className={styles.visual}
-              data-work-visual
-              style={
-                { viewTransitionName: `film-${film.file}` } as CSSProperties
-              }
-            >
-              {film.comparison ? (
-                <BeforeAfter visual={film} />
-              ) : film.kind || preview ? (
-                <ProjectImage film={film} />
-              ) : (
-                <ProjectVideo
-                  key={film.file}
-                  film={film}
-                  autoLoop={film.autoLoop ?? true}
-                />
-              )}
-            </div>
+          <div className="mx-auto grid h-[var(--visual-height)] w-full items-center justify-items-center max-md:max-w-lg">
+            <ProjectMedia
+              visual={film}
+              preview={preview}
+              hero
+              autoLoop={film.autoLoop}
+            />
           </div>
 
-          <figcaption className="mx-auto mt-16 w-full max-w-[var(--caption-width)] leading-relaxed md:grid md:grid-cols-[180px_minmax(0,1fr)] md:items-start md:gap-x-8 max-[520px]:w-[calc(100%-8px)]">
-            <div className="@container text-lg text-[var(--muted)] text-pretty md:col-start-2 md:row-start-1">
-              <h1 className="mb-4 text-lg font-semibold leading-relaxed text-[var(--ink)] xl:text-xl">
+          <figcaption className={projectCaptionStyles.layout}>
+            <div className={projectCaptionStyles.body}>
+              <h1
+                data-project-caption="title"
+                className={projectCaptionStyles.title}
+              >
                 {film.title}
               </h1>
-              <p>{renderProjectText(film.introduction)}</p>
-              {film.paragraphs?.map((paragraph, index) => (
-                <Fragment key={paragraph}>
-                  {film.youtube &&
-                    index === (film.paragraphs?.length ?? 0) - 1 && (
-                      <figure className="mt-8">
-                        {preview ? (
-                          // Swipe neighbors are inert visual copies, never active players.
-                          <div className="aspect-video w-full" />
-                        ) : (
-                          <ProjectYouTube {...film.youtube} />
-                        )}
-                        <figcaption className="mt-3 text-sm text-[var(--muted)]">
-                          <HeadingLink
-                            iconSize={12}
-                            className="[--link-arrow-opacity:1] opacity-70 transition-colors hover:text-neutral-950 hover:opacity-100 focus-visible:text-neutral-950 focus-visible:opacity-100 dark:hover:text-neutral-50 dark:focus-visible:text-neutral-50"
-                            href={`https://www.youtube.com/watch?v=${film.youtube.id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {film.youtube.title}
-                          </HeadingLink>
-                        </figcaption>
-                      </figure>
-                    )}
-                  <p className="mt-6">{renderProjectText(paragraph)}</p>
-                  {film.slideshow &&
-                    film.slideshowAfterParagraph === index + 2 && (
-                      <SlideshowContent
-                        slideshow={film.slideshow}
-                        preview={preview}
-                      />
-                    )}
-                </Fragment>
-              ))}
-              {film.contribution && <p className="mt-6">{film.contribution}</p>}
-              <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 empty:hidden">
-                {film.source && <ViewOnX href={film.source} />}
-                {film.links?.map((link) => (
-                  <ButtonLink
-                    key={link.href}
-                    appearance="raised"
-                    compact
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    iconPosition="end"
-                    className="[&_svg]:size-3.5"
-                  >
-                    {link.label}
-                    <WorkIcon name="arrow-up-right" />
-                  </ButtonLink>
+              <div data-project-caption="body">
+                <p>{renderProjectText(film.introduction)}</p>
+                {film.paragraphs?.map((paragraph, index) => (
+                  <Fragment key={paragraph}>
+                    {film.youtube &&
+                      index === (film.paragraphs?.length ?? 0) - 1 && (
+                        <figure className="mt-8">
+                          {preview ? (
+                            // Swipe neighbors are inert visual copies, never active players.
+                            <div className="aspect-video w-full" />
+                          ) : (
+                            <ProjectYouTube {...film.youtube} />
+                          )}
+                          <figcaption className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
+                            <HeadingLink
+                              iconSize={12}
+                              className="[--link-arrow-opacity:1] opacity-70 transition-colors hover:text-neutral-950 hover:opacity-100 focus-visible:text-neutral-950 focus-visible:opacity-100 dark:hover:text-neutral-50 dark:focus-visible:text-neutral-50"
+                              href={`https://www.youtube.com/watch?v=${film.youtube.id}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {film.youtube.title}
+                            </HeadingLink>
+                          </figcaption>
+                        </figure>
+                      )}
+                    <p className="mt-6">{renderProjectText(paragraph)}</p>
+                    {film.slideshow &&
+                      film.slideshowAfterParagraph === index + 2 && (
+                        <SlideshowContent
+                          slideshow={film.slideshow}
+                          preview={preview}
+                        />
+                      )}
+                  </Fragment>
                 ))}
+                {film.contribution && (
+                  <p className="mt-6">{film.contribution}</p>
+                )}
+                <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 empty:hidden">
+                  {film.source && <ViewOnX href={film.source} />}
+                  {film.links?.map((link) => (
+                    <ButtonLink
+                      key={link.href}
+                      appearance="raised"
+                      compact
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      iconPosition="end"
+                      className="[&_svg]:size-3.5"
+                    >
+                      {link.label}
+                      <Icon name="arrow-up-right" />
+                    </ButtonLink>
+                  ))}
+                </div>
+                {film.gallery && (
+                  <ProjectGallery
+                    preview={preview}
+                    visuals={film.gallery}
+                    layout={film.galleryLayout}
+                  />
+                )}
+                {film.afterGalleryParagraphs?.map((paragraph) => (
+                  <p key={paragraph} className="mt-6">
+                    {renderProjectText(paragraph)}
+                  </p>
+                ))}
+                {film.slideshow && film.slideshowAfterParagraph == null && (
+                  <SlideshowContent
+                    slideshow={film.slideshow}
+                    preview={preview}
+                  />
+                )}
+                {film.collaborators && (
+                  <Collaborators people={film.collaborators} />
+                )}
               </div>
-              {film.gallery && (
-                <ProjectGallery
-                  preview={preview}
-                  visuals={film.gallery}
-                  layout={film.galleryLayout}
-                />
-              )}
-              {film.afterGalleryParagraphs?.map((paragraph) => (
-                <p key={paragraph} className="mt-6">
-                  {renderProjectText(paragraph)}
-                </p>
-              ))}
-              {film.slideshow && film.slideshowAfterParagraph == null && (
-                <SlideshowContent
-                  slideshow={film.slideshow}
-                  preview={preview}
-                />
-              )}
-              {film.collaborators && (
-                <Collaborators people={film.collaborators} />
-              )}
             </div>
             <aside
-              className="mt-8 grid grid-cols-2 items-start gap-8 border-t border-black/10 pt-5 text-sm leading-relaxed text-[var(--muted)] dark:border-white/10 md:block md:border-0 md:sticky md:top-[calc(var(--bar-height)+24px)] md:self-start md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
+              data-project-caption="info"
+              className={`${projectCaptionStyles.credits} mt-8 grid grid-cols-2 items-start gap-8 border-t border-black/10 pt-5 dark:border-white/10 md:block md:border-0 md:sticky md:top-22 md:self-start md:mt-0`}
               aria-label="Project credits"
             >
               <div className="min-w-0 grid gap-1">
-                <p className="flex items-center font-medium text-[var(--ink)]">
+                <p className="flex items-center font-medium text-neutral-900 dark:text-neutral-100">
                   <ExternalLink
                     href={company.url}
                     iconSize={13}
@@ -182,7 +174,6 @@ export default function ProjectContent({
                 </ul>
               )}
             </aside>
-            <Footer className="static mt-20 xl:mt-24 w-full bg-transparent backdrop-blur-none dark:bg-transparent md:col-start-2" />
           </figcaption>
         </figure>
       </div>
@@ -215,9 +206,9 @@ function SlideshowContent({
           sizes="(min-width: 1280px) 704px, (min-width: 768px) 480px, 100vw"
           className={slideshow.thumbnails ? "object-cover" : "object-contain"}
         />
-        <span className="pointer-events-none absolute inset-0 rounded-[inherit] border border-[var(--media-border)]" />
+        <span className="pointer-events-none absolute inset-0 rounded-[inherit] border border-black/10 dark:border-white/10" />
       </div>
-      <figcaption className="mt-3 truncate text-sm leading-relaxed text-[var(--muted)] opacity-70">
+      <figcaption className="mt-3 truncate text-sm leading-relaxed text-neutral-500 dark:text-neutral-400 opacity-70">
         {image.caption ?? slideshow.caption}
       </figcaption>
     </figure>

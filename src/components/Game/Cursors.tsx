@@ -1,6 +1,6 @@
 "use client";
 
-import Cursor from "./Cursor";
+import Cursor from "@/components/Game/Cursor";
 import { useOthersConnectionIds } from "@liveblocks/react/suspense";
 
 export default function Cursors() {

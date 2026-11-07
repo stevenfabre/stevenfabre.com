@@ -6,14 +6,14 @@ import {
   RoomProvider,
   ClientSideSuspense,
 } from "@liveblocks/react/suspense";
-import Game from "./Game";
+import Game from "@/components/Game/Game";
 import {
   COLORS,
   PIXELS_RESOLUTION_HEIGHT,
   PIXELS_RESOLUTION_WIDTH,
-} from "./constants";
-import { Pixel } from "./types";
-import { Storage } from "./liveblocks.config";
+} from "@/components/Game/constants";
+import { Pixel } from "@/components/Game/types";
+import { Storage } from "@/components/Game/liveblocks.config";
 
 export default function GameProvider() {
   return (

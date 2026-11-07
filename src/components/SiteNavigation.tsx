@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { saveVideoPlayback } from "../utils/videoPlayback";
+import { saveVideoPlayback } from "@/utils/videoPlayback";
 import {
   isPlainNavigation,
   rememberProjectHref,
-} from "../utils/projectNavigation";
+} from "@/utils/projectNavigation";
 import {
   decodeVisibleImages,
   prepareProjectImages,
-} from "../utils/transitionImages";
-import { captureProjectTransition } from "../utils/projectTransition";
-import { holdSwipeVisual } from "../utils/swipeVisual";
+} from "@/utils/transitionImages";
+import { captureProjectTransition } from "@/utils/projectTransition";
+import { holdSwipeVisual } from "@/utils/swipeVisual";
 import { usePathname, useRouter } from "next/navigation";
 import {
   createContext,
@@ -177,7 +177,7 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
       try {
         images.current?.selectDestination();
         fallback.current?.prepareDestination();
-        if (images.current || fallback.current || swipeVisual.current)
+        if (!fallback.current && (images.current || swipeVisual.current))
           await decodeVisibleImages();
         if (pending.current !== navigation) return;
         if (swipeVisual.current) {
@@ -354,12 +354,14 @@ export function SiteNavigationProvider({ children }: { children: ReactNode }) {
           }
         };
         try {
-          if (projectChange) await decodeVisibleImages();
           if (request !== sequence.current) return;
           prepared = projectChange ? prepareProjectImages(source!) : null;
           images.current = prepared;
           if (projectChange || !doc.startViewTransition) {
-            animation = captureProjectTransition(source);
+            animation = captureProjectTransition(
+              source,
+              projectChange && pathname.startsWith("/work/")
+            );
             fallback.current = animation;
             await update();
             if (fallback.current === animation) await animation.play();

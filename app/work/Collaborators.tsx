@@ -1,7 +1,7 @@
 import type { Collaborator } from "./work-data";
 import ExternalLink from "./ExternalLink";
 import Image from "next/image";
-import HorizontalScroll from "../../src/components/HorizontalScroll";
+import HorizontalScroll from "@/components/HorizontalScroll";
 
 export default function Collaborators({ people }: { people: Collaborator[] }) {
   if (!people.length) return null;
@@ -10,7 +10,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
       className="mt-8 min-w-0 border-t border-black/10 pt-5 dark:border-white/10 text-sm leading-normal"
       aria-label="Project collaborators"
     >
-      <h2 className="mb-3 text-[13px] font-normal text-[var(--muted)]">
+      <h2 className="mb-3 text-sm font-normal text-neutral-500 dark:text-neutral-400">
         Collaborators
       </h2>
       <HorizontalScroll label="Scroll collaborators">
@@ -31,7 +31,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
               ) : (
                 <span
                   aria-hidden="true"
-                  className="flex size-10 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-xs font-medium text-[var(--muted)] dark:bg-neutral-800"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-xs font-medium text-neutral-500 dark:text-neutral-400 dark:bg-neutral-800"
                 >
                   {person.name
                     .split(" ")
@@ -40,7 +40,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
                 </span>
               )}
               <div className="grid min-w-0 flex-1">
-                <span className="min-w-0 font-medium text-[var(--ink)]">
+                <span className="min-w-0 font-medium text-neutral-900 dark:text-neutral-100">
                   {person.href ? (
                     <ExternalLink
                       href={person.href}
@@ -58,7 +58,7 @@ export default function Collaborators({ people }: { people: Collaborator[] }) {
                   )}
                 </span>
                 <span
-                  className="truncate text-[var(--muted)]"
+                  className="truncate text-neutral-500 dark:text-neutral-400"
                   title={person.role}
                 >
                   {person.role}

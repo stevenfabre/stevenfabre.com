@@ -1,16 +1,15 @@
 "use client";
 
 import { forwardRef, type AnchorHTMLAttributes } from "react";
-import cx from "../utils/cx";
-import { squareControlSize } from "./buttonStyles";
-import { SiteLink } from "./SiteNavigation";
+import cx from "@/utils/cx";
+import { squareControlSize } from "@/components/buttonStyles";
+import AppLink from "./AppLink";
 
 type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   variant?: "text" | "icon";
   appearance?: "ghost" | "raised";
   iconPosition?: "start" | "end";
   compact?: boolean;
-  clientNavigation?: boolean;
 };
 
 // Shared controls support ordinary links and the persistent home/work layout.
@@ -21,7 +20,6 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       appearance = "ghost",
       iconPosition = "start",
       compact = false,
-      clientNavigation = false,
       className,
       href,
       ...props
@@ -47,10 +45,7 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         "rounded-lg border border-black/8 bg-white text-neutral-700 shadow-raised transition-[background-color,box-shadow] duration-300 hover:bg-neutral-50 focus-visible:bg-neutral-200 active:bg-neutral-100 active:shadow-pressed active:duration-0 dark:border-white/9 dark:border-t-white/13 dark:bg-[#242424] dark:text-neutral-200 dark:hover:bg-[#2c2c2c] dark:focus-visible:bg-neutral-700 dark:active:bg-[#202020]",
       className
     );
-    if (clientNavigation && href) {
-      return <SiteLink {...props} href={href} ref={ref} className={classes} />;
-    }
-    return <a {...props} href={href} ref={ref} className={classes} />;
+    return <AppLink {...props} href={href} ref={ref} className={classes} />;
   }
 );
 

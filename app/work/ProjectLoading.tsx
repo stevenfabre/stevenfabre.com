@@ -2,18 +2,28 @@
 
 import { useParams } from "next/navigation";
 import ProjectNavigation from "./ProjectNavigation";
-import styles from "./detail.module.css";
+import ProjectPage from "./ProjectPage";
+import ProjectFooter from "./ProjectFooter";
+import { projectCaptionStyles } from "./projectCaptionStyles";
 
-type Project = { slug: string; title: string };
+type Project = {
+  slug: string;
+  title: string;
+  introduction: string;
+  company: string;
+  role: string;
+  year: string;
+  contributions: string[];
+};
 
-// Only navigation labels cross the client boundary, not the project galleries.
+// Text metrics cross the client boundary; galleries and media stay on the server.
 export default function ProjectLoading({ projects }: { projects: Project[] }) {
   const { slug } = useParams<{ slug: string }>();
   const index = projects.findIndex((project) => project.slug === slug);
   const project = projects[index];
 
   return (
-    <div className={styles.page} aria-busy="true">
+    <ProjectPage aria-busy="true">
       {project && (
         <ProjectNavigation
           slug={project.slug}
@@ -25,52 +35,57 @@ export default function ProjectLoading({ projects }: { projects: Project[] }) {
       )}
       <main className="w-full flex-1">
         <div className="h-[var(--visual-height)]" aria-hidden="true" />
-        <div className="mx-auto mt-16 w-full max-w-[var(--caption-width)] leading-relaxed md:grid md:grid-cols-[180px_minmax(0,1fr)] md:items-start md:gap-x-8 max-[520px]:w-[calc(100%-8px)]">
-          <div
-            aria-hidden="true"
-            className="@container text-lg text-[var(--muted)] md:col-start-2 md:row-start-1"
-          >
-            <div className="mb-4 text-lg font-semibold leading-relaxed text-[var(--ink)] xl:text-xl">
-              <SkeletonLine width="w-44" />
+        {project && (
+          <div aria-hidden="true" className={projectCaptionStyles.layout}>
+            <div className={projectCaptionStyles.body}>
+              <div data-loading-title className={projectCaptionStyles.title}>
+                <SkeletonText text={project.title} />
+              </div>
+              <p data-loading-introduction>
+                <SkeletonText text={project.introduction} />
+              </p>
             </div>
-            <div>
-              <SkeletonLine />
-              <SkeletonLine />
-              <SkeletonLine width="w-3/4" />
+            {/* On mobile, credits follow the full article and galleries below the fold. */}
+            <div
+              data-loading-info
+              className={`${projectCaptionStyles.credits} hidden md:block`}
+            >
+              <div className="grid gap-1">
+                <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                  <SkeletonText text={project.company} />
+                </p>
+                <p>
+                  <SkeletonText text={project.role} />
+                </p>
+                <p className="opacity-70">
+                  <SkeletonText text={project.year} />
+                </p>
+              </div>
+              <ul className="mt-5 grid gap-1">
+                {project.contributions.map((contribution) => (
+                  <li key={contribution} className="flex items-center gap-1.5">
+                    <span className="size-3 shrink-0" />
+                    <SkeletonText text={contribution} />
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-          <div
-            aria-hidden="true"
-            className="mt-8 text-sm leading-relaxed text-[var(--muted)] [&>p+p]:mt-0.5 md:col-start-1 md:row-start-1 md:mt-0 md:pt-1 xl:pt-1.5"
-          >
-            <p className="font-medium text-[var(--ink)]">
-              <SkeletonLine width="w-24" />
-            </p>
-            <p>
-              <SkeletonLine width="w-32" />
-            </p>
-            <p className="opacity-70">
-              <SkeletonLine width="w-20" />
-            </p>
-          </div>
-        </div>
+        )}
         <span role="status" className="sr-only">
           Loading project…
         </span>
       </main>
-    </div>
+      <ProjectFooter />
+    </ProjectPage>
   );
 }
 
-// A baseline-aligned 1ex rectangle matches the font's lowercase x-height.
-// The zero-width space preserves the same line box as the eventual text.
-function SkeletonLine({ width = "w-full" }: { width?: string }) {
+// Invisible real text preserves glyph widths, wrapping, and line boxes exactly.
+function SkeletonText({ text }: { text: string }) {
   return (
-    <span className="block">
-      {"\u200b"}
-      <span
-        className={`skeleton-shimmer inline-block h-[1ex] align-baseline rounded-xs bg-current opacity-10 ${width}`}
-      />
+    <span className="skeleton-shimmer text-transparent [box-decoration-break:clone] bg-[linear-gradient(transparent_35%,rgb(115_115_115/0.1)_35%,rgb(115_115_115/0.1)_80%,transparent_80%)]">
+      {text}
     </span>
   );
 }

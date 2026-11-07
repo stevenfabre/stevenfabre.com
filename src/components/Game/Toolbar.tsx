@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import * as Select from "@radix-ui/react-select";
-import { ColorSwatch } from "./ColorSwatch";
-import { COLORS } from "./constants";
-import { iconControl } from "../buttonStyles";
-import { SelectMenuSurface, type MenuMotion } from "../SelectMenuSurface";
-import { useTouchSelect } from "../../hooks/useTouchSelect";
+import { ColorSwatch } from "@/components/Game/ColorSwatch";
+import { COLORS } from "@/components/Game/constants";
+import { iconControl } from "@/components/buttonStyles";
+import { SelectMenuSurface, type MenuMotion } from "@/components/SelectMenuSurface";
+import { useTouchSelect } from "@/hooks/useTouchSelect";
 
 export default function Toolbar({
   currentColor,
@@ -46,7 +46,7 @@ export default function Toolbar({
     >
       <Select.Trigger
         aria-label="Change drawing color"
-        className={`${iconControl} touch-none select-none [-webkit-touch-callout:none]`}
+        className={`${iconControl} group/color touch-none select-none [-webkit-touch-callout:none]`}
         onPointerDown={startTouchSelection}
       >
         <Select.Value>
@@ -54,7 +54,7 @@ export default function Toolbar({
             <ColorSwatch color={currentColor} />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 rounded-full border border-black/20"
+              className="pointer-events-none absolute inset-0 rounded-full border border-transparent group-hover/color:border-black/20 group-focus/color:border-black/20 dark:border-black/20 dark:group-hover/color:border-transparent dark:group-focus/color:border-transparent"
             />
           </span>
         </Select.Value>
@@ -65,7 +65,7 @@ export default function Toolbar({
           position="item-aligned"
           aria-label="Drawing colors"
           data-touching={touching || undefined}
-          className="z-50 outline-none motion-safe:[&[data-touching]_[data-highlighted]_[data-swatch]]:scale-110"
+          className="z-50 outline-none motion-safe:[&[data-touching]_[data-highlighted]_[data-swatch]]:scale-110 motion-safe:[&_[data-menu-item]]:hover:[&_[data-swatch]]:scale-110"
         >
           <SelectMenuSurface
             compact

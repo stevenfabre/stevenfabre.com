@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "@/components/Tooltip";
 
 export type InvestmentProps = {
   label: string;

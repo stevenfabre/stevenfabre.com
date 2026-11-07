@@ -1,6 +1,6 @@
 "use client";
 
-import { saveVideoPlayback } from "../utils/videoPlayback";
+import { saveVideoPlayback } from "@/utils/videoPlayback";
 import {
   createContext,
   useCallback,
@@ -13,10 +13,10 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import CompanyLink from "./CompanyLink";
-import { isPlainNavigation } from "../utils/projectNavigation";
-import { afterPageLoad, preloadMedia } from "../utils/preloadMedia";
-import styles from "./WorkPreview.module.css";
+import CompanyLink from "@/components/CompanyLink";
+import { isPlainNavigation } from "@/utils/projectNavigation";
+import { afterPageLoad, preloadMedia } from "@/utils/preloadMedia";
+import styles from "@/components/WorkPreview.module.css";
 
 type Preview = {
   file: string;
@@ -331,7 +331,6 @@ export function WorkPreviewLink({
     <CompanyLink
       className={className}
       href={project.href}
-      clientNavigation
       aria-label={`View ${label} work`}
       onPointerEnter={(event) => {
         if (

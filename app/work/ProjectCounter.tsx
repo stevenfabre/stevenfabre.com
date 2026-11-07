@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { usePathname } from "next/navigation";
-import RollingNumber from "../../src/components/RollingNumber";
+import RollingNumber from "@/components/RollingNumber";
 
 const CounterHistory = createContext<MutableRefObject<number | null> | null>(
   null
@@ -53,7 +53,7 @@ export default function ProjectCounter({
       : -1;
   return (
     <span
-      className="flex items-center px-1 text-[11px] tabular-nums"
+      className="flex items-center px-1 text-xs tabular-nums"
       aria-label={`Project ${current} of ${total}`}
     >
       <RollingNumber

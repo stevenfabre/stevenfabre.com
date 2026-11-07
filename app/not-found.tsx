@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import GameProvider from "../src/components/Game/GameProvider";
+import GameProvider from "@/components/Game/GameProvider";
 import profilePic from "../public/steven-fabre.jpg";
-import EmailLink from "../src/components/EmailLink";
-import Footer from "../src/components/Footer";
-import Investments from "../src/components/Investments";
-import Work from "../src/components/Work";
-import Featured from "../src/components/Featured";
+import EmailLink from "@/components/EmailLink";
+import Footer from "@/components/Footer";
+import Investments from "@/components/Investments";
+import Work from "@/components/Work";
+import Featured from "@/components/Featured";
 
 export default async function NotFound() {
   return (

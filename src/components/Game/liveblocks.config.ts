@@ -1,5 +1,5 @@
 import { LiveList, LiveObject } from "@liveblocks/client";
-import { CursorType, Pixel, Point } from "./types";
+import { CursorType, Pixel, Point } from "@/components/Game/types";
 
 export type Presence = {
   cursor: Point[] | null;

@@ -6,9 +6,12 @@ preview deployments, and production.
 - `work-data.ts`: project copy, company roles, contribution lists, collaborator credits, and gallery definitions.
 - `WorkPortfolio.tsx`: server-rendered company overview, with interactive thumbnails in `ProjectGrid.tsx`.
 - `ProjectViewer.tsx` and `ProjectContent.tsx`: server-rendered project content, with client navigation and media controls.
-- `ProjectSwipe.tsx`: mobile horizontal gestures, spring settling, and inert neighboring previews. `swipe.ts` defines distance/velocity thresholds.
+- `ProjectPage.tsx`: shared page shell for loaded projects and loading states.
+- `ProjectMedia.tsx`: shared media frame and image/video/comparison selection for lead visuals and galleries.
+- `ProjectSwipe.tsx`: touch horizontal gestures, spring settling, and inert neighboring previews. `src/utils/swipe.ts` defines distance/velocity thresholds.
 - `media-dimensions.json`: original dimensions used to preserve aspect ratios and cap visual sizes.
-- `ProjectVideo.tsx`: video playback controls, visibility-aware playback, and preview playback restoration.
+- `ProjectVideo.tsx`: video controls and poster markup; `useProjectVideo.ts` owns playback synchronization and preview restoration.
+- `src/hooks/useSwipeGesture.ts`: shared touch recognition and pointer capture for project and slideshow navigation.
 - `preview-data.ts`: static homepage preview data passed directly from the server.
 - `public/work/media/`: published images, posters, avatars, and web-optimized videos. Static hosting handles caching and byte ranges.
 - `src/components/SiteNavigation.tsx`: route-ready shared-element transitions and fallback animation.
@@ -29,18 +32,24 @@ use the same Next.js navigation provider. Event listeners live in effects with
 cleanup; executable inline navigation scripts are unnecessary. The remaining
 JSON-LD script is structured data for search engines.
 
-On mobile, project content follows horizontal drags while the header stays fixed.
+On touch screens, project content follows horizontal drags at any viewport width
+while the header stays fixed. Gesture eligibility uses pointer type, not layout
+breakpoints. Tapping an untouched video reveals its native controls; dragging
+across it navigates projects without revealing controls.
 Neighboring content is server-rendered and mounted as inert, still-image previews
-only during a gesture; adjacent routes are prefetched for the handoff. Vertical
-scrolling, browser-edge gestures, and nested comparison/media controls keep their
-own behavior. Reduced motion keeps swipe navigation but skips sliding.
+only after a horizontal drag begins. Previews are clipped on both axes so they
+cannot extend the page's scroll range. Adjacent routes are prefetched for the
+handoff. Vertical scrolling, browser-edge gestures, and nested comparison/media
+controls keep their own behavior. Reduced motion keeps swipe navigation but skips
+sliding.
 
-Overview/detail transitions decode visible poster images before capturing either
-state. Only the selected visual gets a separate transition layer; other media,
-the portrait, and navigation stay in the page snapshot. Videos retain a real
-poster image until a decoded frame is ready, and remain hidden during snapshots
-to avoid empty hardware-video surfaces on iOS. Closing restores the saved
-overview scroll position before measuring the destination thumbnail.
+Overview/detail transitions capture the presented video frame synchronously and
+decode the landing poster while the snapshot moves. Closing responds immediately,
+then continues into the thumbnail once the return layout has mounted and restored
+its scroll position. The transition reads the visible border element (or the
+overview pseudo-element), preserving its alpha. Videos retain their poster until
+a compositor frame callback and paint have completed; playback time alone must
+not reveal an empty hardware-video surface on iOS.
 
 Use Tailwind for component layout, spacing, colors, and interaction states.
 `HeadingLink` owns heading links and their focus treatment; `buttonStyles.ts`
@@ -49,3 +58,5 @@ shadow tokens in `globals.css` keep floating surfaces consistent. Footer links a
 `videoPlayback.ts` owns the preview-to-player session handoff. Keep CSS modules
 for coordinated keyframes, media geometry/cropping, and browser-specific range
 pseudo-elements rather than duplicating ordinary utility styles.
+
+Use `@/` imports for shared code in `src` and `@/work/` for portfolio code imported from outside that directory. Styled links share `AppLink`, which uses portfolio navigation for local routes and native anchors for external, hash, and mail links.

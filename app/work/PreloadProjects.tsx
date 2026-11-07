@@ -4,7 +4,7 @@ import {
   afterPageLoad,
   preloadMedia,
   type MediaAsset,
-} from "../../src/utils/preloadMedia";
+} from "@/utils/preloadMedia";
 export default function PreloadProjects({ assets }: { assets: MediaAsset[] }) {
   useEffect(() => afterPageLoad(() => assets.forEach(preloadMedia)), [assets]);
   return null;

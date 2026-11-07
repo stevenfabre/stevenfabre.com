@@ -1,5 +1,5 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import cx from "../utils/cx";
+import cx from "@/utils/cx";
 import React from "react";
 
 type TooltipProps = Omit<

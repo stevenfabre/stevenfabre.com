@@ -1,17 +1,9 @@
 "use client";
 
-import Icon from "./Icon";
-import Link from "next/link";
-import {
-  ReactNode,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import copyStringToClipboard from "../utils/copyStringToClipboard";
-import { Tooltip } from "./Tooltip";
+import Icon from "@/components/Icon";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import copyStringToClipboard from "@/utils/copyStringToClipboard";
+import { Tooltip } from "@/components/Tooltip";
 
 enum FeedbackState {
   None,
@@ -34,29 +26,25 @@ export default function EmailLink({
   const [state, setState] = useState<FeedbackState>(FeedbackState.None);
   const [isOpen, setIsOpen] = useState(false);
 
-  const content = useMemo(() => {
-    if (state === FeedbackState.None) {
-      return "Copy email to clipboard";
-    }
-    if (state === FeedbackState.Success) {
-      return (
-        <div className="flex items-center gap-1.5 -ml-1">
-          <Icon name="check" size={16} className="text-green-400" />
-          Email copied
-        </div>
-      );
-    }
-    if (state === FeedbackState.Error) {
-      return (
-        <div className="flex items-center gap-1.5 -ml-1">
-          <Icon name="error" size={16} className="text-red-400" />
-          The email couldn’t be copied.
-        </div>
-      );
-    }
-  }, [state]);
+  const content =
+    state === FeedbackState.None ? (
+      "Copy email to clipboard"
+    ) : (
+      <div className="flex items-center gap-1.5 -ml-1">
+        <Icon
+          name={state === FeedbackState.Success ? "check" : "error"}
+          size={16}
+          className={
+            state === FeedbackState.Success ? "text-green-400" : "text-red-400"
+          }
+        />
+        {state === FeedbackState.Success
+          ? "Email copied"
+          : "The email couldn’t be copied."}
+      </div>
+    );
 
-  const handleClick = useCallback(async () => {
+  async function handleClick() {
     const success = await copyStringToClipboard(email);
     setState(success ? FeedbackState.Success : FeedbackState.Error);
     setIsOpen(true);
@@ -66,7 +54,7 @@ export default function EmailLink({
       setState(FeedbackState.None);
       setIsOpen(false);
     }, 2000);
-  }, [email]);
+  }
 
   return (
     <Tooltip
@@ -78,7 +66,7 @@ export default function EmailLink({
         if (e.target === triggerRef.current) e.preventDefault();
       }}
     >
-      <Link
+      <a
         ref={triggerRef}
         className={className}
         href={`mailto:${email}`}
@@ -88,7 +76,7 @@ export default function EmailLink({
         }}
       >
         {children}
-      </Link>
+      </a>
     </Tooltip>
   );
 }

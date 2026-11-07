@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { registerAudioPlayer } from "../../src/utils/mediaAudio";
-import { loadYouTubeAPI, type YouTubePlayer } from "../../src/utils/youtube";
+import { registerAudioPlayer } from "@/utils/mediaAudio";
+import { loadYouTubeAPI, type YouTubePlayer } from "@/utils/youtube";
 
 export default function ProjectYouTube({
   id,
@@ -120,7 +120,7 @@ export default function ProjectYouTube({
       {failed && (
         <p
           role="status"
-          className="absolute inset-0 grid place-content-center p-4 text-center text-sm text-[var(--muted)]"
+          className="absolute inset-0 grid place-content-center p-4 text-center text-sm text-neutral-500 dark:text-neutral-400"
         >
           Video couldn’t load. Use the link below to watch on YouTube.
         </p>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "@/components/Tooltip";
 import { ReactNode } from "react";
 
 export type FeaturedItemProps = {

@@ -86,6 +86,13 @@
     --visual-height: max(0px, calc(100svh - var(--bar-height) - 10.5rem));
   }
 }
+@media (orientation: landscape) and (max-height: 500px) {
+  .page {
+    /* Short viewports prioritize the visual; the description can scroll.
+       Safari's browser bars must not reduce the media stage to zero. */
+    --visual-height: max(160px, calc(100svh - var(--bar-height) - 24px));
+  }
+}
 @media (min-width: 768px) {
   .page {
     --caption-width: calc(180px + 32px + var(--text-width));

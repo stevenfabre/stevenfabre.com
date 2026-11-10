@@ -6,8 +6,11 @@ export const COLORS = {
   PINK: "#f472b6",
 };
 
-export const PIXELS_RESOLUTION_WIDTH = 30;
-export const PIXELS_RESOLUTION_HEIGHT = 50;
 export const DENSITY_PIXELS = 20;
 
 export const DELAY_TIMEOUT_PIXEL = 800;
+
+export const RIPPLE_DURATION_MS = 1000;
+export const REDUCED_RIPPLE_DURATION_MS = 200;
+export const MAX_RIPPLES = 32;
+export const MAX_TRAIL_PIXELS = 1500;

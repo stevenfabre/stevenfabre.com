@@ -1,5 +1,5 @@
-import { LiveList, LiveObject } from "@liveblocks/client";
-import { CursorType, Pixel, Point } from "@/components/Game/types";
+import type { RippleEvent } from "./types";
+import { CursorType, Point } from "@/components/Game/types";
 
 export type Presence = {
   cursor: Point[] | null;
@@ -8,13 +8,9 @@ export type Presence = {
   location?: string | null;
 };
 
-export type Storage = {
-  pixels: LiveList<LiveObject<Pixel>>;
-};
-
 declare global {
   interface Liveblocks {
+    RoomEvent: RippleEvent;
     Presence: Presence;
-    Storage: Storage;
   }
 }

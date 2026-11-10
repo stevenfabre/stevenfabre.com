@@ -1,25 +1,82 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, type TouchEvent } from "react";
 import Toolbar from "@/components/Game/Toolbar";
 import {
+  COLORS,
   DELAY_TIMEOUT_PIXEL,
   DENSITY_PIXELS,
+  RIPPLE_DURATION_MS,
+  MAX_RIPPLES,
+  MAX_TRAIL_PIXELS,
 } from "@/components/Game/constants";
 import Cursors from "@/components/Game/Cursors";
 import {
-  useMutation,
+  useBroadcastEvent,
+  useEventListener,
   useSelf,
-  useStorage,
+  useOthersListener,
   useUpdateMyPresence,
 } from "@liveblocks/react/suspense";
-import { CursorType, Point } from "@/components/Game/types";
+import {
+  CursorType,
+  Point,
+  Ripple,
+  RippleEvent,
+  Trail,
+} from "@/components/Game/types";
 import Footer from "@/components/Game/Footer";
 
+import Effects from "./Effects";
+
 export default function Game() {
+  const [trails, setTrails] = useState<Trail[]>([]);
+  const [ripples, setRipples] = useState<Ripple[]>([]);
+  const broadcast = useBroadcastEvent();
+  const addRipple = (event: RippleEvent) => {
+    if (
+      event.type !== "RIPPLE" ||
+      !Number.isFinite(event.x) ||
+      !Number.isFinite(event.y) ||
+      !Object.values<string>(COLORS).includes(event.color)
+    )
+      return;
+    const started = performance.now();
+    setRipples((current) => [
+      ...current
+        .filter((ripple) => started - ripple.started < RIPPLE_DURATION_MS)
+        .slice(-(MAX_RIPPLES - 1)),
+      { ...event, started },
+    ]);
+  };
+  useEventListener(({ event }) => addRipple(event));
   const me = useSelf();
-  const pixels = useStorage((root) => root.pixels);
   const updateMyPresence = useUpdateMyPresence();
+
+  const paintTrail = (points: readonly Point[] | null, color: string) => {
+    if (!points?.length || !Object.values<string>(COLORS).includes(color))
+      return;
+    const started = performance.now();
+    setTrails((current) => {
+      const cells = new Map(
+        current
+          .filter((p) => started - p.started < DELAY_TIMEOUT_PIXEL)
+          .map((p) => [`${p.x},${p.y}`, p])
+      );
+      for (const point of points) {
+        if (!Number.isFinite(point.x) || !Number.isFinite(point.y)) continue;
+        const x = Math.round(point.x / DENSITY_PIXELS) * DENSITY_PIXELS;
+        const y = Math.round(point.y / DENSITY_PIXELS) * DENSITY_PIXELS;
+        cells.set(`${x},${y}`, { x, y, color, started });
+      }
+      return Array.from(cells.values()).slice(-MAX_TRAIL_PIXELS);
+    });
+  };
+  useOthersListener((event) => {
+    if (event.type === "update" && "cursor" in event.updates) {
+      paintTrail(event.user.presence.cursor, event.user.presence.color);
+    }
+  });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -40,42 +97,13 @@ export default function Game() {
     return () => controller.abort();
   }, [updateMyPresence]);
 
-  const setColor = useMutation(
-    ({ setMyPresence }, color: string) => setMyPresence({ color }),
-    []
-  );
-
-  const setCursor = useMutation(
-    (
-      { setMyPresence },
-      cursor: Point[] | null,
-      cursorType: CursorType | null
-    ) => setMyPresence({ cursor, cursorType }),
-    []
-  );
-
-  const setPixel = useMutation(
-    ({ storage }, index: number) => {
-      const pixels = storage.get("pixels");
-      const pixel = pixels.get(index);
-
-      if (!pixel) {
-        return;
-      }
-
-      pixel.set("color", me.presence.color);
-      pixel.set("on", true);
-
-      setTimeout(() => {
-        pixel.set("on", false);
-      }, DELAY_TIMEOUT_PIXEL);
-    },
-    [me]
-  );
+  const setColor = (color: string) => updateMyPresence({ color });
+  const setCursor = (cursor: Point[] | null, cursorType: CursorType | null) =>
+    updateMyPresence({ cursor, cursorType });
 
   useEffect(() => {
     const onWindowBlur = () => {
-      setCursor(null, null);
+      updateMyPresence({ cursor: null, cursorType: null });
     };
 
     window.addEventListener("blur", onWindowBlur);
@@ -83,7 +111,7 @@ export default function Game() {
     return () => {
       window.removeEventListener("blur", onWindowBlur);
     };
-  });
+  }, [updateMyPresence]);
 
   const onDraw = (
     touches: { clientX: number; clientY: number }[],
@@ -91,30 +119,31 @@ export default function Game() {
     target: HTMLElement
   ) => {
     const bounds = target.getBoundingClientRect();
-    const points = touches.map((touch) => ({
-      x: touch.clientX - bounds.left - bounds.width / 2,
-      y: touch.clientY - bounds.top - bounds.height / 2,
-    }));
+    const points = touches.map((touch) => toGamePoint(touch, bounds));
 
-    setCursor(points, cursorType);
-
-    // Draw pixels for each touch point
-    points.forEach((point) => {
-      const pixelIndexFromPoint = pixels.findIndex((pixel) => {
-        return (
-          pixel.x * DENSITY_PIXELS + DENSITY_PIXELS / 2 >= point.x &&
-          pixel.y * DENSITY_PIXELS + DENSITY_PIXELS / 2 >= point.y
-        );
-      });
-
-      setPixel(pixelIndexFromPoint);
-    });
+    paintTrail(points, me.presence.color);
+    setCursor(points.length ? points : null, points.length ? cursorType : null);
   };
+
+  const onTouch = (event: TouchEvent<HTMLDivElement>) =>
+    onDraw(Array.from(event.touches), "touch", event.currentTarget);
 
   return (
     <div className="group absolute inset-0 flex justify-center items-center touch-none md:touch-auto">
       <div
         className="absolute inset-0 flex items-center justify-center mix-blend-overlay cursor-crosshair"
+        onPointerDown={(e) => {
+          if (e.button !== 0) return;
+          const bounds = e.currentTarget.getBoundingClientRect();
+          const event: RippleEvent = {
+            type: "RIPPLE",
+            ...toGamePoint(e, bounds),
+            color: me.presence.color,
+          };
+          addRipple(event);
+          // One event per press; don't replay stale clicks after reconnecting.
+          broadcast(event, { shouldQueueEventIfNotReady: false });
+        }}
         onPointerMove={(e) => {
           // Only handle mouse pointer, touches are handled by onTouchMove
           if (e.pointerType !== "touch") {
@@ -125,44 +154,14 @@ export default function Game() {
             );
           }
         }}
-        onTouchMove={(e) => {
-          // Handle multi-touch - captures all active touch points
-          const touches = Array.from(e.touches).map((touch) => ({
-            clientX: touch.clientX,
-            clientY: touch.clientY,
-          }));
-          onDraw(touches, "touch", e.currentTarget);
-        }}
+        onTouchStart={onTouch}
+        onTouchMove={onTouch}
+        onTouchEnd={onTouch}
+        onTouchCancel={onTouch}
         onPointerLeave={() => setCursor(null, null)}
-        onTouchEnd={() => setCursor(null, null)}
-      >
-        {pixels.map((pixel, index) => {
-          const { x, y, color, on } = pixel;
+      />
 
-          return (
-            <div
-              key={index}
-              className="absolute flex items-center justify-center"
-              style={{
-                transform: `translateX(${x * DENSITY_PIXELS}px) translateY(${
-                  y * DENSITY_PIXELS
-                }px)`,
-                width: `${DENSITY_PIXELS}px`,
-                height: `${DENSITY_PIXELS}px`,
-              }}
-            >
-              {on && (
-                <div
-                  className="absolute w-full h-full"
-                  style={{
-                    backgroundColor: color,
-                  }}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <Effects trails={trails} ripples={ripples} />
 
       <Footer>
         <Toolbar currentColor={me.presence.color} setColor={setColor} />
@@ -171,4 +170,14 @@ export default function Game() {
       <Cursors />
     </div>
   );
+}
+
+function toGamePoint(
+  point: { clientX: number; clientY: number },
+  bounds: DOMRect
+): Point {
+  return {
+    x: point.clientX - bounds.left - bounds.width / 2,
+    y: point.clientY - bounds.top - bounds.height / 2,
+  };
 }

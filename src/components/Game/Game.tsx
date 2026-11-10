@@ -1,24 +1,45 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, type TouchEvent } from "react";
 import Toolbar from "@/components/Game/Toolbar";
-import {
-  DELAY_TIMEOUT_PIXEL,
-  DENSITY_PIXELS,
-} from "@/components/Game/constants";
+import { COLORS } from "@/components/Game/constants";
 import Cursors from "@/components/Game/Cursors";
 import {
-  useMutation,
+  useBroadcastEvent,
+  useEventListener,
   useSelf,
-  useStorage,
   useUpdateMyPresence,
 } from "@liveblocks/react/suspense";
-import { CursorType, Point } from "@/components/Game/types";
+import {
+  CursorType,
+  Point,
+  Ripple,
+  RippleEvent,
+} from "@/components/Game/types";
 import Footer from "@/components/Game/Footer";
 
+import Ripples from "./Ripples";
+import Trails from "./Trails";
+
 export default function Game() {
+  const [ripples, setRipples] = useState<Ripple[]>([]);
+  const broadcast = useBroadcastEvent();
+  const addRipple = (event: RippleEvent) => {
+    if (
+      event.type !== "RIPPLE" ||
+      !Number.isFinite(event.x) ||
+      !Number.isFinite(event.y) ||
+      !Object.values<string>(COLORS).includes(event.color)
+    )
+      return;
+    const started = performance.now();
+    setRipples((current) => [
+      ...current.filter((ripple) => started - ripple.started < 1000).slice(-31),
+      { ...event, started },
+    ]);
+  };
+  useEventListener(({ event }) => addRipple(event));
   const me = useSelf();
-  const pixels = useStorage((root) => root.pixels);
   const updateMyPresence = useUpdateMyPresence();
 
   useEffect(() => {
@@ -40,42 +61,13 @@ export default function Game() {
     return () => controller.abort();
   }, [updateMyPresence]);
 
-  const setColor = useMutation(
-    ({ setMyPresence }, color: string) => setMyPresence({ color }),
-    []
-  );
-
-  const setCursor = useMutation(
-    (
-      { setMyPresence },
-      cursor: Point[] | null,
-      cursorType: CursorType | null
-    ) => setMyPresence({ cursor, cursorType }),
-    []
-  );
-
-  const setPixel = useMutation(
-    ({ storage }, index: number) => {
-      const pixels = storage.get("pixels");
-      const pixel = pixels.get(index);
-
-      if (!pixel) {
-        return;
-      }
-
-      pixel.set("color", me.presence.color);
-      pixel.set("on", true);
-
-      setTimeout(() => {
-        pixel.set("on", false);
-      }, DELAY_TIMEOUT_PIXEL);
-    },
-    [me]
-  );
+  const setColor = (color: string) => updateMyPresence({ color });
+  const setCursor = (cursor: Point[] | null, cursorType: CursorType | null) =>
+    updateMyPresence({ cursor, cursorType });
 
   useEffect(() => {
     const onWindowBlur = () => {
-      setCursor(null, null);
+      updateMyPresence({ cursor: null, cursorType: null });
     };
 
     window.addEventListener("blur", onWindowBlur);
@@ -83,7 +75,7 @@ export default function Game() {
     return () => {
       window.removeEventListener("blur", onWindowBlur);
     };
-  });
+  }, [updateMyPresence]);
 
   const onDraw = (
     touches: { clientX: number; clientY: number }[],
@@ -96,25 +88,29 @@ export default function Game() {
       y: touch.clientY - bounds.top - bounds.height / 2,
     }));
 
-    setCursor(points, cursorType);
-
-    // Draw pixels for each touch point
-    points.forEach((point) => {
-      const pixelIndexFromPoint = pixels.findIndex((pixel) => {
-        return (
-          pixel.x * DENSITY_PIXELS + DENSITY_PIXELS / 2 >= point.x &&
-          pixel.y * DENSITY_PIXELS + DENSITY_PIXELS / 2 >= point.y
-        );
-      });
-
-      setPixel(pixelIndexFromPoint);
-    });
+    setCursor(points.length ? points : null, points.length ? cursorType : null);
   };
+
+  const onTouch = (event: TouchEvent<HTMLDivElement>) =>
+    onDraw(Array.from(event.touches), "touch", event.currentTarget);
 
   return (
     <div className="group absolute inset-0 flex justify-center items-center touch-none md:touch-auto">
       <div
         className="absolute inset-0 flex items-center justify-center mix-blend-overlay cursor-crosshair"
+        onPointerDown={(e) => {
+          if (e.button !== 0) return;
+          const bounds = e.currentTarget.getBoundingClientRect();
+          const event: RippleEvent = {
+            type: "RIPPLE",
+            x: e.clientX - bounds.left - bounds.width / 2,
+            y: e.clientY - bounds.top - bounds.height / 2,
+            color: me.presence.color,
+          };
+          addRipple(event);
+          // One event per press; don't replay stale clicks after reconnecting.
+          broadcast(event, { shouldQueueEventIfNotReady: false });
+        }}
         onPointerMove={(e) => {
           // Only handle mouse pointer, touches are handled by onTouchMove
           if (e.pointerType !== "touch") {
@@ -125,44 +121,16 @@ export default function Game() {
             );
           }
         }}
-        onTouchMove={(e) => {
-          // Handle multi-touch - captures all active touch points
-          const touches = Array.from(e.touches).map((touch) => ({
-            clientX: touch.clientX,
-            clientY: touch.clientY,
-          }));
-          onDraw(touches, "touch", e.currentTarget);
-        }}
+        onTouchStart={onTouch}
+        onTouchMove={onTouch}
+        onTouchEnd={onTouch}
+        onTouchCancel={onTouch}
         onPointerLeave={() => setCursor(null, null)}
-        onTouchEnd={() => setCursor(null, null)}
-      >
-        {pixels.map((pixel, index) => {
-          const { x, y, color, on } = pixel;
+      />
 
-          return (
-            <div
-              key={index}
-              className="absolute flex items-center justify-center"
-              style={{
-                transform: `translateX(${x * DENSITY_PIXELS}px) translateY(${
-                  y * DENSITY_PIXELS
-                }px)`,
-                width: `${DENSITY_PIXELS}px`,
-                height: `${DENSITY_PIXELS}px`,
-              }}
-            >
-              {on && (
-                <div
-                  className="absolute w-full h-full"
-                  style={{
-                    backgroundColor: color,
-                  }}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <Trails cursor={me.presence.cursor} color={me.presence.color} />
+
+      <Ripples ripples={ripples} />
 
       <Footer>
         <Toolbar currentColor={me.presence.color} setColor={setColor} />

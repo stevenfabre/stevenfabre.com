@@ -131,7 +131,7 @@ export default function Game() {
   return (
     <div className="group absolute inset-0 flex justify-center items-center touch-none md:touch-auto">
       <div
-        className="absolute inset-0 flex items-center justify-center mix-blend-overlay cursor-crosshair"
+        className="absolute inset-0 flex items-center justify-center mix-blend-overlay"
         onPointerDown={(e) => {
           if (e.button !== 0) return;
           const bounds = e.currentTarget.getBoundingClientRect();

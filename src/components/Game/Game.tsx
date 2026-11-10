@@ -2,12 +2,17 @@
 
 import { useEffect, useState, type TouchEvent } from "react";
 import Toolbar from "@/components/Game/Toolbar";
-import { COLORS } from "@/components/Game/constants";
+import {
+  COLORS,
+  DELAY_TIMEOUT_PIXEL,
+  DENSITY_PIXELS,
+} from "@/components/Game/constants";
 import Cursors from "@/components/Game/Cursors";
 import {
   useBroadcastEvent,
   useEventListener,
   useSelf,
+  useOthersListener,
   useUpdateMyPresence,
 } from "@liveblocks/react/suspense";
 import {
@@ -15,13 +20,14 @@ import {
   Point,
   Ripple,
   RippleEvent,
+  Trail,
 } from "@/components/Game/types";
 import Footer from "@/components/Game/Footer";
 
-import Ripples from "./Ripples";
-import Trails from "./Trails";
+import Effects from "./Effects";
 
 export default function Game() {
+  const [trails, setTrails] = useState<Trail[]>([]);
   const [ripples, setRipples] = useState<Ripple[]>([]);
   const broadcast = useBroadcastEvent();
   const addRipple = (event: RippleEvent) => {
@@ -41,6 +47,31 @@ export default function Game() {
   useEventListener(({ event }) => addRipple(event));
   const me = useSelf();
   const updateMyPresence = useUpdateMyPresence();
+
+  const paintTrail = (points: readonly Point[] | null, color: string) => {
+    if (!points?.length || !Object.values<string>(COLORS).includes(color))
+      return;
+    const started = performance.now();
+    setTrails((current) => {
+      const cells = new Map(
+        current
+          .filter((p) => started - p.started < DELAY_TIMEOUT_PIXEL)
+          .map((p) => [`${p.x},${p.y}`, p])
+      );
+      for (const point of points) {
+        if (!Number.isFinite(point.x) || !Number.isFinite(point.y)) continue;
+        const x = Math.round(point.x / DENSITY_PIXELS) * DENSITY_PIXELS;
+        const y = Math.round(point.y / DENSITY_PIXELS) * DENSITY_PIXELS;
+        cells.set(`${x},${y}`, { x, y, color, started });
+      }
+      return Array.from(cells.values()).slice(-1500);
+    });
+  };
+  useOthersListener((event) => {
+    if (event.type === "update" && "cursor" in event.updates) {
+      paintTrail(event.user.presence.cursor, event.user.presence.color);
+    }
+  });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -88,6 +119,7 @@ export default function Game() {
       y: touch.clientY - bounds.top - bounds.height / 2,
     }));
 
+    paintTrail(points, me.presence.color);
     setCursor(points.length ? points : null, points.length ? cursorType : null);
   };
 
@@ -128,9 +160,7 @@ export default function Game() {
         onPointerLeave={() => setCursor(null, null)}
       />
 
-      <Trails cursor={me.presence.cursor} color={me.presence.color} />
-
-      <Ripples ripples={ripples} />
+      <Effects trails={trails} ripples={ripples} />
 
       <Footer>
         <Toolbar currentColor={me.presence.color} setColor={setColor} />

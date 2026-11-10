@@ -1,11 +1,24 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { DENSITY_PIXELS } from "./constants";
-import type { Ripple } from "./types";
+import { DELAY_TIMEOUT_PIXEL, DENSITY_PIXELS } from "./constants";
+import type { Ripple, Trail } from "./types";
 
-export default function Ripples({ ripples }: { ripples: Ripple[] }) {
+export default function Effects({
+  trails,
+  ripples,
+}: {
+  trails: Trail[];
+  ripples: Ripple[];
+}) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const active = useRef({ trails, ripples });
+  const wake = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    active.current = { trails, ripples };
+    wake.current?.();
+  }, [trails, ripples]);
 
   useEffect(() => {
     const el = canvas.current!;
@@ -18,14 +31,32 @@ export default function Ripples({ ripples }: { ripples: Ripple[] }) {
     const draw = (now: number) => {
       frame = 0;
       ctx.clearRect(0, 0, width, height);
-      const active = ripples.filter(
+      active.current.trails = active.current.trails.filter(
+        (p) => now - p.started < DELAY_TIMEOUT_PIXEL
+      );
+      active.current.ripples = active.current.ripples.filter(
         (p) => now - p.started < (reduced.matches ? 200 : 1000)
       );
-      for (const ripple of active) {
+      for (const trail of active.current.trails) {
+        ctx.fillStyle = trail.color;
+        ctx.globalAlpha = 1 - (now - trail.started) / DELAY_TIMEOUT_PIXEL;
+        ctx.fillRect(
+          width / 2 + trail.x - DENSITY_PIXELS / 2,
+          height / 2 + trail.y - DENSITY_PIXELS / 2,
+          DENSITY_PIXELS,
+          DENSITY_PIXELS
+        );
+      }
+      for (const ripple of active.current.ripples) {
         drawRipple(ctx, ripple, now, width, height, reduced.matches);
       }
-      if (active.length) frame = requestAnimationFrame(draw);
+      if (active.current.trails.length || active.current.ripples.length)
+        frame = requestAnimationFrame(draw);
     };
+    const start = () => {
+      if (!frame) frame = requestAnimationFrame(draw);
+    };
+    wake.current = start;
     const resize = () => {
       const rect = el.getBoundingClientRect();
       width = rect.width;
@@ -34,7 +65,7 @@ export default function Ripples({ ripples }: { ripples: Ripple[] }) {
       el.width = Math.round(width * dpr);
       el.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      if (!frame) frame = requestAnimationFrame(draw);
+      start();
     };
     const observer = new ResizeObserver(resize);
     observer.observe(el);
@@ -42,8 +73,9 @@ export default function Ripples({ ripples }: { ripples: Ripple[] }) {
     return () => {
       observer.disconnect();
       cancelAnimationFrame(frame);
+      wake.current = null;
     };
-  }, [ripples]);
+  }, []);
 
   return (
     <canvas

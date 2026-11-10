@@ -5,6 +5,7 @@ export type Presence = {
   cursor: Point[] | null;
   color: string;
   cursorType: CursorType | null;
+  location?: string | null;
 };
 
 export type Storage = {

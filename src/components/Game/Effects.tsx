@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { DELAY_TIMEOUT_PIXEL, DENSITY_PIXELS } from "./constants";
+import {
+  DELAY_TIMEOUT_PIXEL,
+  DENSITY_PIXELS,
+  RIPPLE_DURATION_MS,
+  REDUCED_RIPPLE_DURATION_MS,
+} from "./constants";
 import type { Ripple, Trail } from "./types";
 
 export default function Effects({
@@ -35,7 +40,9 @@ export default function Effects({
         (p) => now - p.started < DELAY_TIMEOUT_PIXEL
       );
       active.current.ripples = active.current.ripples.filter(
-        (p) => now - p.started < (reduced.matches ? 200 : 1000)
+        (p) =>
+          now - p.started <
+          (reduced.matches ? REDUCED_RIPPLE_DURATION_MS : RIPPLE_DURATION_MS)
       );
       for (const trail of active.current.trails) {
         ctx.fillStyle = trail.color;
@@ -95,10 +102,12 @@ function drawRipple(
   reduced: boolean
 ) {
   const cell = DENSITY_PIXELS;
-  const t = (now - ripple.started) / 1000;
+  const t = (now - ripple.started) / RIPPLE_DURATION_MS;
   ctx.fillStyle = ripple.color;
   if (reduced) {
-    ctx.globalAlpha = Math.max(0, 1 - t * 5) * 0.7;
+    ctx.globalAlpha =
+      Math.max(0, 1 - (now - ripple.started) / REDUCED_RIPPLE_DURATION_MS) *
+      0.7;
     ctx.fillRect(
       width / 2 + Math.round(ripple.x / cell) * cell - cell / 2,
       height / 2 + Math.round(ripple.y / cell) * cell - cell / 2,

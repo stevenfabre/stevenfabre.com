@@ -6,6 +6,9 @@ import {
   COLORS,
   DELAY_TIMEOUT_PIXEL,
   DENSITY_PIXELS,
+  RIPPLE_DURATION_MS,
+  MAX_RIPPLES,
+  MAX_TRAIL_PIXELS,
 } from "@/components/Game/constants";
 import Cursors from "@/components/Game/Cursors";
 import {
@@ -40,7 +43,9 @@ export default function Game() {
       return;
     const started = performance.now();
     setRipples((current) => [
-      ...current.filter((ripple) => started - ripple.started < 1000).slice(-31),
+      ...current
+        .filter((ripple) => started - ripple.started < RIPPLE_DURATION_MS)
+        .slice(-(MAX_RIPPLES - 1)),
       { ...event, started },
     ]);
   };
@@ -64,7 +69,7 @@ export default function Game() {
         const y = Math.round(point.y / DENSITY_PIXELS) * DENSITY_PIXELS;
         cells.set(`${x},${y}`, { x, y, color, started });
       }
-      return Array.from(cells.values()).slice(-1500);
+      return Array.from(cells.values()).slice(-MAX_TRAIL_PIXELS);
     });
   };
   useOthersListener((event) => {
@@ -114,10 +119,7 @@ export default function Game() {
     target: HTMLElement
   ) => {
     const bounds = target.getBoundingClientRect();
-    const points = touches.map((touch) => ({
-      x: touch.clientX - bounds.left - bounds.width / 2,
-      y: touch.clientY - bounds.top - bounds.height / 2,
-    }));
+    const points = touches.map((touch) => toGamePoint(touch, bounds));
 
     paintTrail(points, me.presence.color);
     setCursor(points.length ? points : null, points.length ? cursorType : null);
@@ -135,8 +137,7 @@ export default function Game() {
           const bounds = e.currentTarget.getBoundingClientRect();
           const event: RippleEvent = {
             type: "RIPPLE",
-            x: e.clientX - bounds.left - bounds.width / 2,
-            y: e.clientY - bounds.top - bounds.height / 2,
+            ...toGamePoint(e, bounds),
             color: me.presence.color,
           };
           addRipple(event);
@@ -169,4 +170,14 @@ export default function Game() {
       <Cursors />
     </div>
   );
+}
+
+function toGamePoint(
+  point: { clientX: number; clientY: number },
+  bounds: DOMRect
+): Point {
+  return {
+    x: point.clientX - bounds.left - bounds.width / 2,
+    y: point.clientY - bounds.top - bounds.height / 2,
+  };
 }

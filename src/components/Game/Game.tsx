@@ -2,25 +2,56 @@
 
 import { useEffect } from "react";
 import Toolbar from "@/components/Game/Toolbar";
-import { DELAY_TIMEOUT_PIXEL, DENSITY_PIXELS } from "@/components/Game/constants";
+import {
+  DELAY_TIMEOUT_PIXEL,
+  DENSITY_PIXELS,
+} from "@/components/Game/constants";
 import Cursors from "@/components/Game/Cursors";
-import { useMutation, useSelf, useStorage } from "@liveblocks/react/suspense";
+import {
+  useMutation,
+  useSelf,
+  useStorage,
+  useUpdateMyPresence,
+} from "@liveblocks/react/suspense";
 import { CursorType, Point } from "@/components/Game/types";
 import Footer from "@/components/Game/Footer";
 
 export default function Game() {
   const me = useSelf();
   const pixels = useStorage((root) => root.pixels);
+  const updateMyPresence = useUpdateMyPresence();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch("/api/location", {
+      signal: controller.signal,
+      cache: "no-store",
+    })
+      .then(async (response) => {
+        if (!response.ok) return;
+        const { location } = await response.json();
+        if (!controller.signal.aborted && typeof location === "string") {
+          updateMyPresence({ location });
+        }
+      })
+      .catch(() => {
+        // Location is optional; the game works without it.
+      });
+    return () => controller.abort();
+  }, [updateMyPresence]);
 
   const setColor = useMutation(
     ({ setMyPresence }, color: string) => setMyPresence({ color }),
-    [],
+    []
   );
 
   const setCursor = useMutation(
-    ({ setMyPresence }, cursor: Point[] | null, cursorType: CursorType | null) =>
-      setMyPresence({ cursor, cursorType }),
-    [],
+    (
+      { setMyPresence },
+      cursor: Point[] | null,
+      cursorType: CursorType | null
+    ) => setMyPresence({ cursor, cursorType }),
+    []
   );
 
   const setPixel = useMutation(
@@ -39,7 +70,7 @@ export default function Game() {
         pixel.set("on", false);
       }, DELAY_TIMEOUT_PIXEL);
     },
-    [me],
+    [me]
   );
 
   useEffect(() => {
@@ -57,12 +88,12 @@ export default function Game() {
   const onDraw = (
     touches: { clientX: number; clientY: number }[],
     cursorType: CursorType,
-    target: HTMLElement,
+    target: HTMLElement
   ) => {
     const bounds = target.getBoundingClientRect();
     const points = touches.map((touch) => ({
-      x: Math.round(touch.clientX - bounds.width / 2),
-      y: Math.round(touch.clientY - bounds.height / 2),
+      x: touch.clientX - bounds.left - bounds.width / 2,
+      y: touch.clientY - bounds.top - bounds.height / 2,
     }));
 
     setCursor(points, cursorType);
@@ -90,7 +121,7 @@ export default function Game() {
             onDraw(
               [{ clientX: e.clientX, clientY: e.clientY }],
               "mouse",
-              e.currentTarget,
+              e.currentTarget
             );
           }
         }}

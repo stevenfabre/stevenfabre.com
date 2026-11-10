@@ -1,6 +1,5 @@
 "use client";
 
-import { Plus } from "lucide-react";
 import { memo } from "react";
 import { useOther } from "@liveblocks/react/suspense";
 
@@ -9,10 +8,14 @@ type Props = {
 };
 
 function Cursor({ connectionId }: Props) {
-  const { cursor, color, cursorType } = useOther(
+  const { cursor, color, cursorType, location } = useOther(
     connectionId,
     (user) => user.presence
   );
+
+  const countryMatch = location?.match(/(?:^|, )([A-Z]{2})$/);
+  const country = countryMatch?.[1];
+  const city = countryMatch ? location!.slice(0, countryMatch.index) : location;
 
   if (!cursor || cursor.length === 0) {
     return null;
@@ -21,26 +24,34 @@ function Cursor({ connectionId }: Props) {
   return (
     <>
       {cursor.map((point, index) => (
-        <div key={index}>
+        <div
+          key={index}
+          className="absolute left-1/2 top-1/2"
+          style={{ transform: `translate(${point.x}px, ${point.y}px)` }}
+        >
+          {/* The supplied SVG tip is at (5, 5); keep that hotspot at the pointer. */}
           {cursorType === "mouse" && (
-            <Plus
+            <svg
               aria-hidden="true"
-              width={15}
-              height={15}
-              strokeWidth={2}
-              style={{
-                color,
-                filter: "drop-shadow(0 0 1px white)",
-                transform: `translateX(${point.x}px) translateY(${point.y}px)`,
-              }}
-            />
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              className="absolute -left-[5px] -top-[5px] overflow-visible drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]"
+            >
+              <path
+                d="M5.036 5.6103C5.00118 5.52995 4.99133 5.44099 5.00772 5.35496C5.0241 5.26894 5.06598 5.18982 5.1279 5.1279C5.18982 5.06598 5.26894 5.0241 5.35496 5.00772C5.44099 4.99133 5.52995 5.00118 5.6103 5.036L19.7253 10.7702C19.8112 10.8052 19.8838 10.8663 19.9329 10.9449C19.982 11.0235 20.0052 11.1155 19.999 11.208C19.9929 11.3005 19.9578 11.3887 19.8986 11.46C19.8395 11.5314 19.7595 11.5824 19.6698 11.6057L14.2672 12.9995C13.962 13.078 13.6833 13.2368 13.4602 13.4594C13.2371 13.6821 13.0777 13.9604 12.9986 14.2655L11.6057 19.6698C11.5824 19.7595 11.5314 19.8395 11.46 19.8986C11.3887 19.9578 11.3005 19.9929 11.208 19.999C11.1155 20.0052 11.0235 19.982 10.9449 19.9329C10.8663 19.8838 10.8052 19.8112 10.7702 19.7253L5.036 5.6103Z"
+                fill={color}
+                stroke="white"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           )}
 
           {cursorType === "touch" && (
             <svg
-              style={{
-                transform: `translateX(${point.x}px) translateY(${point.y}px)`,
-              }}
+              className="absolute -left-[22px] -top-[22px]"
               width="44"
               height="44"
               viewBox="0 0 44 44"
@@ -60,6 +71,30 @@ function Cursor({ connectionId }: Props) {
                 fillOpacity="0.08"
               />
             </svg>
+          )}
+          {location && index === 0 && (
+            <span
+              className="absolute isolate flex w-max max-w-48 items-center gap-1 rounded-[5px] py-0.5 pl-1.5 pr-0.5 text-[10px] font-medium leading-[14px] text-white shadow-[0_1px_3px_rgba(0,0,0,0.2)]"
+              style={{
+                backgroundColor: color,
+                left: cursorType === "touch" ? 18 : 14,
+                top: cursorType === "touch" ? 18 : 14,
+              }}
+            >
+              {city && <span className="min-w-0 truncate">{city}</span>}
+              {country && (
+                <span className="relative flex h-3.5 shrink-0 items-center justify-center rounded-[3px] px-1 text-white font-semibold tracking-[0.06em]">
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 rounded-[inherit] opacity-60 mix-blend-multiply"
+                    style={{ backgroundColor: color }}
+                  />
+                  <span className="relative text-[8px] leading-none opacity-60">
+                    {country}
+                  </span>
+                </span>
+              )}
+            </span>
           )}
         </div>
       ))}

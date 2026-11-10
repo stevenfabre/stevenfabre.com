@@ -40,7 +40,7 @@ export function Tooltip({
         <TooltipPrimitive.Content
           className={cx(
             className,
-            "z-50 bg-neutral-800 text-neutral-200 border border-white/0 dark:border-white/5 rounded-md px-3 py-1.5 xl:px-3.5 text-xs xl:text-sm font-medium shadow-xl"
+            "z-50 bg-neutral-800 text-neutral-200 border border-white/0 dark:border-white/5 rounded-md px-3 py-1.5 xl:px-3.5 text-xs font-medium shadow-xl"
           )}
           side={side}
           align={align}

@@ -83,7 +83,15 @@ export default function ProjectNavigation({
       // Paint the pressed button before navigation can replace this view.
       navigationFrame = requestAnimationFrame(() => {
         navigationFrame = requestAnimationFrame(() => {
-          navigate(shortcut.href, { animate: false });
+          const closing = shortcut.direction === "close";
+          navigate(shortcut.href, {
+            animate: closing,
+            source: closing
+              ? document.querySelector<HTMLElement>(
+                  "[data-project-slug] [data-work-visual]"
+                )
+              : undefined,
+          });
         });
       });
     };
